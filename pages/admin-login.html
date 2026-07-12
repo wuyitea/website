@@ -29,7 +29,8 @@
             e.preventDefault();
             var user = document.getElementById('adminUser').value;
             var pass = document.getElementById('adminPass').value;
-            if (user === 'admin' && pass === 'admin123') {
+            var savedPass = localStorage.getItem('admin_password') || 'admin123';
+            if (user === 'admin' && pass === savedPass) {
                 localStorage.setItem('admin_logged_in', 'true');
                 window.location.href = 'admin.html';
             } else {
