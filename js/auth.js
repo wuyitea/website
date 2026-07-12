@@ -1,49 +1,35 @@
-// 用户认证模块
+// 用户认证模块（localStorage 版本）
 const authModule = {
     currentUser: null,
     userRole: null,
-    
-    // 初始化认证状态监听
+
     init() {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                this.currentUser = user;
-                await this.loadUserProfile(user.uid);
-                this.updateUI(true);
-            } else {
-                this.currentUser = null;
-                this.userRole = null;
-                this.updateUI(false);
-            }
-        });
-        
+        const saved = localStorage.getItem('current_user');
+        if (saved) {
+            this.currentUser = JSON.parse(saved);
+            this.userRole = this.currentUser.role;
+        }
         this.setupEventListeners();
+        this.updateUI(!!this.currentUser);
     },
-    
-    // 设置事件监听
+
     setupEventListeners() {
-        // 登录按钮
         const loginBtn = document.getElementById('loginBtn');
-        const registerBtn = document.getElementById('registerBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const showRegister = document.getElementById('showRegister');
         const showLogin = document.getElementById('showLogin');
-        
+
         if (loginBtn) {
             loginBtn.addEventListener('click', () => this.showModal('login'));
         }
-        
-        if (registerBtn) {
-            registerBtn.addEventListener('click', () => this.showModal('register'));
-        }
-        
+
         if (logoutBtn) {
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.logout();
             });
         }
-        
+
         if (showRegister) {
             showRegister.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -51,7 +37,7 @@ const authModule = {
                 this.showModal('register');
             });
         }
-        
+
         if (showLogin) {
             showLogin.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -59,232 +45,180 @@ const authModule = {
                 this.showModal('login');
             });
         }
-        
-        // 表单提交
+
         const loginForm = document.getElementById('loginForm');
         const registerForm = document.getElementById('registerForm');
-        
+
         if (loginForm) {
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.login();
             });
         }
-        
+
         if (registerForm) {
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.register();
             });
         }
-        
-        // 模态框关闭
+
         document.querySelectorAll('.close-modal').forEach(btn => {
             btn.addEventListener('click', () => {
                 this.hideAllModals();
             });
         });
-        
-        // 点击模态框外部关闭
+
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 this.hideAllModals();
             }
         });
     },
-    
-    // 登录
-    async login() {
+
+    login() {
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        
+
         if (!email || !password) {
-            utils.showNotification('请填写邮箱和密码', 'error');
+            this.showTip('请填写邮箱和密码', 'error');
             return;
         }
-        
-        try {
-            await auth.signInWithEmailAndPassword(email, password);
-            this.hideModal('login');
-            utils.showNotification('登录成功', 'success');
-        } catch (error) {
-            console.error('登录失败:', error);
-            let message = '登录失败';
-            switch (error.code) {
-                case 'auth/user-not-found':
-                    message = '用户不存在';
-                    break;
-                case 'auth/wrong-password':
-                    message = '密码错误';
-                    break;
-                case 'auth/invalid-email':
-                    message = '邮箱格式不正确';
-                    break;
-                case 'auth/too-many-requests':
-                    message = '登录尝试次数过多，请稍后再试';
-                    break;
-            }
-            utils.showNotification(message, 'error');
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+
+        if (!user) {
+            this.showTip('邮箱或密码错误', 'error');
+            return;
         }
+
+        this.currentUser = user;
+        this.userRole = user.role;
+        localStorage.setItem('current_user', JSON.stringify(user));
+        this.hideModal('login');
+        this.showTip('登录成功', 'success');
+        this.updateUI(true);
     },
-    
-    // 注册
-    async register() {
+
+    register() {
         const username = document.getElementById('registerUsername').value;
         const email = document.getElementById('registerEmail').value;
         const password = document.getElementById('registerPassword').value;
         const confirmPassword = document.getElementById('registerConfirmPassword').value;
-        
-        // 验证
+
         if (!username || !email || !password || !confirmPassword) {
-            utils.showNotification('请填写所有字段', 'error');
+            this.showTip('请填写所有字段', 'error');
             return;
         }
-        
-        if (!utils.validateEmail(email)) {
-            utils.showNotification('邮箱格式不正确', 'error');
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            this.showTip('邮箱格式不正确', 'error');
             return;
         }
-        
-        if (!utils.validatePassword(password)) {
-            utils.showNotification('密码至少需要6个字符', 'error');
+
+        if (password.length < 6) {
+            this.showTip('密码至少需要6个字符', 'error');
             return;
         }
-        
+
         if (password !== confirmPassword) {
-            utils.showNotification('两次输入的密码不一致', 'error');
+            this.showTip('两次输入的密码不一致', 'error');
             return;
         }
-        
-        try {
-            // 创建用户
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
-            // 创建用户文档
-            await usersRef.doc(user.uid).set({
-                username: username,
-                email: email,
-                avatar: 'images/default-avatar.png',
-                bio: '',
-                role: 'user',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                postsCount: 0,
-                productsCount: 0,
-                followersCount: 0,
-                followingCount: 0
-            });
-            
-            this.hideModal('register');
-            utils.showNotification('注册成功', 'success');
-        } catch (error) {
-            console.error('注册失败:', error);
-            let message = '注册失败';
-            switch (error.code) {
-                case 'auth/email-already-in-use':
-                    message = '该邮箱已被注册';
-                    break;
-                case 'auth/invalid-email':
-                    message = '邮箱格式不正确';
-                    break;
-                case 'auth/weak-password':
-                    message = '密码强度不够';
-                    break;
-            }
-            utils.showNotification(message, 'error');
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        if (users.find(u => u.email === email)) {
+            this.showTip('该邮箱已被注册', 'error');
+            return;
         }
+
+        const newUser = {
+            id: Date.now().toString(),
+            username: username,
+            email: email,
+            password: password,
+            avatar: 'images/default-avatar.png',
+            bio: '',
+            role: 'user',
+            createdAt: new Date().toISOString(),
+            postsCount: 0,
+            productsCount: 0
+        };
+
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        this.currentUser = newUser;
+        this.userRole = newUser.role;
+        localStorage.setItem('current_user', JSON.stringify(newUser));
+
+        this.hideModal('register');
+        this.showTip('注册成功', 'success');
+        this.updateUI(true);
     },
-    
-    // 退出登录
-    async logout() {
-        try {
-            await auth.signOut();
-            utils.showNotification('已退出登录', 'info');
-        } catch (error) {
-            console.error('退出失败:', error);
-            utils.showNotification('退出失败', 'error');
-        }
+
+    logout() {
+        this.currentUser = null;
+        this.userRole = null;
+        localStorage.removeItem('current_user');
+        this.showTip('已退出登录', 'info');
+        this.updateUI(false);
+        setTimeout(() => { window.location.href = '../index.html'; }, 500);
     },
-    
-    // 加载用户资料
-    async loadUserProfile(uid) {
-        try {
-            const doc = await usersRef.doc(uid).get();
-            if (doc.exists) {
-                this.userRole = doc.data().role;
-                return doc.data();
-            }
-        } catch (error) {
-            console.error('加载用户资料失败:', error);
-        }
-        return null;
-    },
-    
-    // 更新UI状态
+
     updateUI(isLoggedIn) {
         const userActions = document.getElementById('userActions');
         const userProfile = document.getElementById('userProfile');
-        const userAvatar = document.getElementById('userAvatar');
-        
+        const userName = document.getElementById('userName');
+
         if (isLoggedIn && this.currentUser) {
             if (userActions) userActions.style.display = 'none';
             if (userProfile) {
-                userProfile.style.display = 'block';
-                // 这里可以加载用户头像
-                // userAvatar.src = this.currentUser.photoURL || 'images/default-avatar.png';
+                userProfile.style.display = 'flex';
+                if (userName) userName.textContent = this.currentUser.username;
             }
         } else {
             if (userActions) userActions.style.display = 'flex';
             if (userProfile) userProfile.style.display = 'none';
         }
     },
-    
-    // 显示模态框
+
     showModal(type) {
         const modal = document.getElementById(`${type}Modal`);
-        if (modal) {
-            modal.style.display = 'block';
-        }
+        if (modal) modal.style.display = 'block';
     },
-    
-    // 隐藏模态框
+
     hideModal(type) {
         const modal = document.getElementById(`${type}Modal`);
-        if (modal) {
-            modal.style.display = 'none';
-        }
+        if (modal) modal.style.display = 'none';
     },
-    
-    // 隐藏所有模态框
+
     hideAllModals() {
         document.querySelectorAll('.modal').forEach(modal => {
             modal.style.display = 'none';
         });
     },
-    
-    // 获取当前用户
-    getCurrentUser() {
-        return this.currentUser;
+
+    showTip(message, type) {
+        const existing = document.querySelector('.auth-tip');
+        if (existing) existing.remove();
+
+        const tip = document.createElement('div');
+        tip.className = 'auth-tip';
+        tip.textContent = message;
+        tip.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:14px;z-index:9999;animation:fadeIn 0.3s;' +
+            (type === 'error' ? 'background:#fee2e2;color:#dc2626;' : 'background:#d1fae5;color:#059669;');
+        document.body.appendChild(tip);
+        setTimeout(() => tip.remove(), 3000);
     },
-    
-    // 检查是否已登录
-    isLoggedIn() {
-        return !!this.currentUser;
-    },
-    
-    // 检查是否是管理员
-    isAdmin() {
-        return this.userRole === 'admin';
-    },
-    
-    // 检查是否是卖家
-    isSeller() {
-        return this.userRole === 'seller' || this.userRole === 'admin';
-    }
+
+    getCurrentUser() { return this.currentUser; },
+    isLoggedIn() { return !!this.currentUser; },
+    isAdmin() { return this.userRole === 'admin'; },
+    isSeller() { return this.userRole === 'seller' || this.userRole === 'admin'; }
 };
 
-// 页面加载时初始化认证模块
 document.addEventListener('DOMContentLoaded', () => {
     authModule.init();
 });
