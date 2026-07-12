@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商城管理 - 社区平台</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>社区平台</h2>
+                <p>管理后台</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin.html"><span class="icon">📊</span> 仪表盘</a>
+                <a href="admin-forum.html"><span class="icon">💬</span> 论坛管理</a>
+                <a href="admin-market.html" class="active"><span class="icon">🛍️</span> 商城管理</a>
+                <a href="admin-users.html"><span class="icon">👥</span> 用户管理</a>
+                <div class="sidebar-section">系统</div>
+                <a href="admin-settings.html"><span class="icon">⚙️</span> 网站设置</a>
+                <a href="../index.html" target="_blank"><span class="icon">🌐</span> 查看前台</a>
+                <a href="#" id="adminLogout"><span class="icon">🚪</span> 退出登录</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>商城管理</h1>
+                <div class="topbar-actions">
+                    <span class="topbar-user">管理员</span>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value">43</div>
+                        <div class="stat-label">总商品数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value">38</div>
+                        <div class="stat-label">在售中</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">待审核</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">¥2.4w</div>
+                        <div class="stat-label">总成交额</div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>商品列表</h2>
+                        <div class="card-actions">
+                            <input type="text" class="admin-search" placeholder="搜索商品..." id="productSearch">
+                            <select class="admin-filter" id="productFilter">
+                                <option value="all">全部状态</option>
+                                <option value="onsale">在售</option>
+                                <option value="pending">待审核</option>
+                                <option value="sold">已售出</option>
+                                <option value="removed">已下架</option>
+                            </select>
+                            <select class="admin-filter" id="categoryFilter">
+                                <option value="all">全部分类</option>
+                                <option value="electronics">数码电子</option>
+                                <option value="clothing">服装鞋帽</option>
+                                <option value="home">家居生活</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>卖家</th>
+                                <th>价格</th>
+                                <th>分类</th>
+                                <th>上架时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <tr data-status="onsale" data-category="electronics">
+                                <td>MacBook Pro 2024 M3</td>
+                                <td>小明</td>
+                                <td>¥12,800</td>
+                                <td>数码电子</td>
+                                <td>2026-07-10</td>
+                                <td><span class="badge badge-success">在售</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(1)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(1)">下架</button>
+                                </td>
+                            </tr>
+                            <tr data-status="onsale" data-category="electronics">
+                                <td>Cherry MX 机械键盘</td>
+                                <td>小红</td>
+                                <td>¥399</td>
+                                <td>数码电子</td>
+                                <td>2026-07-09</td>
+                                <td><span class="badge badge-success">在售</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(2)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(2)">下架</button>
+                                </td>
+                            </tr>
+                            <tr data-status="pending" data-category="electronics">
+                                <td>无线蓝牙耳机 AirPods</td>
+                                <td>小刚</td>
+                                <td>¥259</td>
+                                <td>数码电子</td>
+                                <td>2026-07-09</td>
+                                <td><span class="badge badge-warning">待审核</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-success" onclick="approveProduct(3)">通过</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="rejectProduct(3)">拒绝</button>
+                                </td>
+                            </tr>
+                            <tr data-status="onsale" data-category="clothing">
+                                <td>限定款运动鞋</td>
+                                <td>小芳</td>
+                                <td>¥599</td>
+                                <td>服装鞋帽</td>
+                                <td>2026-07-08</td>
+                                <td><span class="badge badge-success">在售</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(4)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(4)">下架</button>
+                                </td>
+                            </tr>
+                            <tr data-status="sold" data-category="home">
+                                <td>北欧风格台灯</td>
+                                <td>小明</td>
+                                <td>¥189</td>
+                                <td>家居生活</td>
+                                <td>2026-07-07</td>
+                                <td><span class="badge badge-info">已售出</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(5)">查看</button>
+                                </td>
+                            </tr>
+                            <tr data-status="pending" data-category="other">
+                                <td>手绘明信片套装</td>
+                                <td>小白</td>
+                                <td>¥35</td>
+                                <td>其他</td>
+                                <td>2026-07-07</td>
+                                <td><span class="badge badge-warning">待审核</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-success" onclick="approveProduct(6)">通过</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="rejectProduct(6)">拒绝</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="admin-pagination">
+                        <span class="pagination-info">显示 1-6 / 共 43 条</span>
+                        <div class="pagination-btns">
+                            <button disabled>&laquo;</button>
+                            <button class="active">1</button>
+                            <button>2</button>
+                            <button>3</button>
+                            <button>&raquo;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="admin-modal-overlay" id="productModal">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3>商品详情</h3>
+                <button class="admin-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="detail-grid">
+                    <div class="detail-item detail-full">
+                        <div class="label">商品名称</div>
+                        <div class="value" id="modalProductName">MacBook Pro 2024 M3</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">卖家</div>
+                        <div class="value" id="modalProductSeller">小明</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">价格</div>
+                        <div class="value" id="modalProductPrice">¥12,800</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">分类</div>
+                        <div class="value" id="modalProductCategory">数码电子</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">状态</div>
+                        <div class="value" id="modalProductStatus"><span class="badge badge-success">在售</span></div>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <div class="label">描述</div>
+                        <div class="value" id="modalProductDesc">这是一台2024年款MacBook Pro...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="btn-admin btn-admin-outline" onclick="closeModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('admin_logged_in') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+        document.getElementById('adminLogout').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('admin_logged_in');
+            window.location.href = 'admin-login.html';
+        });
+
+        document.getElementById('productFilter').addEventListener('change', filterProducts);
+        document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+        document.getElementById('productSearch').addEventListener('input', function() {
+            var keyword = this.value.toLowerCase();
+            document.querySelectorAll('#productTableBody tr').forEach(function(row) {
+                var text = row.textContent.toLowerCase();
+                row.style.display = text.includes(keyword) ? '' : 'none';
+            });
+        });
+
+        function filterProducts() {
+            var status = document.getElementById('productFilter').value;
+            var category = document.getElementById('categoryFilter').value;
+            document.querySelectorAll('#productTableBody tr').forEach(function(row) {
+                var matchStatus = status === 'all' || row.dataset.status === status;
+                var matchCategory = category === 'all' || row.dataset.category === category;
+                row.style.display = (matchStatus && matchCategory) ? '' : 'none';
+            });
+        }
+
+        function viewProduct(id) { document.getElementById('productModal').classList.add('show'); }
+        function closeModal() { document.getElementById('productModal').classList.remove('show'); }
+        function approveProduct(id) { alert('商品已通过审核'); }
+        function rejectProduct(id) { alert('商品已拒绝'); }
+        function removeProduct(id) { alert('商品已下架'); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>论坛管理 - 社区平台</title>
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>社区平台</h2>
+                <p>管理后台</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="admin.html"><span class="icon">📊</span> 仪表盘</a>
+                <a href="admin-forum.html" class="active"><span class="icon">💬</span> 论坛管理</a>
+                <a href="admin-market.html"><span class="icon">🛍️</span> 商城管理</a>
+                <a href="admin-users.html"><span class="icon">👥</span> 用户管理</a>
+                <div class="sidebar-section">系统</div>
+                <a href="admin-settings.html"><span class="icon">⚙️</span> 网站设置</a>
+                <a href="../index.html" target="_blank"><span class="icon">🌐</span> 查看前台</a>
+                <a href="#" id="adminLogout"><span class="icon">🚪</span> 退出登录</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-topbar">
+                <h1>论坛管理</h1>
+                <div class="topbar-actions">
+                    <span class="topbar-user">管理员</span>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">总帖子数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value">78</div>
+                        <div class="stat-label">已发布</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">待审核</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚫</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">已屏蔽</div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>帖子列表</h2>
+                        <div class="card-actions">
+                            <input type="text" class="admin-search" placeholder="搜索帖子..." id="postSearch">
+                            <select class="admin-filter" id="postFilter">
+                                <option value="all">全部状态</option>
+                                <option value="published">已发布</option>
+                                <option value="pending">待审核</option>
+                                <option value="blocked">已屏蔽</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>标题</th>
+                                <th>作者</th>
+                                <th>分类</th>
+                                <th>发布时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forumTableBody">
+                            <tr data-status="published">
+                                <td>分享一个好用的开发工具</td>
+                                <td>小明</td>
+                                <td>技术分享</td>
+                                <td>2026-07-10 14:30</td>
+                                <td><span class="badge badge-success">已发布</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(1)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(1)">屏蔽</button>
+                                </td>
+                            </tr>
+                            <tr data-status="published">
+                                <td>如何学习前端开发？</td>
+                                <td>小红</td>
+                                <td>问答求助</td>
+                                <td>2026-07-10 10:15</td>
+                                <td><span class="badge badge-success">已发布</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(2)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(2)">屏蔽</button>
+                                </td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td>周末线下聚会招募</td>
+                                <td>小刚</td>
+                                <td>活动</td>
+                                <td>2026-07-09 20:00</td>
+                                <td><span class="badge badge-warning">待审核</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-success" onclick="approvePost(3)">通过</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="rejectPost(3)">拒绝</button>
+                                </td>
+                            </tr>
+                            <tr data-status="published">
+                                <td>我的读书笔记分享</td>
+                                <td>小芳</td>
+                                <td>分享</td>
+                                <td>2026-07-09 16:45</td>
+                                <td><span class="badge badge-success">已发布</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(4)">查看</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(4)">屏蔽</button>
+                                </td>
+                            </tr>
+                            <tr data-status="blocked">
+                                <td>违规广告内容</td>
+                                <td>匿名用户</td>
+                                <td>其他</td>
+                                <td>2026-07-08 09:20</td>
+                                <td><span class="badge badge-danger">已屏蔽</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(5)">查看</button>
+                                    <button class="btn-admin btn-admin-success" onclick="approvePost(5)">恢复</button>
+                                </td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td>请问哪里可以买到便宜的配件？</td>
+                                <td>小白</td>
+                                <td>问答求助</td>
+                                <td>2026-07-08 15:30</td>
+                                <td><span class="badge badge-warning">待审核</span></td>
+                                <td>
+                                    <button class="btn-admin btn-admin-success" onclick="approvePost(6)">通过</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="rejectPost(6)">拒绝</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="admin-pagination">
+                        <span class="pagination-info">显示 1-6 / 共 86 条</span>
+                        <div class="pagination-btns">
+                            <button disabled>&laquo;</button>
+                            <button class="active">1</button>
+                            <button>2</button>
+                            <button>3</button>
+                            <button>...</button>
+                            <button>15</button>
+                            <button>&raquo;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="admin-modal-overlay" id="postModal">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3>帖子详情</h3>
+                <button class="admin-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="detail-grid">
+                    <div class="detail-item detail-full">
+                        <div class="label">标题</div>
+                        <div class="value" id="modalPostTitle">分享一个好用的开发工具</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">作者</div>
+                        <div class="value" id="modalPostAuthor">小明</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">分类</div>
+                        <div class="value" id="modalPostCategory">技术分享</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">发布时间</div>
+                        <div class="value" id="modalPostTime">2026-07-10 14:30</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">状态</div>
+                        <div class="value" id="modalPostStatus"><span class="badge badge-success">已发布</span></div>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <div class="label">内容</div>
+                        <div class="value" id="modalPostContent">这是一篇关于开发工具的分享帖...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="btn-admin btn-admin-outline" onclick="closeModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (localStorage.getItem('admin_logged_in') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+        document.getElementById('adminLogout').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('admin_logged_in');
+            window.location.href = 'admin-login.html';
+        });
+
+        document.getElementById('postFilter').addEventListener('change', function() {
+            var filter = this.value;
+            var rows = document.querySelectorAll('#forumTableBody tr');
+            rows.forEach(function(row) {
+                if (filter === 'all' || row.dataset.status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('postSearch').addEventListener('input', function() {
+            var keyword = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#forumTableBody tr');
+            rows.forEach(function(row) {
+                var text = row.textContent.toLowerCase();
+                row.style.display = text.includes(keyword) ? '' : 'none';
+            });
+        });
+
+        function viewPost(id) {
+            document.getElementById('postModal').classList.add('show');
+        }
+        function closeModal() {
+            document.getElementById('postModal').classList.remove('show');
+        }
+        function approvePost(id) { alert('帖子已通过审核'); }
+        function rejectPost(id) { alert('帖子已拒绝'); }
+        function blockPost(id) { alert('帖子已屏蔽'); }
+    </script>
+</body>
+</html>
