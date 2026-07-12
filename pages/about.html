@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="关于我们 - 了解社区平台的故事、使命和团队">
+    <title>关于我们 - 社区平台</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: var(--spacing-2xl) var(--spacing-md);
+            text-align: center;
+        }
+        
+        .about-hero h1 {
+            font-size: var(--font-size-3xl);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .about-hero p {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .about-content {
+            padding: var(--spacing-2xl) 0;
+        }
+        
+        .about-section {
+            margin-bottom: var(--spacing-2xl);
+        }
+        
+        .about-section h2 {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-primary);
+        }
+        
+        .about-section p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .value-card {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+        }
+        
+        .value-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .value-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .value-desc {
+            color: var(--text-secondary);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+        
+        .team-card {
+            text-align: center;
+            padding: var(--spacing-lg);
+        }
+        
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: var(--spacing-md);
+            border: 4px solid var(--border-color);
+        }
+        
+        .team-name {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            color: var(--text-primary);
+        }
+        
+        .team-role {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .team-bio {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="../index.html">社区平台</a>
+            </div>
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="forum.html">论坛</a></li>
+                    <li><a href="market.html">市场</a></li>
+                    <li><a href="about.html" class="active">关于我们</a></li>
+                </ul>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="about-hero">
+            <h1>关于社区平台</h1>
+            <p>我们致力于打造一个开放、友好、有价值的社区，让每个人都能在这里分享、交流、成长。</p>
+        </section>
+        
+        <div class="container">
+            <div class="about-content">
+                <div class="about-section">
+                    <h2>我们的故事</h2>
+                    <p>社区平台成立于2024年，源于一个简单的想法：创建一个既有论坛交流功能，又有电商交易能力的综合性社区。</p>
+                    <p>我们相信，好的社区不仅仅是信息的集合，更是人与人之间连接的桥梁。在这里，你可以分享知识、结交朋友、发现好物，甚至开始自己的小生意。</p>
+                </div>
+                
+                <div class="about-section">
+                    <h2>我们的使命</h2>
+                    <p>让社区更有温度，让交流更有价值，让交易更便捷。</p>
+                </div>
+                
+                <div class="about-section">
+                    <h2>核心价值观</h2>
+                    <div class="values-grid">
+                        <div class="value-card">
+                            <div class="value-icon">🤝</div>
+                            <h3 class="value-title">信任</h3>
+                            <p class="value-desc">建立透明、可信的交易环境，让每位用户都能安心交流和交易。</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">💡</div>
+                            <h3 class="value-title">创新</h3>
+                            <p class="value-desc">持续改进产品功能，为用户带来更好的社区体验。</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">❤️</div>
+                            <h3 class="value-title">关怀</h3>
+                            <p class="value-desc">重视每位用户的声音，用心服务每一位社区成员。</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🌱</div>
+                            <h3 class="value-title">成长</h3>
+                            <p class="value-desc">与用户共同成长，让社区成为大家学习和进步的平台。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-section">
+                    <h2>我们的团队</h2>
+                    <div class="team-grid">
+                        <div class="team-card">
+                            <img src="../images/default-avatar.png" alt="团队成员" class="team-avatar">
+                            <h3 class="team-name">张三</h3>
+                            <p class="team-role">创始人 & CEO</p>
+                            <p class="team-bio">热爱社区产品，致力于打造更好的用户体验。</p>
+                        </div>
+                        <div class="team-card">
+                            <img src="../images/default-avatar.png" alt="团队成员" class="team-avatar">
+                            <h3 class="team-name">李四</h3>
+                            <p class="team-role">技术负责人</p>
+                            <p class="team-bio">专注技术架构，确保平台稳定运行。</p>
+                        </div>
+                        <div class="team-card">
+                            <img src="../images/default-avatar.png" alt="团队成员" class="team-avatar">
+                            <h3 class="team-name">王五</h3>
+                            <p class="team-role">产品设计师</p>
+                            <p class="team-bio">用设计思维提升产品易用性和美观度。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 社区平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/config.js"></script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="帖子详情 - 查看帖子内容、评论、参与讨论">
+    <title>帖子详情 - 社区平台</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .post-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .post-main {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+        
+        .post-meta {
+            flex: 1;
+        }
+        
+        .post-author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .post-time {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+        
+        .post-category {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-xs);
+        }
+        
+        .post-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        
+        .post-content {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: var(--spacing-xl);
+            white-space: pre-wrap;
+        }
+        
+        .post-tags {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-xs);
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border-color);
+            background: none;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .post-action:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--primary-color);
+        }
+        
+        .post-action.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .comments-section {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .comments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .comments-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .comment-form {
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            font-size: var(--font-size-base);
+        }
+        
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .comment-form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        
+        .comment-item {
+            padding: var(--spacing-lg);
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius-lg);
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .comment-meta {
+            flex: 1;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .comment-time {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+        
+        .comment-content {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        
+        .comment-action {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+        }
+        
+        .comment-action:hover {
+            color: var(--primary-color);
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+        
+        .sidebar-section {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .sidebar-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+        
+        .related-posts {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .related-post {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+        .related-post:hover {
+            background-color: var(--bg-tertiary);
+        }
+        
+        .related-post-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .related-post-meta {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 1024px) {
+            .post-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: var(--spacing-md);
+            }
+            
+            .sidebar-section {
+                margin-bottom: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .post-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .post-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="../index.html">社区平台</a>
+            </div>
+            
+            <div class="nav-search">
+                <input type="search" placeholder="搜索..." id="searchInput">
+                <button type="button" id="searchBtn">搜索</button>
+            </div>
+            
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="forum.html">论坛</a></li>
+                    <li><a href="market.html">市场</a></li>
+                    <li><a href="messages.html">消息</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-user">
+                <div class="user-actions" id="userActions">
+                    <button class="btn btn-outline" id="loginBtn">登录</button>
+                    <button class="btn btn-primary" id="registerBtn">注册</button>
+                </div>
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
+                    <div class="user-dropdown">
+                        <a href="profile.html">个人资料</a>
+                        <a href="settings.html">设置</a>
+                        <a href="#" id="logoutBtn">退出登录</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="main">
+        <div class="container">
+            <div class="post-layout">
+                <div class="post-main">
+                    <div class="post-header">
+                        <img src="../images/default-avatar.png" alt="作者头像" class="post-avatar" id="postAvatar">
+                        <div class="post-meta">
+                            <div class="post-author" id="postAuthor">加载中...</div>
+                            <div class="post-time" id="postTime"></div>
+                        </div>
+                        <span class="post-category" id="postCategory"></span>
+                    </div>
+                    
+                    <h1 class="post-title" id="postTitle">加载中...</h1>
+                    
+                    <div class="post-content" id="postContent">加载中...</div>
+                    
+                    <div class="post-tags" id="postTags"></div>
+                    
+                    <div class="post-actions">
+                        <button class="post-action" id="likeBtn">
+                            <span>👍</span>
+                            <span id="likesCount">0</span>
+                        </button>
+                        <button class="post-action" id="bookmarkBtn">
+                            <span>⭐</span>
+                            <span>收藏</span>
+                        </button>
+                        <button class="post-action" id="shareBtn">
+                            <span>🔗</span>
+                            <span>分享</span>
+                        </button>
+                    </div>
+                    
+                    <div class="comments-section">
+                        <div class="comments-header">
+                            <h2 class="comments-title">评论 <span id="commentsCount">(0)</span></h2>
+                        </div>
+                        
+                        <div class="comment-form">
+                            <textarea id="commentContent" placeholder="写下你的评论..."></textarea>
+                            <div class="comment-form-actions">
+                                <button class="btn btn-primary" id="submitCommentBtn">发表评论</button>
+                            </div>
+                        </div>
+                        
+                        <div class="comments-list" id="commentsList">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">作者信息</h3>
+                        <div class="author-info">
+                            <a href="profile.html?id=" class="author-link" id="authorLink">
+                                <img src="../images/default-avatar.png" alt="作者头像" class="author-avatar" id="authorAvatar">
+                                <span class="author-name" id="authorName">加载中...</span>
+                            </a>
+                            <p class="author-bio" id="authorBio">这个人很懒，什么都没写</p>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">相关帖子</h3>
+                        <div class="related-posts" id="relatedPosts">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 社区平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/post.js"></script>
+</body>
+</html>

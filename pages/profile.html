@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="用户个人资料 - 查看用户信息、帖子、商品">
+    <title>个人资料 - 社区平台</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .profile-layout {
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .profile-header {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .profile-info {
+            display: flex;
+            gap: var(--spacing-xl);
+            align-items: flex-start;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--border-color);
+        }
+        
+        .profile-details {
+            flex: 1;
+        }
+        
+        .profile-username {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-primary);
+        }
+        
+        .profile-bio {
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .profile-stat {
+            text-align: center;
+        }
+        
+        .profile-stat-value {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .profile-stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .profile-tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .profile-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .profile-tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .profile-content {
+            min-height: 400px;
+        }
+        
+        .posts-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin: 0 auto;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .profile-actions {
+                justify-content: center;
+            }
+            
+            .profile-tabs {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="../index.html">社区平台</a>
+            </div>
+            
+            <div class="nav-search">
+                <input type="search" placeholder="搜索..." id="searchInput">
+                <button type="button" id="searchBtn">搜索</button>
+            </div>
+            
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="forum.html">论坛</a></li>
+                    <li><a href="market.html">市场</a></li>
+                    <li><a href="messages.html">消息</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-user">
+                <div class="user-actions" id="userActions">
+                    <button class="btn btn-outline" id="loginBtn">登录</button>
+                    <button class="btn btn-primary" id="registerBtn">注册</button>
+                </div>
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
+                    <div class="user-dropdown">
+                        <a href="profile.html">个人资料</a>
+                        <a href="settings.html">设置</a>
+                        <a href="#" id="logoutBtn">退出登录</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="main">
+        <div class="container">
+            <div class="profile-layout">
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <img src="../images/default-avatar.png" alt="用户头像" class="profile-avatar" id="profileAvatar">
+                        <div class="profile-details">
+                            <h1 class="profile-username" id="profileUsername">加载中...</h1>
+                            <p class="profile-bio" id="profileBio">这个人很懒，什么都没写</p>
+                            <div class="profile-stats">
+                                <div class="profile-stat">
+                                    <div class="profile-stat-value" id="postsCount">0</div>
+                                    <div class="profile-stat-label">帖子</div>
+                                </div>
+                                <div class="profile-stat">
+                                    <div class="profile-stat-value" id="productsCount">0</div>
+                                    <div class="profile-stat-label">商品</div>
+                                </div>
+                                <div class="profile-stat">
+                                    <div class="profile-stat-value" id="followersCount">0</div>
+                                    <div class="profile-stat-label">粉丝</div>
+                                </div>
+                                <div class="profile-stat">
+                                    <div class="profile-stat-value" id="followingCount">0</div>
+                                    <div class="profile-stat-label">关注</div>
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn btn-primary" id="followBtn" style="display: none;">关注</button>
+                                <button class="btn btn-outline" id="messageBtn" style="display: none;">发消息</button>
+                                <button class="btn btn-outline" id="editProfileBtn" style="display: none;">编辑资料</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-tabs">
+                    <button class="profile-tab active" data-tab="posts">帖子</button>
+                    <button class="profile-tab" data-tab="products">商品</button>
+                    <button class="profile-tab" data-tab="likes">点赞</button>
+                    <button class="profile-tab" data-tab="bookmarks">收藏</button>
+                </div>
+                
+                <div class="profile-content" id="profileContent">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 社区平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 编辑资料模态框 -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>编辑资料</h2>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editUsername">用户名</label>
+                    <input type="text" id="editUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBio">个人简介</label>
+                    <textarea id="editBio" rows="3" placeholder="介绍一下自己..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editAvatar">头像</label>
+                    <input type="file" id="editAvatar" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">保存修改</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/profile.js"></script>
+</body>
+</html>

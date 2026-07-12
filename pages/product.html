@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="商品详情 - 查看商品信息、购买商品">
+    <title>商品详情 - 社区平台</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        .product-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .product-gallery {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: contain;
+            border-radius: var(--border-radius);
+            background-color: var(--bg-tertiary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .thumbnail-list {
+            display: flex;
+            gap: var(--spacing-sm);
+            overflow-x: auto;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .thumbnail:hover,
+        .thumbnail.active {
+            border-color: var(--primary-color);
+        }
+        
+        .product-detail {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+        
+        .product-category {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-xs);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .product-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        
+        .product-price-section {
+            display: flex;
+            align-items: baseline;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .product-price {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .product-original-price {
+            font-size: var(--font-size-lg);
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+        
+        .product-discount {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+        
+        .product-meta {
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .meta-item {
+            display: flex;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .meta-label {
+            width: 80px;
+            color: var(--text-secondary);
+        }
+        
+        .meta-value {
+            color: var(--text-primary);
+        }
+        
+        .seller-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .seller-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+        
+        .seller-details {
+            flex: 1;
+        }
+        
+        .seller-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .seller-stats {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .product-actions .btn {
+            flex: 1;
+            padding: 0.75rem;
+        }
+        
+        .product-description {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .description-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+        
+        .description-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        @media (max-width: 1024px) {
+            .product-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-detail {
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-image {
+                height: 300px;
+            }
+            
+            .product-title {
+                font-size: var(--font-size-xl);
+            }
+            
+            .product-price {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <a href="../index.html">社区平台</a>
+            </div>
+            <div class="nav-search">
+                <input type="search" placeholder="搜索商品..." id="searchInput">
+                <button type="button" id="searchBtn">搜索</button>
+            </div>
+            <div class="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="forum.html">论坛</a></li>
+                    <li><a href="market.html">市场</a></li>
+                    <li><a href="messages.html">消息</a></li>
+                </ul>
+            </div>
+            <div class="nav-user">
+                <div class="user-actions" id="userActions">
+                    <button class="btn btn-outline" id="loginBtn">登录</button>
+                    <button class="btn btn-primary" id="registerBtn">注册</button>
+                </div>
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
+                    <div class="user-dropdown">
+                        <a href="profile.html">个人资料</a>
+                        <a href="settings.html">设置</a>
+                        <a href="#" id="logoutBtn">退出登录</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="product-layout">
+                <div class="product-gallery">
+                    <img src="../images/default-product.png" alt="商品图片" class="main-image" id="mainImage">
+                    <div class="thumbnail-list" id="thumbnailList"></div>
+                </div>
+                
+                <div class="product-detail">
+                    <span class="product-category" id="productCategory"></span>
+                    <h1 class="product-title" id="productTitle">加载中...</h1>
+                    
+                    <div class="product-price-section">
+                        <span class="product-price" id="productPrice">¥0.00</span>
+                        <span class="product-original-price" id="originalPrice"></span>
+                        <span class="product-discount" id="discountBadge" style="display: none;"></span>
+                    </div>
+                    
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">状态</span>
+                            <span class="meta-value" id="productCondition">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">浏览</span>
+                            <span class="meta-value" id="viewsCount">0</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">发布</span>
+                            <span class="meta-value" id="publishTime">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="seller-info">
+                        <img src="../images/default-avatar.png" alt="卖家头像" class="seller-avatar" id="sellerAvatar">
+                        <div class="seller-details">
+                            <div class="seller-name" id="sellerName">加载中...</div>
+                            <div class="seller-stats" id="sellerStats">-</div>
+                        </div>
+                        <a href="#" class="btn btn-outline btn-sm" id="sellerLink">查看主页</a>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn btn-primary" id="addToCartBtn">加入购物车</button>
+                        <button class="btn btn-secondary" id="buyNowBtn">立即购买</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-description">
+                <h2 class="description-title">商品描述</h2>
+                <div class="description-content" id="productDescription">加载中...</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 社区平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/product.js"></script>
+</body>
+</html>
