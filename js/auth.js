@@ -219,6 +219,35 @@ const authModule = {
     isSeller() { return this.userRole === 'seller' || this.userRole === 'admin'; }
 };
 
+// 社交登录（模拟）
+function socialLogin(platform) {
+    var platformName = platform === 'wechat' ? '微信' : 'QQ';
+    var mockUser = {
+        id: 'social_' + Date.now(),
+        username: platformName + '用户' + Math.floor(Math.random() * 10000),
+        email: platform + '_' + Date.now() + '@social.com',
+        password: '',
+        avatar: 'images/default-avatar.png',
+        bio: '通过' + platformName + '注册的用户',
+        role: 'user',
+        createdAt: new Date().toISOString(),
+        postsCount: 0,
+        productsCount: 0,
+        socialType: platform
+    };
+
+    var users = JSON.parse(localStorage.getItem('users') || '[]');
+    users.push(mockUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    authModule.currentUser = mockUser;
+    authModule.userRole = mockUser.role;
+    localStorage.setItem('current_user', JSON.stringify(mockUser));
+    authModule.hideAllModals();
+    authModule.showTip(platformName + '登录成功', 'success');
+    authModule.updateUI(true);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     authModule.init();
 });
