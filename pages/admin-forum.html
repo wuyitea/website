@@ -82,76 +82,11 @@
                             </tr>
                         </thead>
                         <tbody id="forumTableBody">
-                            <tr data-status="published">
-                                <td>分享一个好用的开发工具</td>
-                                <td>小明</td>
-                                <td>技术分享</td>
-                                <td>2026-07-10 14:30</td>
-                                <td><span class="badge badge-success">已发布</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(1)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(1)">屏蔽</button>
-                                </td>
-                            </tr>
-                            <tr data-status="published">
-                                <td>如何学习前端开发？</td>
-                                <td>小红</td>
-                                <td>问答求助</td>
-                                <td>2026-07-10 10:15</td>
-                                <td><span class="badge badge-success">已发布</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(2)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(2)">屏蔽</button>
-                                </td>
-                            </tr>
-                            <tr data-status="pending">
-                                <td>周末线下聚会招募</td>
-                                <td>小刚</td>
-                                <td>活动</td>
-                                <td>2026-07-09 20:00</td>
-                                <td><span class="badge badge-warning">待审核</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-success" onclick="approvePost(3)">通过</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="rejectPost(3)">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr data-status="published">
-                                <td>我的读书笔记分享</td>
-                                <td>小芳</td>
-                                <td>分享</td>
-                                <td>2026-07-09 16:45</td>
-                                <td><span class="badge badge-success">已发布</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(4)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="blockPost(4)">屏蔽</button>
-                                </td>
-                            </tr>
-                            <tr data-status="blocked">
-                                <td>违规广告内容</td>
-                                <td>匿名用户</td>
-                                <td>其他</td>
-                                <td>2026-07-08 09:20</td>
-                                <td><span class="badge badge-danger">已屏蔽</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewPost(5)">查看</button>
-                                    <button class="btn-admin btn-admin-success" onclick="approvePost(5)">恢复</button>
-                                </td>
-                            </tr>
-                            <tr data-status="pending">
-                                <td>请问哪里可以买到便宜的配件？</td>
-                                <td>小白</td>
-                                <td>问答求助</td>
-                                <td>2026-07-08 15:30</td>
-                                <td><span class="badge badge-warning">待审核</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-success" onclick="approvePost(6)">通过</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="rejectPost(6)">拒绝</button>
-                                </td>
-                            </tr>
+                            <!-- 动态加载 -->
                         </tbody>
                     </table>
                     <div class="admin-pagination">
-                        <span class="pagination-info">显示 1-6 / 共 86 条</span>
+                        <span class="pagination-info" id="paginationInfo">显示 0 / 共 0 条</span>
                         <div class="pagination-btns">
                             <button disabled>&laquo;</button>
                             <button class="active">1</button>
@@ -217,10 +152,63 @@
             window.location.href = 'admin-login.html';
         });
 
+        function loadPosts() {
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var tbody = document.getElementById('forumTableBody');
+
+            var total = posts.length;
+            var published = posts.filter(function(p) { return p.status === 'published'; }).length;
+            var pending = posts.filter(function(p) { return p.status === 'pending'; }).length;
+            var blocked = posts.filter(function(p) { return p.status === 'blocked'; }).length;
+            var cards = document.querySelectorAll('.stat-card .stat-value');
+            cards[0].textContent = total;
+            cards[1].textContent = published;
+            cards[2].textContent = pending;
+            cards[3].textContent = blocked;
+
+            if (posts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="icon">📝</div><p>暂无帖子</p></td></tr>';
+                return;
+            }
+
+            var html = '';
+            posts.forEach(function(post, index) {
+                var user = users.find(function(u) { return u.id === post.authorId; });
+                var authorName = user ? (user.username || '未知') : (post.authorName || '未知');
+                var status = post.status || 'published';
+                var statusBadge = '';
+                var actions = '';
+                if (status === 'published') {
+                    statusBadge = '<span class="badge badge-success">已发布</span>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')">查看</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="blockPost(' + index + ')">屏蔽</button>';
+                } else if (status === 'pending') {
+                    statusBadge = '<span class="badge badge-warning">待审核</span>';
+                    actions = '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')">通过</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="rejectPost(' + index + ')">拒绝</button>';
+                } else if (status === 'blocked') {
+                    statusBadge = '<span class="badge badge-danger">已屏蔽</span>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')">查看</button> ' +
+                              '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')">恢复</button>';
+                }
+                var date = post.createdAt ? new Date(post.createdAt).toLocaleString('zh-CN') : '-';
+                html += '<tr data-status="' + status + '">' +
+                    '<td>' + (post.title || '-') + '</td>' +
+                    '<td>' + authorName + '</td>' +
+                    '<td>' + (post.category || '-') + '</td>' +
+                    '<td>' + date + '</td>' +
+                    '<td>' + statusBadge + '</td>' +
+                    '<td>' + actions + '</td>' +
+                    '</tr>';
+            });
+            tbody.innerHTML = html;
+            document.getElementById('paginationInfo').textContent = '显示 1-' + posts.length + ' / 共 ' + posts.length + ' 条';
+        }
+
         document.getElementById('postFilter').addEventListener('change', function() {
             var filter = this.value;
-            var rows = document.querySelectorAll('#forumTableBody tr');
-            rows.forEach(function(row) {
+            document.querySelectorAll('#forumTableBody tr').forEach(function(row) {
                 if (filter === 'all' || row.dataset.status === filter) {
                     row.style.display = '';
                 } else {
@@ -231,22 +219,68 @@
 
         document.getElementById('postSearch').addEventListener('input', function() {
             var keyword = this.value.toLowerCase();
-            var rows = document.querySelectorAll('#forumTableBody tr');
-            rows.forEach(function(row) {
+            document.querySelectorAll('#forumTableBody tr').forEach(function(row) {
                 var text = row.textContent.toLowerCase();
                 row.style.display = text.includes(keyword) ? '' : 'none';
             });
         });
 
-        function viewPost(id) {
+        function viewPost(index) {
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var post = posts[index];
+            if (!post) return;
+            var user = users.find(function(u) { return u.id === post.authorId; });
+            var authorName = user ? (user.username || '未知') : (post.authorName || '未知');
+            var status = post.status || 'published';
+            var statusBadge = status === 'published' ? '<span class="badge badge-success">已发布</span>' :
+                status === 'pending' ? '<span class="badge badge-warning">待审核</span>' :
+                '<span class="badge badge-danger">已屏蔽</span>';
+            document.getElementById('postModal').querySelector('.detail-grid').innerHTML =
+                '<div class="detail-item detail-full"><div class="label">标题</div><div class="value">' + (post.title || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">作者</div><div class="value">' + authorName + '</div></div>' +
+                '<div class="detail-item"><div class="label">分类</div><div class="value">' + (post.category || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">发布时间</div><div class="value">' + (post.createdAt ? new Date(post.createdAt).toLocaleString('zh-CN') : '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">状态</div><div class="value">' + statusBadge + '</div></div>' +
+                '<div class="detail-item detail-full"><div class="label">内容</div><div class="value">' + (post.content || '暂无内容') + '</div></div>';
             document.getElementById('postModal').classList.add('show');
         }
+
         function closeModal() {
             document.getElementById('postModal').classList.remove('show');
         }
-        function approvePost(id) { alert('帖子已通过审核'); }
-        function rejectPost(id) { alert('帖子已拒绝'); }
-        function blockPost(id) { alert('帖子已屏蔽'); }
+
+        function approvePost(index) {
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var post = posts[index];
+            if (!post) return;
+            post.status = 'published';
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            alert('帖子已通过审核');
+        }
+
+        function rejectPost(index) {
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var post = posts[index];
+            if (!post) return;
+            post.status = 'blocked';
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            alert('帖子已拒绝');
+        }
+
+        function blockPost(index) {
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var post = posts[index];
+            if (!post) return;
+            post.status = 'blocked';
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            alert('帖子已屏蔽');
+        }
+
+        loadPosts();
     </script>
 </body>
 </html>

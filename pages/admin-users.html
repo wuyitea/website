@@ -83,89 +83,14 @@
                             </tr>
                         </thead>
                         <tbody id="userTableBody">
-                            <tr data-status="active">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> 小明</div></td>
-                                <td>xiaoming@email.com</td>
-                                <td>2026-01-15</td>
-                                <td>12</td>
-                                <td>3</td>
-                                <td><span class="badge badge-success">正常</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(1)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="banUser(1)">封禁</button>
-                                </td>
-                            </tr>
-                            <tr data-status="active">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> 小红</div></td>
-                                <td>xiaohong@email.com</td>
-                                <td>2026-02-20</td>
-                                <td>8</td>
-                                <td>5</td>
-                                <td><span class="badge badge-success">正常</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(2)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="banUser(2)">封禁</button>
-                                </td>
-                            </tr>
-                            <tr data-status="active">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> 小刚</div></td>
-                                <td>xiaogang@email.com</td>
-                                <td>2026-03-10</td>
-                                <td>5</td>
-                                <td>2</td>
-                                <td><span class="badge badge-success">正常</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(3)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="banUser(3)">封禁</button>
-                                </td>
-                            </tr>
-                            <tr data-status="active">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> 小芳</div></td>
-                                <td>xiaofang@email.com</td>
-                                <td>2026-04-05</td>
-                                <td>15</td>
-                                <td>8</td>
-                                <td><span class="badge badge-success">正常</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(4)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="banUser(4)">封禁</button>
-                                </td>
-                            </tr>
-                            <tr data-status="banned">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> spam_user</div></td>
-                                <td>spam@email.com</td>
-                                <td>2026-05-01</td>
-                                <td>2</td>
-                                <td>0</td>
-                                <td><span class="badge badge-danger">封禁</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(5)">查看</button>
-                                    <button class="btn-admin btn-admin-success" onclick="unbanUser(5)">解封</button>
-                                </td>
-                            </tr>
-                            <tr data-status="inactive">
-                                <td><div class="user-cell"><img src="../images/default-avatar.png" class="avatar-sm" alt=""> 小白</div></td>
-                                <td>xiaobai@email.com</td>
-                                <td>2026-06-15</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td><span class="badge badge-gray">不活跃</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewUser(6)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="banUser(6)">封禁</button>
-                                </td>
-                            </tr>
+                            <!-- 动态加载 -->
                         </tbody>
                     </table>
                     <div class="admin-pagination">
-                        <span class="pagination-info">显示 1-6 / 共 128 条</span>
+                        <span class="pagination-info" id="paginationInfo">显示 0 / 共 0 条</span>
                         <div class="pagination-btns">
                             <button disabled>&laquo;</button>
                             <button class="active">1</button>
-                            <button>2</button>
-                            <button>3</button>
-                            <button>...</button>
-                            <button>22</button>
                             <button>&raquo;</button>
                         </div>
                     </div>
@@ -228,6 +153,45 @@
             window.location.href = 'admin-login.html';
         });
 
+        function loadUsers() {
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var tbody = document.getElementById('userTableBody');
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">👥</div><p>暂无注册用户</p></td></tr>';
+                document.getElementById('paginationInfo').textContent = '显示 0 / 共 0 条';
+                return;
+            }
+
+            var html = '';
+            users.forEach(function(user, index) {
+                var userPosts = posts.filter(function(p) { return p.authorId === user.id; }).length;
+                var userProducts = products.filter(function(p) { return p.sellerId === user.id; }).length;
+                var status = user.status === 'banned' ? 'banned' : 'active';
+                var statusBadge = status === 'banned' ?
+                    '<span class="badge badge-danger">封禁</span>' :
+                    '<span class="badge badge-success">正常</span>';
+                var action = status === 'banned' ?
+                    '<button class="btn-admin btn-admin-success" onclick="unbanUser(\'' + user.id + '\')">解封</button>' :
+                    '<button class="btn-admin btn-admin-danger" onclick="banUser(\'' + user.id + '\')">封禁</button>';
+                var date = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
+
+                html += '<tr data-status="' + status + '">' +
+                    '<td><div class="user-cell"><img src="../' + (user.avatar || 'images/default-avatar.png') + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td>' +
+                    '<td>' + (user.email || '-') + '</td>' +
+                    '<td>' + date + '</td>' +
+                    '<td>' + userPosts + '</td>' +
+                    '<td>' + userProducts + '</td>' +
+                    '<td>' + statusBadge + '</td>' +
+                    '<td><button class="btn-admin btn-admin-outline" onclick="viewUser(' + index + ')">查看</button> ' + action + '</td>' +
+                    '</tr>';
+            });
+            tbody.innerHTML = html;
+            document.getElementById('paginationInfo').textContent = '显示 1-' + users.length + ' / 共 ' + users.length + ' 条';
+        }
+
         document.getElementById('userFilter').addEventListener('change', function() {
             var filter = this.value;
             document.querySelectorAll('#userTableBody tr').forEach(function(row) {
@@ -247,12 +211,45 @@
             });
         });
 
-        function viewUser(id) { document.getElementById('userModal').classList.add('show'); }
-        function closeModal() { document.getElementById('userModal').classList.remove('show'); }
-        function banUser(id) {
-            if (confirm('确定要封禁该用户吗？')) alert('用户已封禁');
+        function viewUser(index) {
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var user = users[index];
+            if (!user) return;
+            document.getElementById('userModal').querySelector('.detail-grid').innerHTML =
+                '<div class="detail-item"><div class="label">用户名</div><div class="value">' + (user.username || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">邮箱</div><div class="value">' + (user.email || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">注册时间</div><div class="value">' + (user.createdAt ? new Date(user.createdAt).toLocaleString('zh-CN') : '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">状态</div><div class="value">' + (user.status === 'banned' ? '<span class="badge badge-danger">封禁</span>' : '<span class="badge badge-success">正常</span>') + '</div></div>' +
+                '<div class="detail-item detail-full"><div class="label">个人简介</div><div class="value">' + (user.bio || '暂无简介') + '</div></div>';
+            document.getElementById('userModal').classList.add('show');
         }
-        function unbanUser(id) { alert('用户已解封'); }
+
+        function closeModal() { document.getElementById('userModal').classList.remove('show'); }
+
+        function banUser(id) {
+            if (!confirm('确定要封禁该用户吗？')) return;
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var user = users.find(function(u) { return u.id === id; });
+            if (user) {
+                user.status = 'banned';
+                localStorage.setItem('users', JSON.stringify(users));
+                loadUsers();
+                alert('用户已封禁');
+            }
+        }
+
+        function unbanUser(id) {
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var user = users.find(function(u) { return u.id === id; });
+            if (user) {
+                user.status = 'active';
+                localStorage.setItem('users', JSON.stringify(users));
+                loadUsers();
+                alert('用户已解封');
+            }
+        }
+
+        loadUsers();
     </script>
 </body>
 </html>

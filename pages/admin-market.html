@@ -91,81 +91,11 @@
                             </tr>
                         </thead>
                         <tbody id="productTableBody">
-                            <tr data-status="onsale" data-category="electronics">
-                                <td>MacBook Pro 2024 M3</td>
-                                <td>小明</td>
-                                <td>¥12,800</td>
-                                <td>数码电子</td>
-                                <td>2026-07-10</td>
-                                <td><span class="badge badge-success">在售</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(1)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(1)">下架</button>
-                                </td>
-                            </tr>
-                            <tr data-status="onsale" data-category="electronics">
-                                <td>Cherry MX 机械键盘</td>
-                                <td>小红</td>
-                                <td>¥399</td>
-                                <td>数码电子</td>
-                                <td>2026-07-09</td>
-                                <td><span class="badge badge-success">在售</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(2)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(2)">下架</button>
-                                </td>
-                            </tr>
-                            <tr data-status="pending" data-category="electronics">
-                                <td>无线蓝牙耳机 AirPods</td>
-                                <td>小刚</td>
-                                <td>¥259</td>
-                                <td>数码电子</td>
-                                <td>2026-07-09</td>
-                                <td><span class="badge badge-warning">待审核</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-success" onclick="approveProduct(3)">通过</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="rejectProduct(3)">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr data-status="onsale" data-category="clothing">
-                                <td>限定款运动鞋</td>
-                                <td>小芳</td>
-                                <td>¥599</td>
-                                <td>服装鞋帽</td>
-                                <td>2026-07-08</td>
-                                <td><span class="badge badge-success">在售</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(4)">查看</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="removeProduct(4)">下架</button>
-                                </td>
-                            </tr>
-                            <tr data-status="sold" data-category="home">
-                                <td>北欧风格台灯</td>
-                                <td>小明</td>
-                                <td>¥189</td>
-                                <td>家居生活</td>
-                                <td>2026-07-07</td>
-                                <td><span class="badge badge-info">已售出</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-outline" onclick="viewProduct(5)">查看</button>
-                                </td>
-                            </tr>
-                            <tr data-status="pending" data-category="other">
-                                <td>手绘明信片套装</td>
-                                <td>小白</td>
-                                <td>¥35</td>
-                                <td>其他</td>
-                                <td>2026-07-07</td>
-                                <td><span class="badge badge-warning">待审核</span></td>
-                                <td>
-                                    <button class="btn-admin btn-admin-success" onclick="approveProduct(6)">通过</button>
-                                    <button class="btn-admin btn-admin-danger" onclick="rejectProduct(6)">拒绝</button>
-                                </td>
-                            </tr>
+                            <!-- 动态加载 -->
                         </tbody>
                     </table>
                     <div class="admin-pagination">
-                        <span class="pagination-info">显示 1-6 / 共 43 条</span>
+                        <span class="pagination-info" id="paginationInfo">显示 0 / 共 0 条</span>
                         <div class="pagination-btns">
                             <button disabled>&laquo;</button>
                             <button class="active">1</button>
@@ -229,6 +159,62 @@
             window.location.href = 'admin-login.html';
         });
 
+        function loadProducts() {
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var tbody = document.getElementById('productTableBody');
+
+            var total = products.length;
+            var onsale = products.filter(function(p) { return p.status === 'onsale'; }).length;
+            var pending = products.filter(function(p) { return p.status === 'pending'; }).length;
+            var cards = document.querySelectorAll('.stat-card .stat-value');
+            cards[0].textContent = total;
+            cards[1].textContent = onsale;
+            cards[2].textContent = pending;
+
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">📦</div><p>暂无商品</p></td></tr>';
+                return;
+            }
+
+            var html = '';
+            products.forEach(function(product, index) {
+                var user = users.find(function(u) { return u.id === product.sellerId; });
+                var sellerName = user ? (user.username || '未知') : (product.sellerName || '未知');
+                var status = product.status || 'onsale';
+                var statusBadge = '';
+                var actions = '';
+                if (status === 'onsale') {
+                    statusBadge = '<span class="badge badge-success">在售</span>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="removeProduct(' + index + ')">下架</button>';
+                } else if (status === 'pending') {
+                    statusBadge = '<span class="badge badge-warning">待审核</span>';
+                    actions = '<button class="btn-admin btn-admin-success" onclick="approveProduct(' + index + ')">通过</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="rejectProduct(' + index + ')">拒绝</button>';
+                } else if (status === 'sold') {
+                    statusBadge = '<span class="badge badge-info">已售出</span>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button>';
+                } else {
+                    statusBadge = '<span class="badge badge-secondary">已下架</span>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button>';
+                }
+                var date = product.createdAt ? new Date(product.createdAt).toLocaleDateString('zh-CN') : '-';
+                var price = product.price ? ('¥' + Number(product.price).toLocaleString()) : '-';
+                html += '<tr data-status="' + status + '" data-category="' + (product.category || '') + '">' +
+                    '<td>' + (product.name || '-') + '</td>' +
+                    '<td>' + sellerName + '</td>' +
+                    '<td>' + price + '</td>' +
+                    '<td>' + (product.categoryName || product.category || '-') + '</td>' +
+                    '<td>' + date + '</td>' +
+                    '<td>' + statusBadge + '</td>' +
+                    '<td>' + actions + '</td>' +
+                    '</tr>';
+            });
+            tbody.innerHTML = html;
+            document.getElementById('paginationInfo').textContent = '显示 1-' + products.length + ' / 共 ' + products.length + ' 条';
+        }
+
         document.getElementById('productFilter').addEventListener('change', filterProducts);
         document.getElementById('categoryFilter').addEventListener('change', filterProducts);
         document.getElementById('productSearch').addEventListener('input', function() {
@@ -249,11 +235,64 @@
             });
         }
 
-        function viewProduct(id) { document.getElementById('productModal').classList.add('show'); }
-        function closeModal() { document.getElementById('productModal').classList.remove('show'); }
-        function approveProduct(id) { alert('商品已通过审核'); }
-        function rejectProduct(id) { alert('商品已拒绝'); }
-        function removeProduct(id) { alert('商品已下架'); }
+        function viewProduct(index) {
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            var users = JSON.parse(localStorage.getItem('users') || '[]');
+            var product = products[index];
+            if (!product) return;
+            var user = users.find(function(u) { return u.id === product.sellerId; });
+            var sellerName = user ? (user.username || '未知') : (product.sellerName || '未知');
+            var status = product.status || 'onsale';
+            var statusBadge = status === 'onsale' ? '<span class="badge badge-success">在售</span>' :
+                status === 'pending' ? '<span class="badge badge-warning">待审核</span>' :
+                status === 'sold' ? '<span class="badge badge-info">已售出</span>' :
+                '<span class="badge badge-secondary">已下架</span>';
+            var price = product.price ? ('¥' + Number(product.price).toLocaleString()) : '-';
+            document.getElementById('productModal').querySelector('.detail-grid').innerHTML =
+                '<div class="detail-item detail-full"><div class="label">商品名称</div><div class="value">' + (product.name || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">卖家</div><div class="value">' + sellerName + '</div></div>' +
+                '<div class="detail-item"><div class="label">价格</div><div class="value">' + price + '</div></div>' +
+                '<div class="detail-item"><div class="label">分类</div><div class="value">' + (product.categoryName || product.category || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">状态</div><div class="value">' + statusBadge + '</div></div>' +
+                '<div class="detail-item detail-full"><div class="label">描述</div><div class="value">' + (product.description || '暂无描述') + '</div></div>';
+            document.getElementById('productModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+        }
+
+        function approveProduct(index) {
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            var product = products[index];
+            if (!product) return;
+            product.status = 'onsale';
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+            alert('商品已通过审核');
+        }
+
+        function rejectProduct(index) {
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            var product = products[index];
+            if (!product) return;
+            product.status = 'removed';
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+            alert('商品已拒绝');
+        }
+
+        function removeProduct(index) {
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            var product = products[index];
+            if (!product) return;
+            product.status = 'removed';
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+            alert('商品已下架');
+        }
+
+        loadProducts();
     </script>
 </body>
 </html>

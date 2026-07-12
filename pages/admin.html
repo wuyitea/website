@@ -192,6 +192,45 @@
             localStorage.removeItem('admin_logged_in');
             window.location.href = 'admin-login.html';
         });
+
+        // 加载真实数据
+        var users = JSON.parse(localStorage.getItem('users') || '[]');
+        var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        var products = JSON.parse(localStorage.getItem('products') || '[]');
+
+        document.getElementById('statUsers').textContent = users.length;
+        document.getElementById('statPosts').textContent = posts.length;
+        document.getElementById('statProducts').textContent = products.length;
+
+        // 最新用户
+        var recentUsersHtml = '';
+        var sortedUsers = users.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 4);
+        sortedUsers.forEach(function(user) {
+            var date = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
+            recentUsersHtml += '<tr><td><div class="user-cell"><img src="../' + (user.avatar || 'images/default-avatar.png') + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td><td>' + date + '</td><td><span class="badge badge-success">正常</span></td></tr>';
+        });
+        if (sortedUsers.length === 0) recentUsersHtml = '<tr><td colspan="3" style="text-align:center;color:#9ca3af">暂无用户</td></tr>';
+        document.getElementById('recentUsers').innerHTML = recentUsersHtml;
+
+        // 最新帖子
+        var recentPostsHtml = '';
+        var sortedPosts = posts.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 4);
+        sortedPosts.forEach(function(post) {
+            var author = users.find(function(u) { return u.id === post.authorId; }) || {};
+            recentPostsHtml += '<tr><td>' + (post.title || '-') + '</td><td>' + (author.username || '匿名') + '</td><td><span class="badge badge-success">已发布</span></td></tr>';
+        });
+        if (sortedPosts.length === 0) recentPostsHtml = '<tr><td colspan="3" style="text-align:center;color:#9ca3af">暂无帖子</td></tr>';
+        document.getElementById('recentPosts').innerHTML = recentPostsHtml;
+
+        // 最新商品
+        var recentProductsHtml = '';
+        var sortedProducts = products.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 3);
+        sortedProducts.forEach(function(product) {
+            var seller = users.find(function(u) { return u.id === product.sellerId; }) || {};
+            recentProductsHtml += '<tr><td>' + (product.title || '-') + '</td><td>' + (seller.username || '匿名') + '</td><td>¥' + (product.price || 0).toFixed(2) + '</td><td><span class="badge badge-success">在售</span></td><td><button class="btn-admin btn-admin-outline">查看</button></td></tr>';
+        });
+        if (sortedProducts.length === 0) recentProductsHtml = '<tr><td colspan="5" style="text-align:center;color:#9ca3af">暂无商品</td></tr>';
+        document.getElementById('recentProducts').innerHTML = recentProductsHtml;
     </script>
 </body>
 </html>
