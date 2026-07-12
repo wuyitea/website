@@ -200,6 +200,19 @@
     .user-stats {
         gap: var(--spacing-md);
     }
+    
+    /* 手机端模态框优化 */
+    .modal {
+        padding: 10px 0;
+    }
+    
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        max-height: 85vh;
+        margin: 0 auto;
+        padding: var(--spacing-lg);
+    }
 }
 
 /* 触摸设备优化 */
