@@ -185,6 +185,12 @@ const market = {
     },
 
     submitProduct() {
+        if (!authModule.isLoggedIn()) {
+            alert('请先登录后再发布商品');
+            authModule.showModal('login');
+            return;
+        }
+
         var category = document.getElementById('productCategory').value;
         var title = document.getElementById('productTitle').value.trim();
         var description = document.getElementById('productDescription').value.trim();
@@ -198,6 +204,7 @@ const market = {
         if (isNaN(price) || price <= 0) { alert('请输入有效的价格'); return; }
 
         var user = authModule.getCurrentUser();
+        if (!user) { alert('请先登录'); return; }
         var products = JSON.parse(localStorage.getItem('products') || '[]');
         var newProduct = {
             id: Date.now().toString(),

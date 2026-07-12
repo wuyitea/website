@@ -3,28 +3,23 @@ const profile = {
     userId: null,
     userData: null,
     currentTab: 'posts',
-    
-    // 初始化个人资料
+
     init() {
         this.getUserId();
         this.loadProfile();
         this.setupEventListeners();
     },
-    
-    // 获取用户ID
+
     getUserId() {
         const urlParams = new URLSearchParams(window.location.search);
         this.userId = urlParams.get('id');
-        
-        // 如果没有指定ID，使用当前用户
+
         if (!this.userId && authModule.isLoggedIn()) {
-            this.userId = authModule.getCurrentUser().uid;
+            this.userId = authModule.getCurrentUser().id;
         }
     },
-    
-    // 设置事件监听
+
     setupEventListeners() {
-        // 标签切换
         document.querySelectorAll('.profile-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
@@ -33,28 +28,24 @@ const profile = {
                 this.loadTabContent();
             });
         });
-        
-        // 关注按钮
+
         const followBtn = document.getElementById('followBtn');
         if (followBtn) {
             followBtn.addEventListener('click', () => this.toggleFollow());
         }
-        
-        // 发消息按钮
+
         const messageBtn = document.getElementById('messageBtn');
         if (messageBtn) {
             messageBtn.addEventListener('click', () => {
                 window.location.href = `messages.html?user=${this.userId}`;
             });
         }
-        
-        // 编辑资料按钮
+
         const editProfileBtn = document.getElementById('editProfileBtn');
         if (editProfileBtn) {
             editProfileBtn.addEventListener('click', () => this.showEditModal());
         }
-        
-        // 编辑资料表单
+
         const editProfileForm = document.getElementById('editProfileForm');
         if (editProfileForm) {
             editProfileForm.addEventListener('submit', (e) => {
@@ -62,8 +53,7 @@ const profile = {
                 this.updateProfile();
             });
         }
-        
-        // 模态框关闭
+
         document.querySelectorAll('.close-modal').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.modal').forEach(modal => {
@@ -71,62 +61,53 @@ const profile = {
                 });
             });
         });
-        
-        // 点击模态框外部关闭
+
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 e.target.style.display = 'none';
             }
         });
     },
-    
-    // 加载个人资料
-    async loadProfile() {
+
+    loadProfile() {
         if (!this.userId) {
             utils.showNotification('用户不存在', 'error');
             return;
         }
-        
-        try {
-            const userDoc = await usersRef.doc(this.userId).get();
-            if (!userDoc.exists) {
-                utils.showNotification('用户不存在', 'error');
-                return;
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        this.userData = users.find(u => u.id === this.userId);
+
+        if (!this.userData) {
+            utils.showNotification('用户不存在', 'error');
+            return;
+        }
+
+        this.updateProfileUI();
+        this.loadTabContent();
+
+        if (authModule.isLoggedIn()) {
+            const currentUser = authModule.getCurrentUser();
+            const isOwner = currentUser.id === this.userId;
+
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const followBtn = document.getElementById('followBtn');
+            const messageBtn = document.getElementById('messageBtn');
+
+            if (isOwner) {
+                if (editProfileBtn) editProfileBtn.style.display = 'inline-block';
+                if (followBtn) followBtn.style.display = 'none';
+                if (messageBtn) messageBtn.style.display = 'none';
+            } else {
+                if (editProfileBtn) editProfileBtn.style.display = 'none';
+                if (followBtn) followBtn.style.display = 'inline-block';
+                if (messageBtn) messageBtn.style.display = 'inline-block';
+
+                this.checkFollowStatus();
             }
-            
-            this.userData = userDoc.data();
-            this.updateProfileUI();
-            this.loadTabContent();
-            
-            // 检查是否是当前用户
-            if (authModule.isLoggedIn()) {
-                const currentUser = authModule.getCurrentUser();
-                const isOwner = currentUser.uid === this.userId;
-                
-                const editProfileBtn = document.getElementById('editProfileBtn');
-                const followBtn = document.getElementById('followBtn');
-                const messageBtn = document.getElementById('messageBtn');
-                
-                if (isOwner) {
-                    if (editProfileBtn) editProfileBtn.style.display = 'inline-block';
-                    if (followBtn) followBtn.style.display = 'none';
-                    if (messageBtn) messageBtn.style.display = 'none';
-                } else {
-                    if (editProfileBtn) editProfileBtn.style.display = 'none';
-                    if (followBtn) followBtn.style.display = 'inline-block';
-                    if (messageBtn) messageBtn.style.display = 'inline-block';
-                    
-                    // 检查是否已关注
-                    await this.checkFollowStatus();
-                }
-            }
-        } catch (error) {
-            console.error('加载个人资料失败:', error);
-            utils.showNotification('加载失败', 'error');
         }
     },
-    
-    // 更新个人资料UI
+
     updateProfileUI() {
         const profileAvatar = document.getElementById('profileAvatar');
         const profileUsername = document.getElementById('profileUsername');
@@ -135,7 +116,7 @@ const profile = {
         const productsCount = document.getElementById('productsCount');
         const followersCount = document.getElementById('followersCount');
         const followingCount = document.getElementById('followingCount');
-        
+
         if (profileAvatar) profileAvatar.src = this.userData.avatar || '../images/default-avatar.png';
         if (profileUsername) profileUsername.textContent = this.userData.username;
         if (profileBio) profileBio.textContent = this.userData.bio || '这个人很懒，什么都没写';
@@ -143,47 +124,39 @@ const profile = {
         if (productsCount) productsCount.textContent = this.userData.productsCount || 0;
         if (followersCount) followersCount.textContent = this.userData.followersCount || 0;
         if (followingCount) followingCount.textContent = this.userData.followingCount || 0;
-        
-        // 更新页面标题
+
         document.title = `${this.userData.username} - 社区平台`;
     },
-    
-    // 加载标签内容
-    async loadTabContent() {
+
+    loadTabContent() {
         const content = document.getElementById('profileContent');
         if (!content) return;
-        
+
         utils.showLoading(content);
-        
-        try {
-            switch (this.currentTab) {
-                case 'posts':
-                    await this.loadUserPosts(content);
-                    break;
-                case 'products':
-                    await this.loadUserProducts(content);
-                    break;
-                case 'likes':
-                    await this.loadUserLikes(content);
-                    break;
-                case 'bookmarks':
-                    await this.loadUserBookmarks(content);
-                    break;
-            }
-        } catch (error) {
-            console.error('加载标签内容失败:', error);
-            content.innerHTML = '<div class="empty-state"><p>加载失败，请稍后再试</p></div>';
+
+        switch (this.currentTab) {
+            case 'posts':
+                this.loadUserPosts(content);
+                break;
+            case 'products':
+                this.loadUserProducts(content);
+                break;
+            case 'likes':
+                this.loadUserLikes(content);
+                break;
+            case 'bookmarks':
+                this.loadUserBookmarks(content);
+                break;
         }
     },
-    
-    // 加载用户帖子
-    async loadUserPosts(container) {
-        const snapshot = await postsRef
-            .where('authorId', '==', this.userId)
-            .orderBy('createdAt', 'desc')
-            .get();
-        
-        if (snapshot.empty) {
+
+    loadUserPosts(container) {
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        const userPosts = posts
+            .filter(p => p.authorId === this.userId)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        if (userPosts.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">📝</div>
@@ -193,22 +166,20 @@ const profile = {
             `;
             return;
         }
-        
+
         let html = '<div class="posts-list">';
-        for (const doc of snapshot.docs) {
-            const post = doc.data();
+        for (const post of userPosts) {
             html += this.createPostItem(post);
         }
         html += '</div>';
-        
+
         container.innerHTML = html;
     },
-    
-    // 创建帖子项
+
     createPostItem(post) {
         const category = appConfig.postCategories.find(c => c.id === post.category);
         const timeAgo = utils.formatDate(post.createdAt);
-        
+
         return `
             <article class="post-item">
                 <div class="post-item-header">
@@ -231,15 +202,14 @@ const profile = {
             </article>
         `;
     },
-    
-    // 加载用户商品
-    async loadUserProducts(container) {
-        const snapshot = await productsRef
-            .where('sellerId', '==', this.userId)
-            .orderBy('createdAt', 'desc')
-            .get();
-        
-        if (snapshot.empty) {
+
+    loadUserProducts(container) {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const userProducts = products
+            .filter(p => p.sellerId === this.userId)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        if (userProducts.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">🛒</div>
@@ -249,21 +219,19 @@ const profile = {
             `;
             return;
         }
-        
+
         let html = '<div class="products-grid">';
-        for (const doc of snapshot.docs) {
-            const product = doc.data();
+        for (const product of userProducts) {
             html += this.createProductItem(product);
         }
         html += '</div>';
-        
+
         container.innerHTML = html;
     },
-    
-    // 创建商品项
+
     createProductItem(product) {
         const category = appConfig.productCategories.find(c => c.id === product.category);
-        
+
         return `
             <article class="product-card">
                 <img src="${product.images?.[0] || '../images/default-product.png'}" 
@@ -286,14 +254,16 @@ const profile = {
             </article>
         `;
     },
-    
-    // 加载用户点赞
-    async loadUserLikes(container) {
-        const snapshot = await db.collection('likes')
-            .where('userId', '==', this.userId)
-            .get();
-        
-        if (snapshot.empty) {
+
+    loadUserLikes(container) {
+        const likes = JSON.parse(localStorage.getItem('likes') || '[]');
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+
+        const userLikes = likes.filter(l => l.userId === this.userId);
+        const postIds = userLikes.map(l => l.postId);
+        const likedPosts = posts.filter(p => postIds.includes(p.id));
+
+        if (likedPosts.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">👍</div>
@@ -303,27 +273,25 @@ const profile = {
             `;
             return;
         }
-        
-        const postIds = snapshot.docs.map(doc => doc.data().postId);
-        const postsSnapshot = await postsRef.where(firebase.firestore.FieldPath.documentId(), 'in', postIds).get();
-        
+
         let html = '<div class="posts-list">';
-        for (const doc of postsSnapshot.docs) {
-            const post = doc.data();
+        for (const post of likedPosts) {
             html += this.createPostItem(post);
         }
         html += '</div>';
-        
+
         container.innerHTML = html;
     },
-    
-    // 加载用户收藏
-    async loadUserBookmarks(container) {
-        const snapshot = await db.collection('bookmarks')
-            .where('userId', '==', this.userId)
-            .get();
-        
-        if (snapshot.empty) {
+
+    loadUserBookmarks(container) {
+        const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+
+        const userBookmarks = bookmarks.filter(b => b.userId === this.userId);
+        const postIds = userBookmarks.map(b => b.postId);
+        const bookmarkedPosts = posts.filter(p => postIds.includes(p.id));
+
+        if (bookmarkedPosts.length === 0) {
             container.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-state-icon">⭐</div>
@@ -333,32 +301,26 @@ const profile = {
             `;
             return;
         }
-        
-        const postIds = snapshot.docs.map(doc => doc.data().postId);
-        const postsSnapshot = await postsRef.where(firebase.firestore.FieldPath.documentId(), 'in', postIds).get();
-        
+
         let html = '<div class="posts-list">';
-        for (const doc of postsSnapshot.docs) {
-            const post = doc.data();
+        for (const post of bookmarkedPosts) {
             html += this.createPostItem(post);
         }
         html += '</div>';
-        
+
         container.innerHTML = html;
     },
-    
-    // 检查关注状态
-    async checkFollowStatus() {
+
+    checkFollowStatus() {
         if (!authModule.isLoggedIn()) return;
-        
+
         const currentUser = authModule.getCurrentUser();
-        const followDoc = await db.collection('follows')
-            .doc(`${currentUser.uid}_${this.userId}`)
-            .get();
-        
+        const follows = JSON.parse(localStorage.getItem('follows') || '[]');
+        const isFollowing = follows.some(f => f.followerId === currentUser.id && f.followingId === this.userId);
+
         const followBtn = document.getElementById('followBtn');
         if (followBtn) {
-            if (followDoc.exists) {
+            if (isFollowing) {
                 followBtn.textContent = '取消关注';
                 followBtn.classList.remove('btn-primary');
                 followBtn.classList.add('btn-outline');
@@ -369,117 +331,102 @@ const profile = {
             }
         }
     },
-    
-    // 切换关注
-    async toggleFollow() {
+
+    toggleFollow() {
         if (!authModule.isLoggedIn()) {
             utils.showNotification('请先登录', 'warning');
             return;
         }
-        
+
         const currentUser = authModule.getCurrentUser();
-        const followRef = db.collection('follows').doc(`${currentUser.uid}_${this.userId}`);
-        
-        try {
-            const followDoc = await followRef.get();
-            
-            if (followDoc.exists) {
-                // 取消关注
-                await followRef.delete();
-                await usersRef.doc(this.userId).update({
-                    followersCount: firebase.firestore.FieldValue.increment(-1)
-                });
-                await usersRef.doc(currentUser.uid).update({
-                    followingCount: firebase.firestore.FieldValue.increment(-1)
-                });
-                
-                utils.showNotification('已取消关注', 'info');
-            } else {
-                // 关注
-                await followRef.set({
-                    followerId: currentUser.uid,
-                    followingId: this.userId,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                await usersRef.doc(this.userId).update({
-                    followersCount: firebase.firestore.FieldValue.increment(1)
-                });
-                await usersRef.doc(currentUser.uid).update({
-                    followingCount: firebase.firestore.FieldValue.increment(1)
-                });
-                
-                utils.showNotification('关注成功', 'success');
+        const follows = JSON.parse(localStorage.getItem('follows') || '[]');
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const existingIndex = follows.findIndex(f => f.followerId === currentUser.id && f.followingId === this.userId);
+
+        if (existingIndex !== -1) {
+            follows.splice(existingIndex, 1);
+            localStorage.setItem('follows', JSON.stringify(follows));
+
+            const targetIndex = users.findIndex(u => u.id === this.userId);
+            if (targetIndex !== -1) {
+                users[targetIndex].followersCount = Math.max((users[targetIndex].followersCount || 1) - 1, 0);
             }
-            
-            await this.checkFollowStatus();
-            await this.loadProfile();
-        } catch (error) {
-            console.error('关注操作失败:', error);
-            utils.showNotification('操作失败', 'error');
+            const selfIndex = users.findIndex(u => u.id === currentUser.id);
+            if (selfIndex !== -1) {
+                users[selfIndex].followingCount = Math.max((users[selfIndex].followingCount || 1) - 1, 0);
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+
+            utils.showNotification('已取消关注', 'info');
+        } else {
+            follows.push({
+                followerId: currentUser.id,
+                followingId: this.userId,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('follows', JSON.stringify(follows));
+
+            const targetIndex = users.findIndex(u => u.id === this.userId);
+            if (targetIndex !== -1) {
+                users[targetIndex].followersCount = (users[targetIndex].followersCount || 0) + 1;
+            }
+            const selfIndex = users.findIndex(u => u.id === currentUser.id);
+            if (selfIndex !== -1) {
+                users[selfIndex].followingCount = (users[selfIndex].followingCount || 0) + 1;
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+
+            utils.showNotification('关注成功', 'success');
         }
+
+        this.checkFollowStatus();
+        this.loadProfile();
     },
-    
-    // 显示编辑资料模态框
+
     showEditModal() {
         const modal = document.getElementById('editProfileModal');
         if (modal) {
-            // 填充当前数据
             document.getElementById('editUsername').value = this.userData.username || '';
             document.getElementById('editBio').value = this.userData.bio || '';
-            
             modal.style.display = 'block';
         }
     },
-    
-    // 更新个人资料
-    async updateProfile() {
+
+    updateProfile() {
         const username = document.getElementById('editUsername').value.trim();
         const bio = document.getElementById('editBio').value.trim();
-        const avatarInput = document.getElementById('editAvatar');
-        
+
         if (!username) {
             utils.showNotification('请输入用户名', 'error');
             return;
         }
-        
-        try {
-            const user = authModule.getCurrentUser();
-            const updateData = {
-                username: username,
-                bio: bio,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // 上传新头像
-            if (avatarInput.files.length > 0) {
-                const file = avatarInput.files[0];
-                if (file.size > appConfig.maxImageSize) {
-                    utils.showNotification('头像文件过大', 'error');
-                    return;
-                }
-                
-                const fileRef = avatarsRef.child(`${user.uid}/${Date.now()}_${file.name}`);
-                await fileRef.put(file);
-                const avatarUrl = await fileRef.getDownloadURL();
-                updateData.avatar = avatarUrl;
-            }
-            
-            // 更新用户文档
-            await usersRef.doc(user.uid).update(updateData);
-            
-            // 关闭模态框并刷新
-            document.getElementById('editProfileModal').style.display = 'none';
-            utils.showNotification('资料更新成功', 'success');
-            
-            await this.loadProfile();
-        } catch (error) {
-            console.error('更新资料失败:', error);
-            utils.showNotification('更新失败', 'error');
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex(u => u.id === this.userId);
+
+        if (userIndex === -1) {
+            utils.showNotification('用户不存在', 'error');
+            return;
         }
+
+        users[userIndex].username = username;
+        users[userIndex].bio = bio;
+        localStorage.setItem('users', JSON.stringify(users));
+
+        const currentUser = authModule.getCurrentUser();
+        if (currentUser && currentUser.id === this.userId) {
+            currentUser.username = username;
+            currentUser.bio = bio;
+            localStorage.setItem('current_user', JSON.stringify(currentUser));
+            authModule.currentUser = currentUser;
+        }
+
+        document.getElementById('editProfileModal').style.display = 'none';
+        utils.showNotification('资料更新成功', 'success');
+        this.loadProfile();
     }
 };
 
-// 页面加载完成后初始化个人资料模块
 document.addEventListener('DOMContentLoaded', () => {
     profile.init();
 });

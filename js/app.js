@@ -1,6 +1,5 @@
 // 主应用模块
 const app = {
-    // 初始化应用
     init() {
         this.setupEventListeners();
         this.loadHotPosts();
@@ -9,19 +8,16 @@ const app = {
         this.setupSearch();
         this.setupNavigation();
     },
-    
-    // 设置事件监听
+
     setupEventListeners() {
-        // 用户下拉菜单
         const userAvatar = document.getElementById('userAvatar');
         const userDropdown = document.querySelector('.user-dropdown');
-        
+
         if (userAvatar && userDropdown) {
             userAvatar.addEventListener('click', () => {
                 userDropdown.classList.toggle('show');
             });
-            
-            // 点击外部关闭下拉菜单
+
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.user-profile')) {
                     userDropdown.classList.remove('show');
@@ -29,12 +25,11 @@ const app = {
             });
         }
     },
-    
-    // 设置搜索功能
+
     setupSearch() {
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
-        
+
         if (searchInput && searchBtn) {
             const performSearch = utils.debounce(() => {
                 const query = searchInput.value.trim();
@@ -42,7 +37,7 @@ const app = {
                     this.search(query);
                 }
             }, 500);
-            
+
             searchInput.addEventListener('input', performSearch);
             searchBtn.addEventListener('click', () => {
                 const query = searchInput.value.trim();
@@ -50,7 +45,7 @@ const app = {
                     this.search(query);
                 }
             });
-            
+
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     const query = searchInput.value.trim();
@@ -61,14 +56,13 @@ const app = {
             });
         }
     },
-    
-    // 设置导航
+
     setupNavigation() {
         const navToggle = document.getElementById('navToggle');
         const navMenu = document.querySelector('.nav-menu');
         const navSearch = document.querySelector('.nav-search');
         const userActions = document.querySelector('.user-actions');
-        
+
         if (navToggle) {
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('show');
@@ -77,80 +71,56 @@ const app = {
             });
         }
     },
-    
-    // 搜索
-    async search(query) {
-        try {
-            // 搜索帖子
-            const postsSnapshot = await postsRef
-                .where('title', '>=', query)
-                .where('title', '<=', query + '\uf8ff')
-                .limit(10)
-                .get();
-            
-            // 搜索商品
-            const productsSnapshot = await productsRef
-                .where('title', '>=', query)
-                .where('title', '<=', query + '\uf8ff')
-                .limit(10)
-                .get();
-            
-            // 这里可以跳转到搜索结果页面或显示搜索结果
-            console.log('搜索结果:', {
-                posts: postsSnapshot.docs.length,
-                products: productsSnapshot.docs.length
-            });
-        } catch (error) {
-            console.error('搜索失败:', error);
-        }
+
+    search(query) {
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+
+        const matchedPosts = posts.filter(p => p.title.includes(query)).slice(0, 10);
+        const matchedProducts = products.filter(p => p.title.includes(query)).slice(0, 10);
+
+        console.log('搜索结果:', {
+            posts: matchedPosts.length,
+            products: matchedProducts.length
+        });
     },
-    
-    // 加载热门帖子
-    async loadHotPosts() {
+
+    loadHotPosts() {
         const container = document.getElementById('hotPosts');
         if (!container) return;
-        
+
         utils.showLoading(container);
-        
-        try {
-            const snapshot = await postsRef
-                .orderBy('likesCount', 'desc')
-                .limit(6)
-                .get();
-            
-            if (snapshot.empty) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📝</div>
-                        <h3>暂无帖子</h3>
-                        <p>成为第一个发帖的人吧！</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            for (const doc of snapshot.docs) {
-                const post = doc.data();
-                const userDoc = await usersRef.doc(post.authorId).get();
-                const userData = userDoc.data();
-                
-                html += this.createPostCard(post, userData);
-            }
-            
-            container.innerHTML = html;
-            this.setupPostActions();
-        } catch (error) {
-            console.error('加载热门帖子失败:', error);
-            container.innerHTML = '<div class="empty-state"><p>加载失败，请稍后再试</p></div>';
+
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        if (posts.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>暂无帖子</h3>
+                    <p>成为第一个发帖的人吧！</p>
+                </div>
+            `;
+            return;
         }
+
+        const hotPosts = posts.sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0)).slice(0, 6);
+
+        let html = '';
+        for (const post of hotPosts) {
+            const userData = users.find(u => u.id === post.authorId);
+            html += this.createPostCard(post, userData);
+        }
+
+        container.innerHTML = html;
+        this.setupPostActions();
     },
-    
-    // 创建帖子卡片
+
     createPostCard(post, userData) {
         const category = appConfig.postCategories.find(c => c.id === post.category);
         const timeAgo = utils.formatDate(post.createdAt);
-        
+
         return `
             <article class="post-card" data-id="${post.id}">
                 <div class="post-header">
@@ -185,148 +155,133 @@ const app = {
             </article>
         `;
     },
-    
-    // 设置帖子操作
+
     setupPostActions() {
-        // 点赞按钮
         document.querySelectorAll('.like-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 if (!authModule.isLoggedIn()) {
                     utils.showNotification('请先登录', 'warning');
                     return;
                 }
-                
+
                 const postId = btn.dataset.id;
-                await this.toggleLike(postId, btn);
+                this.toggleLike(postId, btn);
             });
         });
-        
-        // 收藏按钮
+
         document.querySelectorAll('.bookmark-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 if (!authModule.isLoggedIn()) {
                     utils.showNotification('请先登录', 'warning');
                     return;
                 }
-                
+
                 const postId = btn.dataset.id;
-                await this.toggleBookmark(postId, btn);
+                this.toggleBookmark(postId, btn);
             });
         });
     },
-    
-    // 切换点赞
-    async toggleLike(postId, btn) {
-        try {
-            const userId = authModule.getCurrentUser().uid;
-            const likeRef = db.collection('likes').doc(`${postId}_${userId}`);
-            const likeDoc = await likeRef.get();
-            
-            if (likeDoc.exists) {
-                // 取消点赞
-                await likeRef.delete();
-                await postsRef.doc(postId).update({
-                    likesCount: firebase.firestore.FieldValue.increment(-1)
-                });
-                btn.classList.remove('active');
-                utils.showNotification('已取消点赞', 'info');
-            } else {
-                // 点赞
-                await likeRef.set({
-                    postId: postId,
-                    userId: userId,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                await postsRef.doc(postId).update({
-                    likesCount: firebase.firestore.FieldValue.increment(1)
-                });
-                btn.classList.add('active');
-                utils.showNotification('点赞成功', 'success');
+
+    toggleLike(postId, btn) {
+        const userId = authModule.getCurrentUser().id;
+        const likes = JSON.parse(localStorage.getItem('likes') || '[]');
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        const likeKey = `${postId}_${userId}`;
+        const existingIndex = likes.findIndex(l => l.postId === postId && l.userId === userId);
+
+        if (existingIndex !== -1) {
+            likes.splice(existingIndex, 1);
+            localStorage.setItem('likes', JSON.stringify(likes));
+
+            const postIndex = posts.findIndex(p => p.id === postId);
+            if (postIndex !== -1) {
+                posts[postIndex].likesCount = Math.max((posts[postIndex].likesCount || 1) - 1, 0);
+                localStorage.setItem('posts', JSON.stringify(posts));
             }
-        } catch (error) {
-            console.error('点赞操作失败:', error);
-            utils.showNotification('操作失败', 'error');
+
+            btn.classList.remove('active');
+            utils.showNotification('已取消点赞', 'info');
+        } else {
+            likes.push({
+                postId: postId,
+                userId: userId,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('likes', JSON.stringify(likes));
+
+            const postIndex = posts.findIndex(p => p.id === postId);
+            if (postIndex !== -1) {
+                posts[postIndex].likesCount = (posts[postIndex].likesCount || 0) + 1;
+                localStorage.setItem('posts', JSON.stringify(posts));
+            }
+
+            btn.classList.add('active');
+            utils.showNotification('点赞成功', 'success');
         }
     },
-    
-    // 切换收藏
-    async toggleBookmark(postId, btn) {
-        try {
-            const userId = authModule.getCurrentUser().uid;
-            const bookmarkRef = db.collection('bookmarks').doc(`${postId}_${userId}`);
-            const bookmarkDoc = await bookmarkRef.get();
-            
-            if (bookmarkDoc.exists) {
-                // 取消收藏
-                await bookmarkRef.delete();
-                btn.classList.remove('active');
-                utils.showNotification('已取消收藏', 'info');
-            } else {
-                // 收藏
-                await bookmarkRef.set({
-                    postId: postId,
-                    userId: userId,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                btn.classList.add('active');
-                utils.showNotification('收藏成功', 'success');
-            }
-        } catch (error) {
-            console.error('收藏操作失败:', error);
-            utils.showNotification('操作失败', 'error');
+
+    toggleBookmark(postId, btn) {
+        const userId = authModule.getCurrentUser().id;
+        const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        const existingIndex = bookmarks.findIndex(b => b.postId === postId && b.userId === userId);
+
+        if (existingIndex !== -1) {
+            bookmarks.splice(existingIndex, 1);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            btn.classList.remove('active');
+            utils.showNotification('已取消收藏', 'info');
+        } else {
+            bookmarks.push({
+                postId: postId,
+                userId: userId,
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            btn.classList.add('active');
+            utils.showNotification('收藏成功', 'success');
         }
     },
-    
-    // 加载推荐商品
-    async loadFeaturedProducts() {
+
+    loadFeaturedProducts() {
         const container = document.getElementById('featuredProducts');
         if (!container) return;
-        
+
         utils.showLoading(container);
-        
-        try {
-            const snapshot = await productsRef
-                .orderBy('createdAt', 'desc')
-                .limit(8)
-                .get();
-            
-            if (snapshot.empty) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🛒</div>
-                        <h3>暂无商品</h3>
-                        <p>快来发布你的第一个商品吧！</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            for (const doc of snapshot.docs) {
-                const product = doc.data();
-                const userDoc = await usersRef.doc(product.sellerId).get();
-                const userData = userDoc.data();
-                
-                html += this.createProductCard(product, userData);
-            }
-            
-            container.innerHTML = html;
-        } catch (error) {
-            console.error('加载推荐商品失败:', error);
-            container.innerHTML = '<div class="empty-state"><p>加载失败，请稍后再试</p></div>';
+
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        if (products.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🛒</div>
+                    <h3>暂无商品</h3>
+                    <p>快来发布你的第一个商品吧！</p>
+                </div>
+            `;
+            return;
         }
+
+        const recentProducts = products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8);
+
+        let html = '';
+        for (const product of recentProducts) {
+            const userData = users.find(u => u.id === product.sellerId);
+            html += this.createProductCard(product, userData);
+        }
+
+        container.innerHTML = html;
     },
-    
-    // 创建商品卡片
+
     createProductCard(product, userData) {
         const category = appConfig.productCategories.find(c => c.id === product.category);
-        
+
         return `
             <article class="product-card" data-id="${product.id}">
                 <img src="${product.images?.[0] || 'images/default-product.png'}" 
@@ -358,45 +313,36 @@ const app = {
             </article>
         `;
     },
-    
-    // 加载活跃用户
-    async loadActiveUsers() {
+
+    loadActiveUsers() {
         const container = document.getElementById('activeUsers');
         if (!container) return;
-        
+
         utils.showLoading(container);
-        
-        try {
-            const snapshot = await usersRef
-                .orderBy('postsCount', 'desc')
-                .limit(6)
-                .get();
-            
-            if (snapshot.empty) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">👥</div>
-                        <h3>暂无用户</h3>
-                        <p>成为第一个加入社区的用户吧！</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = '';
-            for (const doc of snapshot.docs) {
-                const user = doc.data();
-                html += this.createUserCard(user);
-            }
-            
-            container.innerHTML = html;
-        } catch (error) {
-            console.error('加载活跃用户失败:', error);
-            container.innerHTML = '<div class="empty-state"><p>加载失败，请稍后再试</p></div>';
+
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        if (users.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">👥</div>
+                    <h3>暂无用户</h3>
+                    <p>成为第一个加入社区的用户吧！</p>
+                </div>
+            `;
+            return;
         }
+
+        const activeUsers = users.sort((a, b) => (b.postsCount || 0) - (a.postsCount || 0)).slice(0, 6);
+
+        let html = '';
+        for (const user of activeUsers) {
+            html += this.createUserCard(user);
+        }
+
+        container.innerHTML = html;
     },
-    
-    // 创建用户卡片
+
     createUserCard(user) {
         return `
             <article class="user-card">
@@ -427,7 +373,6 @@ const app = {
     }
 };
 
-// 页面加载完成后初始化应用
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
 });

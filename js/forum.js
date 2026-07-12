@@ -162,12 +162,19 @@ const forum = {
         var content = document.getElementById('postContent').value.trim();
         var tagsInput = document.getElementById('postTags').value.trim();
 
+        if (!authModule.isLoggedIn()) {
+            alert('请先登录后再发帖');
+            authModule.showModal('login');
+            return;
+        }
+
         if (!category) { alert('请选择分类'); return; }
         if (!title) { alert('请输入标题'); return; }
         if (!content) { alert('请输入内容'); return; }
 
         var tags = tagsInput ? tagsInput.split(',').map(function(t) { return t.trim(); }).filter(function(t) { return t; }) : [];
         var user = authModule.getCurrentUser();
+        if (!user) { alert('请先登录'); return; }
 
         var posts = JSON.parse(localStorage.getItem('posts') || '[]');
         var newPost = {
@@ -192,7 +199,7 @@ const forum = {
         alert('发帖成功');
         this.loadPosts();
         this.loadCategories();
-    }
+    },
 };
 
 document.addEventListener('DOMContentLoaded', function() {
