@@ -855,7 +855,8 @@
         // 商城装修
         function loadBanners() {
             var saved = localStorage.getItem('admin_market_banners');
-            var banners = saved ? JSON.parse(saved) : [];
+            var banners = [];
+            try { banners = saved ? JSON.parse(saved) : []; } catch (e) { banners = []; }
             var container = document.getElementById('bannerList');
             if (!banners.length) {
                 container.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--text-light);border:1px dashed var(--border-color);border-radius:var(--border-radius)"><i class="ti ti-photo" style="font-size:1.5rem;display:block;margin-bottom:0.5rem"></i>暂无横幅，点击下方添加</div>';
@@ -879,7 +880,9 @@
             var saved = localStorage.getItem('admin_market_banners');
             var banners = saved ? JSON.parse(saved) : [];
             banners.push({ image: '', link: '' });
-            localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+            try {
+                localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+            } catch (err) {}
             loadBanners();
         }
 
@@ -887,21 +890,40 @@
             var saved = localStorage.getItem('admin_market_banners');
             var banners = saved ? JSON.parse(saved) : [];
             banners.splice(i, 1);
-            localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+            try {
+                localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+            } catch (err) {}
             loadBanners();
         }
 
         function previewBanner(i, input) {
             if (!input.files || !input.files[0]) return;
+            var file = input.files[0];
+            var img = new Image();
             var reader = new FileReader();
-            reader.onload = function(e) {
-                var saved = localStorage.getItem('admin_market_banners');
-                var banners = saved ? JSON.parse(saved) : [];
-                if (banners[i]) banners[i].image = e.target.result;
-                localStorage.setItem('admin_market_banners', JSON.stringify(banners));
-                loadBanners();
+            reader.onload = function(ev) {
+                img.onload = function() {
+                    var maxW = 1200, maxH = 600;
+                    var w = img.width, h = img.height;
+                    if (w > maxW) { h = h * maxW / w; w = maxW; }
+                    if (h > maxH) { w = w * maxH / h; h = maxH; }
+                    var canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    var compressed = canvas.toDataURL('image/jpeg', 0.7);
+                    var saved = localStorage.getItem('admin_market_banners');
+                    var banners = saved ? JSON.parse(saved) : [];
+                    if (banners[i]) banners[i].image = compressed;
+                    try {
+                        localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+                        loadBanners();
+                    } catch (err) {
+                        alert('图片太大，无法保存，请使用更小的图片');
+                    }
+                };
+                img.src = ev.target.result;
             };
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(file);
         }
 
         function saveBanners() {
@@ -911,8 +933,12 @@
                 var linkEl = document.getElementById('bannerLink' + i);
                 if (linkEl) b.link = linkEl.value;
             });
-            localStorage.setItem('admin_market_banners', JSON.stringify(banners));
-            alert('横幅已保存，刷新商城页面即可看到效果');
+            try {
+                localStorage.setItem('admin_market_banners', JSON.stringify(banners));
+                alert('横幅已保存，刷新商城页面即可看到效果');
+            } catch (err) {
+                alert('保存失败：存储空间不足，请使用更小的图片');
+            }
         }
 
         function loadShopLinksEditor() {

@@ -249,11 +249,13 @@
 
     function loadMarketBanners() {
         var saved = localStorage.getItem('admin_market_banners');
-        var banners = saved ? JSON.parse(saved) : [];
+        var banners = [];
+        try { banners = saved ? JSON.parse(saved) : []; } catch (e) { banners = []; }
         var container = document.getElementById('marketBanner');
         var slidesEl = document.getElementById('bannerSlides');
         var dotsEl = document.getElementById('bannerDots');
-        if (!banners.length) { container.style.display = 'none'; return; }
+        if (!banners.length || !banners.some(function(b) { return b.image; })) { container.style.display = 'none'; return; }
+        banners = banners.filter(function(b) { return b.image; });
         container.style.display = 'block';
         slidesEl.innerHTML = banners.map(function(b) {
             return '<div style="min-width:100%;height:100%"><a href="' + (b.link || '#') + '" target="' + (b.link ? '_blank' : '_self') + '" style="display:block;width:100%;height:100%"><img src="' + b.image + '" alt="" style="width:100%;height:100%;object-fit:cover"></a></div>';
