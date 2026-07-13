@@ -69,7 +69,6 @@
                             <a href="#security" onclick="switchTab(this, 'security')"><i class="ti ti-shield"></i> 安全设置</a>
                             <a href="#notifications" onclick="switchTab(this, 'notifications')"><i class="ti ti-bell"></i> 通知设置</a>
                             <a href="#copy" onclick="switchTab(this, 'copy')"><i class="ti ti-article"></i> 网站文案</a>
-                            <a href="#market-custom" onclick="switchTab(this, 'market-custom')"><i class="ti ti-shopping-bag"></i> 商城装修</a>
                             <a href="#appearance" onclick="switchTab(this, 'appearance')"><i class="ti ti-palette"></i> 界面外观</a>
                         </div>
                         <div class="settings-body">
@@ -215,6 +214,27 @@
                                         <button class="btn-admin btn-admin-primary" onclick="saveSettings('market')"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存设置</button>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="settings-group" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                <h3><i class="ti ti-photo" style="margin-right:0.375rem"></i>轮播横幅</h3>
+                                <p class="desc">配置商城首页的轮播横幅图片（支持多张自动轮播）</p>
+                                <div id="bannerList" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem"></div>
+                                <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+                                    <button class="btn-admin btn-admin-outline" onclick="addBanner()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加横幅</button>
+                                    <button class="btn-admin btn-admin-primary" onclick="saveBanners()"><i class="ti ti-device-floppy" style="margin-right:0.25rem"></i>保存横幅</button>
+                                </div>
+                            </div>
+
+                            <div class="settings-group" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                <h3><i class="ti ti-link" style="margin-right:0.375rem"></i>店铺入口链接</h3>
+                                <p class="desc">配置商城页面顶部的快捷入口（默认：淘宝小店 + 微信小店）</p>
+                                <div id="shopLinkList" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem"></div>
+                                <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+                                    <button class="btn-admin btn-admin-outline" onclick="addShopLink()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加链接</button>
+                                    <button class="btn-admin btn-admin-primary" onclick="saveShopLinks()"><i class="ti ti-device-floppy" style="margin-right:0.25rem"></i>保存链接</button>
+                                </div>
+                            </div>
                             </div>
 
                             <!-- 安全设置 -->
@@ -416,29 +436,6 @@
 
                                 <div style="display:flex;gap:0.75rem">
                                     <button class="btn-admin btn-admin-outline" onclick="resetCopySettings()"><i class="ti ti-refresh" style="margin-right:0.375rem"></i>恢复默认文案</button>
-                                </div>
-                            </div>
-
-                            <!-- 商城装修 -->
-                            <div id="tab-market-custom" class="settings-tab" style="display:none">
-                                <div class="settings-group">
-                                    <h3><i class="ti ti-photo" style="margin-right:0.375rem"></i>轮播横幅</h3>
-                                    <p class="desc">配置商城首页的轮播横幅图片（支持多张自动轮播）</p>
-                                    <div id="bannerList" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem"></div>
-                                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-                                        <button class="btn-admin btn-admin-outline" onclick="addBanner()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加横幅</button>
-                                        <button class="btn-admin btn-admin-primary" onclick="saveBanners()"><i class="ti ti-device-floppy" style="margin-right:0.25rem"></i>保存横幅</button>
-                                    </div>
-                                </div>
-
-                                <div class="settings-group">
-                                    <h3><i class="ti ti-link" style="margin-right:0.375rem"></i>店铺入口链接</h3>
-                                    <p class="desc">配置商城页面顶部的快捷入口（默认：淘宝小店 + 微信小店）</p>
-                                    <div id="shopLinkList" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem"></div>
-                                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
-                                        <button class="btn-admin btn-admin-outline" onclick="addShopLink()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加链接</button>
-                                        <button class="btn-admin btn-admin-primary" onclick="saveShopLinks()"><i class="ti ti-device-floppy" style="margin-right:0.25rem"></i>保存链接</button>
-                                    </div>
                                 </div>
                             </div>
 
