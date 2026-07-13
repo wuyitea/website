@@ -1,6 +1,7 @@
 // 主应用模块
 const app = {
     init() {
+        this.loadHeroStats();
         this.setupEventListeners();
         this.loadHotPosts();
         this.loadFeaturedProducts();
@@ -28,40 +29,27 @@ const app = {
 
     setupSearch() {
         const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
+        if (!searchInput) return;
 
-        if (searchInput && searchBtn) {
-            const performSearch = utils.debounce(() => {
+        const performSearch = utils.debounce(() => {
+            const query = searchInput.value.trim();
+            if (query) this.search(query);
+        }, 500);
+
+        searchInput.addEventListener('input', performSearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
                 const query = searchInput.value.trim();
-                if (query) {
-                    this.search(query);
-                }
-            }, 500);
-
-            searchInput.addEventListener('input', performSearch);
-            searchBtn.addEventListener('click', () => {
-                const query = searchInput.value.trim();
-                if (query) {
-                    this.search(query);
-                }
-            });
-
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const query = searchInput.value.trim();
-                    if (query) {
-                        this.search(query);
-                    }
-                }
-            });
-        }
+                if (query) this.search(query);
+            }
+        });
     },
 
     setupNavigation() {
         const navToggle = document.getElementById('navToggle');
-        const navMenu = document.querySelector('.nav-menu');
-        const navSearch = document.querySelector('.nav-search');
-        const userActions = document.querySelector('.user-actions');
+        const navMenu = document.getElementById('navMenu');
+        const navSearch = document.getElementById('navSearch');
+        const userActions = document.getElementById('userActions');
 
         if (navToggle) {
             navToggle.addEventListener('click', () => {
@@ -70,6 +58,33 @@ const app = {
                 if (userActions) userActions.classList.toggle('show');
             });
         }
+    },
+
+    loadHeroStats() {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+
+        const statUsers = document.getElementById('statUsers');
+        const statPosts = document.getElementById('statPosts');
+        const statProducts = document.getElementById('statProducts');
+
+        if (statUsers) this.animateNumber(statUsers, users.length);
+        if (statPosts) this.animateNumber(statPosts, posts.length);
+        if (statProducts) this.animateNumber(statProducts, products.length);
+    },
+
+    animateNumber(el, target) {
+        let current = 0;
+        const step = Math.max(1, Math.ceil(target / 30));
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            el.textContent = current;
+        }, 30);
     },
 
     search(query) {
@@ -89,15 +104,13 @@ const app = {
         const container = document.getElementById('hotPosts');
         if (!container) return;
 
-        utils.showLoading(container);
-
         const posts = JSON.parse(localStorage.getItem('posts') || '[]');
         const users = JSON.parse(localStorage.getItem('users') || '[]');
 
         if (posts.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">📝</div>
+                <div class="empty-state" style="grid-column:1/-1">
+                    <div class="empty-state-icon"><i class="ti ti-pencil" style="font-size:3rem"></i></div>
                     <h3>暂无帖子</h3>
                     <p>成为第一个发帖的人吧！</p>
                 </div>
@@ -126,7 +139,8 @@ const app = {
                 <div class="post-header">
                     <img src="${utils.imagePath(userData?.avatar, '')}" 
                          alt="${userData?.username || '用户'}" 
-                         class="post-avatar">
+                         class="post-avatar"
+                         onerror="this.src='images/default-avatar.png'">
                     <div class="post-meta">
                         <div class="post-author">${userData?.username || '匿名用户'}</div>
                         <div class="post-time">${timeAgo}</div>
@@ -136,19 +150,19 @@ const app = {
                 <h3 class="post-title">
                     <a href="pages/post.html?id=${post.id}">${post.title}</a>
                 </h3>
-                <p class="post-excerpt">${utils.truncateText(post.content, 150)}</p>
+                <p class="post-excerpt">${utils.truncateText(post.content, 120)}</p>
                 <div class="post-footer">
                     <div class="post-stats">
-                        <span>👍 ${post.likesCount || 0}</span>
-                        <span>💬 ${post.commentsCount || 0}</span>
-                        <span>👁 ${post.viewsCount || 0}</span>
+                        <span><i class="ti ti-thumb-up"></i> ${post.likesCount || 0}</span>
+                        <span><i class="ti ti-message"></i> ${post.commentsCount || 0}</span>
+                        <span><i class="ti ti-eye"></i> ${post.viewsCount || 0}</span>
                     </div>
                     <div class="post-actions">
                         <button class="post-action like-btn" data-id="${post.id}" title="点赞">
-                            👍
+                            <i class="ti ti-thumb-up"></i>
                         </button>
                         <button class="post-action bookmark-btn" data-id="${post.id}" title="收藏">
-                            ⭐
+                            <i class="ti ti-star"></i>
                         </button>
                     </div>
                 </div>
@@ -192,7 +206,6 @@ const app = {
         const userId = authModule.getCurrentUser().id;
         const likes = JSON.parse(localStorage.getItem('likes') || '[]');
         const posts = JSON.parse(localStorage.getItem('posts') || '[]');
-        const likeKey = `${postId}_${userId}`;
         const existingIndex = likes.findIndex(l => l.postId === postId && l.userId === userId);
 
         if (existingIndex !== -1) {
@@ -252,15 +265,13 @@ const app = {
         const container = document.getElementById('featuredProducts');
         if (!container) return;
 
-        utils.showLoading(container);
-
         const products = JSON.parse(localStorage.getItem('products') || '[]');
         const users = JSON.parse(localStorage.getItem('users') || '[]');
 
         if (products.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">🛒</div>
+                <div class="empty-state" style="grid-column:1/-1">
+                    <div class="empty-state-icon"><i class="ti ti-shopping-bag" style="font-size:3rem"></i></div>
                     <h3>暂无商品</h3>
                     <p>快来发布你的第一个商品吧！</p>
                 </div>
@@ -286,7 +297,8 @@ const app = {
             <article class="product-card" data-id="${product.id}">
                 <img src="${utils.imagePath(product.images?.[0], '')}" 
                      alt="${product.title}" 
-                     class="product-image">
+                     class="product-image"
+                     onerror="this.src='images/default-product.png'">
                 <div class="product-info">
                     ${category ? `<span class="post-category">${category.icon} ${category.name}</span>` : ''}
                     <h3 class="product-title">
@@ -298,12 +310,13 @@ const app = {
                     </div>
                     <div class="product-seller">
                         <img src="${utils.imagePath(userData?.avatar, '')}" 
-                             alt="${userData?.username || '卖家'}">
+                             alt="${userData?.username || '卖家'}"
+                             onerror="this.src='images/default-avatar.png'">
                         <span>${userData?.username || '匿名卖家'}</span>
                     </div>
                     <div class="product-actions">
                         <button class="btn btn-primary btn-sm add-to-cart" data-id="${product.id}">
-                            加入购物车
+                            <i class="ti ti-shopping-cart"></i> 加入购物车
                         </button>
                         <button class="btn btn-outline btn-sm buy-now" data-id="${product.id}">
                             立即购买
@@ -318,14 +331,12 @@ const app = {
         const container = document.getElementById('activeUsers');
         if (!container) return;
 
-        utils.showLoading(container);
-
         const users = JSON.parse(localStorage.getItem('users') || '[]');
 
         if (users.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">👥</div>
+                <div class="empty-state" style="grid-column:1/-1">
+                    <div class="empty-state-icon"><i class="ti ti-users" style="font-size:3rem"></i></div>
                     <h3>暂无用户</h3>
                     <p>成为第一个加入社区的用户吧！</p>
                 </div>
@@ -348,7 +359,8 @@ const app = {
             <article class="user-card">
                 <img src="${utils.imagePath(user.avatar, '')}" 
                      alt="${user.username}" 
-                     class="user-avatar">
+                     class="user-avatar"
+                     onerror="this.src='images/default-avatar.png'">
                 <h3>${user.username}</h3>
                 <p>${user.bio || '这个人很懒，什么都没写'}</p>
                 <div class="user-stats">

@@ -4,352 +4,90 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="消息中心 - 查看私信、系统通知、互动消息">
     <title>消息 - 社区平台</title>
-    
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
-    <style>
-        .messages-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: var(--spacing-xl);
-            padding: var(--spacing-xl) 0;
-            height: calc(100vh - 80px);
-        }
-        
-        .messages-sidebar {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .messages-header {
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .messages-title {
-            font-size: var(--font-size-xl);
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-        }
-        
-        .messages-tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .messages-tab {
-            flex: 1;
-            padding: var(--spacing-md);
-            border: none;
-            background: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-weight: 500;
-            border-bottom: 2px solid transparent;
-            transition: var(--transition);
-        }
-        
-        .messages-tab.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-        
-        .messages-list {
-            flex: 1;
-            overflow-y: auto;
-        }
-        
-        .message-item {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .message-item:hover {
-            background-color: var(--bg-secondary);
-        }
-        
-        .message-item.active {
-            background-color: var(--bg-tertiary);
-        }
-        
-        .message-item.unread {
-            background-color: rgba(79, 70, 229, 0.05);
-        }
-        
-        .message-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            position: relative;
-        }
-        
-        .unread-dot {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 12px;
-            height: 12px;
-            background-color: var(--primary-color);
-            border-radius: 50%;
-            border: 2px solid var(--bg-primary);
-        }
-        
-        .message-info {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .message-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-xs);
-        }
-        
-        .message-preview {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .message-time {
-            font-size: var(--font-size-xs);
-            color: var(--text-light);
-        }
-        
-        .chat-area {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        
-        .chat-header {
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        
-        .chat-user-info {
-            flex: 1;
-        }
-        
-        .chat-username {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .chat-status {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-        }
-        
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: var(--spacing-lg);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-        
-        .chat-message {
-            max-width: 70%;
-            padding: var(--spacing-md);
-            border-radius: var(--border-radius-lg);
-            position: relative;
-        }
-        
-        .chat-message.sent {
-            align-self: flex-end;
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .chat-message.received {
-            align-self: flex-start;
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            border-bottom-left-radius: 4px;
-        }
-        
-        .chat-message-content {
-            margin-bottom: var(--spacing-xs);
-        }
-        
-        .chat-message-time {
-            font-size: var(--font-size-xs);
-            opacity: 0.7;
-        }
-        
-        .chat-input {
-            padding: var(--spacing-lg);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: var(--spacing-md);
-        }
-        
-        .chat-input textarea {
-            flex: 1;
-            padding: var(--spacing-md);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            resize: none;
-            min-height: 44px;
-            max-height: 120px;
-            font-family: inherit;
-            font-size: var(--font-size-base);
-        }
-        
-        .chat-input textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-        
-        .chat-input .btn {
-            padding: var(--spacing-md) var(--spacing-xl);
-        }
-        
-        .empty-chat {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-        }
-        
-        .empty-chat-icon {
-            font-size: 48px;
-            margin-bottom: var(--spacing-md);
-            opacity: 0.5;
-        }
-        
-        @media (max-width: 1024px) {
-            .messages-layout {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
-            
-            .messages-sidebar {
-                max-height: 400px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .messages-layout {
-                padding: var(--spacing-md);
-            }
-            
-            .chat-message {
-                max-width: 85%;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="../index.html">社区平台</a>
-            </div>
-            
-            <div class="nav-search">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台</a>
+        </div>
+        <div class="nav-search" id="navSearch">
+            <div class="input-icon">
+                <i class="ti ti-search"></i>
                 <input type="search" placeholder="搜索..." id="searchInput">
-                <button type="button" id="searchBtn">搜索</button>
             </div>
-            
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="forum.html">论坛</a></li>
-                    <li><a href="market.html">市场</a></li>
-                    <li><a href="messages.html" class="active">消息</a></li>
-                </ul>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="market.html"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="messages.html" class="active"><i class="ti ti-mail"></i> 消息</a></li>
+            </ul>
+        </div>
+        <div class="nav-user">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-ghost" id="loginBtn">登录</button>
+                <button class="btn btn-primary" id="registerBtn">注册</button>
             </div>
-            
-            <div class="nav-user">
-                <div class="user-actions" id="userActions">
-                    <button class="btn btn-outline" id="loginBtn">登录</button>
-                    <button class="btn btn-primary" id="registerBtn">注册</button>
-                </div>
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
-                    <div class="user-dropdown">
-                        <a href="profile.html">个人资料</a>
-                        <a href="settings.html">设置</a>
-                        <a href="#" id="logoutBtn">退出登录</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- 主要内容 -->
-    <main class="main">
-        <div class="container">
-            <div class="messages-layout">
-                <div class="messages-sidebar">
-                    <div class="messages-header">
-                        <h1 class="messages-title">消息</h1>
-                    </div>
-                    
-                    <div class="messages-tabs">
-                        <button class="messages-tab active" data-tab="private">私信</button>
-                        <button class="messages-tab" data-tab="system">系统</button>
-                        <button class="messages-tab" data-tab="interaction">互动</button>
-                    </div>
-                    
-                    <div class="messages-list" id="messagesList">
-                        <!-- 动态加载 -->
-                    </div>
-                </div>
-                
-                <div class="chat-area" id="chatArea">
-                    <div class="empty-chat">
-                        <div class="empty-chat-icon">💬</div>
-                        <h3>选择一个对话</h3>
-                        <p>从左侧选择一个对话开始聊天</p>
-                    </div>
+            <div class="user-profile" id="userProfile" style="display:none;">
+                <img src="../images/default-avatar.png" alt="头像" id="userAvatar">
+                <div class="user-dropdown">
+                    <a href="profile.html"><i class="ti ti-user"></i> 个人资料</a>
+                    <a href="settings.html"><i class="ti ti-settings"></i> 设置</a>
+                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
                 </div>
             </div>
         </div>
-    </main>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
 
-    <!-- 页脚 -->
+    <div style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem">
+        <div class="forum-layout">
+            <!-- 消息列表 -->
+            <main>
+                <div class="admin-card" style="margin-bottom:1rem">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-mail" style="margin-right:0.375rem"></i>消息</h2>
+                    </div>
+
+                    <div style="display:flex;border-bottom:1px solid var(--border-color)">
+                        <button class="messages-tab active" data-tab="private" style="flex:1;padding:0.75rem;border:none;background:none;color:var(--text-secondary);cursor:pointer;font-weight:500;border-bottom:2px solid transparent">
+                            <i class="ti ti-message"></i> 私信
+                        </button>
+                        <button class="messages-tab" data-tab="system" style="flex:1;padding:0.75rem;border:none;background:none;color:var(--text-secondary);cursor:pointer;font-weight:500;border-bottom:2px solid transparent">
+                            <i class="ti ti-bell"></i> 系统
+                        </button>
+                        <button class="messages-tab" data-tab="interaction" style="flex:1;padding:0.75rem;border:none;background:none;color:var(--text-secondary);cursor:pointer;font-weight:500;border-bottom:2px solid transparent">
+                            <i class="ti ti-heart"></i> 互动
+                        </button>
+                    </div>
+
+                    <div id="messagesList" style="min-height:400px"></div>
+                </div>
+            </main>
+
+            <!-- 聊天区域 -->
+            <aside class="forum-sidebar">
+                <div class="admin-card" style="position:sticky;top:80px">
+                    <div id="chatArea" style="min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-secondary);padding:2rem">
+                        <i class="ti ti-message" style="font-size:3rem;margin-bottom:1rem;opacity:0.5"></i>
+                        <h3 style="margin-bottom:0.5rem">选择一个对话</h3>
+                        <p style="font-size:0.875rem">从左侧选择一个对话开始聊天</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -362,17 +100,19 @@
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>登录</h2>
+            <h2><i class="ti ti-login" style="margin-right:0.375rem"></i>登录</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginEmail">邮箱</label>
+                    <label for="loginEmail"><i class="ti ti-mail"></i> 邮箱</label>
                     <input type="email" id="loginEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">密码</label>
+                    <label for="loginPassword"><i class="ti ti-lock"></i> 密码</label>
                     <input type="password" id="loginPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">登录</button>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ti ti-login"></i> 登录
+                </button>
             </form>
             <div class="modal-footer">
                 <p>还没有账号？<a href="#" id="showRegister">立即注册</a></p>
@@ -384,25 +124,27 @@
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>注册</h2>
+            <h2><i class="ti ti-user-plus" style="margin-right:0.375rem"></i>注册</h2>
             <form id="registerForm">
                 <div class="form-group">
-                    <label for="registerUsername">用户名</label>
+                    <label for="registerUsername"><i class="ti ti-user"></i> 用户名</label>
                     <input type="text" id="registerUsername" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">邮箱</label>
+                    <label for="registerEmail"><i class="ti ti-mail"></i> 邮箱</label>
                     <input type="email" id="registerEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">密码</label>
+                    <label for="registerPassword"><i class="ti ti-lock"></i> 密码</label>
                     <input type="password" id="registerPassword" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="registerConfirmPassword">确认密码</label>
+                    <label for="registerConfirmPassword"><i class="ti ti-lock-check"></i> 确认密码</label>
                     <input type="password" id="registerConfirmPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">注册</button>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ti ti-user-plus"></i> 注册
+                </button>
             </form>
             <div class="modal-footer">
                 <p>已有账号？<a href="#" id="showLogin">立即登录</a></p>
@@ -410,14 +152,9 @@
         </div>
     </div>
 
-
-    
-    <!-- JavaScript -->
-    b
-    <script src="../js/config.js?v=4"></script>
-    <script>var _sv="4";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
-    <script src="../js/auth.js?v=4"></script>
-    b
-    <script src="../js/messages.js?v=2"></script>
+    <script src="../js/config.js?v=5"></script>
+    <script>var _sv="5";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/messages.js?v=5"></script>
 </body>
 </html>

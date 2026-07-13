@@ -4,56 +4,56 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>用户管理 - 社区平台</title>
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="admin-layout">
-        <aside class="admin-sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2>社区平台</h2>
-                <p>管理后台</p>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="admin.html"><span class="icon">📊</span> 仪表盘</a>
-                <a href="admin-forum.html"><span class="icon">💬</span> 论坛管理</a>
-                <a href="admin-market.html"><span class="icon">🛍️</span> 商城管理</a>
-                <a href="admin-users.html" class="active"><span class="icon">👥</span> 用户管理</a>
-                <div class="sidebar-section">系统</div>
-                <a href="admin-settings.html"><span class="icon">⚙️</span> 网站设置</a>
-                <a href="../index.html" target="_blank"><span class="icon">🌐</span> 查看前台</a>
-                <a href="#" id="adminLogout"><span class="icon">🚪</span> 退出登录</a>
-            </nav>
-        </aside>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台</a>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="market.html"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="messages.html"><i class="ti ti-mail"></i> 消息</a></li>
+                <li><a href="admin.html"><i class="ti ti-dashboard"></i> 管理</a></li>
+            </ul>
+        </div>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
 
-        <main class="admin-main">
-            <div class="admin-topbar">
-                <h1>用户管理</h1>
-                <div class="topbar-actions">
-                    <span class="topbar-user">管理员</span>
+    <div style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem">
+        <div class="forum-layout">
+            <main>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-users" style="margin-right:0.375rem"></i>用户管理</h2>
                 </div>
-            </div>
 
-            <div class="admin-content">
-                <div class="stats-grid">
+                <div class="stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem">
                     <div class="stat-card">
-                        <div class="stat-icon">👥</div>
+                        <div class="stat-icon"><i class="ti ti-users"></i></div>
                         <div class="stat-value">128</div>
                         <div class="stat-label">总用户数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">✅</div>
+                        <div class="stat-icon"><i class="ti ti-user-check"></i></div>
                         <div class="stat-value">120</div>
                         <div class="stat-label">正常用户</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-icon"><i class="ti ti-user-off"></i></div>
                         <div class="stat-value">5</div>
                         <div class="stat-label">被封禁</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">🆕</div>
+                        <div class="stat-icon"><i class="ti ti-user-plus"></i></div>
                         <div class="stat-value">12</div>
                         <div class="stat-label">本周注册</div>
                     </div>
@@ -61,7 +61,7 @@
 
                 <div class="admin-card">
                     <div class="admin-card-header">
-                        <h2>用户列表</h2>
+                        <h2><i class="ti ti-list" style="margin-right:0.375rem"></i>用户列表</h2>
                         <div class="card-actions">
                             <input type="text" class="admin-search" placeholder="搜索用户..." id="userSearch">
                             <select class="admin-filter" id="userFilter">
@@ -97,15 +97,53 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+
+            <aside class="forum-sidebar">
+                <div class="admin-card" style="margin-bottom:1rem">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-chart-bar" style="margin-right:0.375rem"></i>用户统计</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div style="display:flex;flex-direction:column;gap:0.75rem">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <span style="color:var(--text-secondary)"><i class="ti ti-users" style="margin-right:0.25rem"></i>总用户</span>
+                                <span style="font-weight:600" id="statTotal">0</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <span style="color:var(--text-secondary)"><i class="ti ti-user-check" style="margin-right:0.25rem"></i>正常</span>
+                                <span style="font-weight:600;color:var(--success-color)" id="statActive">0</span>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <span style="color:var(--text-secondary)"><i class="ti ti-user-off" style="margin-right:0.25rem"></i>封禁</span>
+                                <span style="font-weight:600;color:var(--danger-color)" id="statBanned">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-filter" style="margin-right:0.375rem"></i>快捷操作</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div style="display:flex;flex-direction:column;gap:0.5rem">
+                            <a href="admin.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start"><i class="ti ti-dashboard" style="margin-right:0.375rem"></i> 仪表盘</a>
+                            <a href="admin-forum.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start"><i class="ti ti-message-circle" style="margin-right:0.375rem"></i> 论坛管理</a>
+                            <a href="admin-market.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start"><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i> 商城管理</a>
+                            <a href="admin-settings.html" class="btn btn-ghost" style="width:100%;justify-content:flex-start"><i class="ti ti-settings" style="margin-right:0.375rem"></i> 网站设置</a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </div>
 
     <div class="admin-modal-overlay" id="userModal">
         <div class="admin-modal">
             <div class="admin-modal-header">
-                <h3>用户详情</h3>
-                <button class="admin-modal-close" onclick="closeModal()">&times;</button>
+                <h3><i class="ti ti-user" style="margin-right:0.375rem"></i>用户详情</h3>
+                <button class="admin-modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
             </div>
             <div class="admin-modal-body">
                 <div class="detail-grid">
@@ -140,7 +178,7 @@
                 </div>
             </div>
             <div class="admin-modal-footer">
-                <button class="btn-admin btn-admin-outline" onclick="closeModal()">关闭</button>
+                <button class="btn btn-ghost" onclick="closeModal()"><i class="ti ti-x" style="margin-right:0.25rem"></i>关闭</button>
             </div>
         </div>
     </div>
@@ -149,7 +187,7 @@
         if (localStorage.getItem('admin_logged_in') !== 'true') {
             window.location.href = 'admin-login.html';
         }
-        document.getElementById('adminLogout').addEventListener('click', function(e) {
+        document.getElementById('adminLogout') && document.getElementById('adminLogout').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('admin_logged_in');
             window.location.href = 'admin-login.html';
@@ -161,8 +199,18 @@
             var posts = JSON.parse(localStorage.getItem('posts') || '[]');
             var products = JSON.parse(localStorage.getItem('products') || '[]');
 
+            var total = users.length;
+            var active = users.filter(function(u) { return u.status !== 'banned'; }).length;
+            var banned = users.filter(function(u) { return u.status === 'banned'; }).length;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statActive').textContent = active;
+            document.getElementById('statBanned').textContent = banned;
+            document.querySelectorAll('.stat-card .stat-value')[0].textContent = total;
+            document.querySelectorAll('.stat-card .stat-value')[1].textContent = active;
+            document.querySelectorAll('.stat-card .stat-value')[2].textContent = banned;
+
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon">👥</div><p>暂无注册用户</p></td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><div class="icon"><i class="ti ti-users"></i></div><p>暂无注册用户</p></td></tr>';
                 document.getElementById('paginationInfo').textContent = '显示 0 / 共 0 条';
                 return;
             }
@@ -173,11 +221,11 @@
                 var userProducts = products.filter(function(p) { return p.sellerId === user.id; }).length;
                 var status = user.status === 'banned' ? 'banned' : 'active';
                 var statusBadge = status === 'banned' ?
-                    '<span class="badge badge-danger">封禁</span>' :
-                    '<span class="badge badge-success">正常</span>';
+                    '<span class="badge badge-danger"><i class="ti ti-user-off" style="margin-right:0.25rem"></i>封禁</span>' :
+                    '<span class="badge badge-success"><i class="ti ti-user-check" style="margin-right:0.25rem"></i>正常</span>';
                 var action = status === 'banned' ?
-                    '<button class="btn-admin btn-admin-success" onclick="unbanUser(\'' + user.id + '\')">解封</button>' :
-                    '<button class="btn-admin btn-admin-danger" onclick="banUser(\'' + user.id + '\')">封禁</button>';
+                    '<button class="btn-admin btn-admin-success" onclick="unbanUser(\'' + user.id + '\')"><i class="ti ti-check" style="margin-right:0.25rem"></i>解封</button>' :
+                    '<button class="btn-admin btn-admin-danger" onclick="banUser(\'' + user.id + '\')"><i class="ti ti-ban" style="margin-right:0.25rem"></i>封禁</button>';
                 var date = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
 
                 var avUrl = user.avatar || 'images/default-avatar.png';
@@ -189,7 +237,7 @@
                     '<td>' + userPosts + '</td>' +
                     '<td>' + userProducts + '</td>' +
                     '<td>' + statusBadge + '</td>' +
-                    '<td><button class="btn-admin btn-admin-outline" onclick="viewUser(' + index + ')">查看</button> ' + action + '</td>' +
+                    '<td><button class="btn-admin btn-admin-outline" onclick="viewUser(' + index + ')"><i class="ti ti-eye" style="margin-right:0.25rem"></i>查看</button> ' + action + '</td>' +
                     '</tr>';
             });
             tbody.innerHTML = html;
@@ -220,11 +268,11 @@
             var user = users[index];
             if (!user) return;
             document.getElementById('userModal').querySelector('.detail-grid').innerHTML =
-                '<div class="detail-item"><div class="label">用户名</div><div class="value">' + (user.username || '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">邮箱</div><div class="value">' + (user.email || '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">注册时间</div><div class="value">' + (user.createdAt ? new Date(user.createdAt).toLocaleString('zh-CN') : '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">状态</div><div class="value">' + (user.status === 'banned' ? '<span class="badge badge-danger">封禁</span>' : '<span class="badge badge-success">正常</span>') + '</div></div>' +
-                '<div class="detail-item detail-full"><div class="label">个人简介</div><div class="value">' + (user.bio || '暂无简介') + '</div></div>';
+                '<div class="detail-item"><div class="label">用户名</div><div class="value"><i class="ti ti-user" style="margin-right:0.25rem"></i>' + (user.username || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">邮箱</div><div class="value"><i class="ti ti-mail" style="margin-right:0.25rem"></i>' + (user.email || '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">注册时间</div><div class="value"><i class="ti ti-calendar" style="margin-right:0.25rem"></i>' + (user.createdAt ? new Date(user.createdAt).toLocaleString('zh-CN') : '-') + '</div></div>' +
+                '<div class="detail-item"><div class="label">状态</div><div class="value">' + (user.status === 'banned' ? '<span class="badge badge-danger"><i class="ti ti-user-off" style="margin-right:0.25rem"></i>封禁</span>' : '<span class="badge badge-success"><i class="ti ti-user-check" style="margin-right:0.25rem"></i>正常</span>') + '</div></div>' +
+                '<div class="detail-item detail-full"><div class="label">个人简介</div><div class="value"><i class="ti ti-note" style="margin-right:0.25rem"></i>' + (user.bio || '暂无简介') + '</div></div>';
             document.getElementById('userModal').classList.add('show');
         }
 

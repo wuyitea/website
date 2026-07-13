@@ -8,6 +8,7 @@ const forum = {
     init() {
         this.loadCategories();
         this.loadPosts();
+        this.loadForumStats();
         this.setupEventListeners();
     },
 
@@ -16,7 +17,7 @@ const forum = {
         if (newPostBtn) {
             newPostBtn.addEventListener('click', function() {
                 if (!authModule.isLoggedIn()) {
-                    alert('请先登录');
+                    utils.showNotification('请先登录', 'warning');
                     authModule.showModal('login');
                     return;
                 }
@@ -32,16 +33,20 @@ const forum = {
             });
         }
 
-        document.querySelectorAll('.filter-tab').forEach(function(tab) {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
-                tab.classList.add('active');
-                forum.currentFilter = tab.dataset.filter;
+        // 排序筛选
+        document.querySelectorAll('.forum-filter-btn[data-filter]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.forum-filter-btn[data-filter]').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                forum.currentFilter = btn.dataset.filter;
                 forum.currentPage = 1;
                 forum.loadPosts();
             });
         });
 
+        // 关闭模态框
         document.querySelectorAll('.close-modal').forEach(function(btn) {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.modal').forEach(function(modal) {
@@ -58,9 +63,9 @@ const forum = {
     },
 
     loadCategories() {
-        var categoryList = document.getElementById('categoryList');
+        var categoryFilters = document.getElementById('categoryFilters');
         var postCategory = document.getElementById('postCategory');
-        if (!categoryList) return;
+        if (!categoryFilters) return;
 
         var savedForum = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}');
         if (savedForum.forumCategories) {
@@ -76,23 +81,25 @@ const forum = {
             counts[p.category] = (counts[p.category] || 0) + 1;
         });
 
-        var html = '<li class="category-item"><a href="#" class="category-link active" data-category="all">全部分类 <span class="category-count">' + posts.length + '</span></a></li>';
+        var html = '<button class="forum-filter-btn active" data-category="all">全部 (' + posts.length + ')</button>';
         var selectHtml = '<option value="">请选择分类</option>';
 
         appConfig.postCategories.forEach(function(category) {
-            html += '<li class="category-item"><a href="#" class="category-link" data-category="' + category.id + '">' + category.icon + ' ' + category.name + ' <span class="category-count">' + (counts[category.id] || 0) + '</span></a></li>';
+            html += '<button class="forum-filter-btn" data-category="' + category.id + '">' + category.icon + ' ' + category.name + ' (' + (counts[category.id] || 0) + ')</button>';
             selectHtml += '<option value="' + category.id + '">' + category.icon + ' ' + category.name + '</option>';
         });
 
-        categoryList.innerHTML = html;
+        categoryFilters.innerHTML = html;
         if (postCategory) postCategory.innerHTML = selectHtml;
 
-        document.querySelectorAll('.category-link').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.category-link').forEach(function(l) { l.classList.remove('active'); });
-                link.classList.add('active');
-                forum.currentCategory = link.dataset.category === 'all' ? null : link.dataset.category;
+        // 分类筛选点击
+        document.querySelectorAll('.forum-filter-btn[data-category]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.forum-filter-btn[data-category]').forEach(function(b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                forum.currentCategory = btn.dataset.category === 'all' ? null : btn.dataset.category;
                 forum.currentPage = 1;
                 forum.loadPosts();
             });
@@ -120,10 +127,14 @@ const forum = {
             case 'hot':
                 filtered.sort(function(a, b) { return (b.likesCount || 0) - (a.likesCount || 0); });
                 break;
+            case 'essence':
+                filtered = filtered.filter(function(p) { return p.isEssence; });
+                filtered.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+                break;
         }
 
         if (filtered.length === 0) {
-            postsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><h3>暂无帖子</h3><p>成为第一个发帖的人吧！</p></div>';
+            postsList.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon"><i class="ti ti-pencil" style="font-size:3rem"></i></div><h3>暂无帖子</h3><p>成为第一个发帖的人吧！</p></div>';
             return;
         }
 
@@ -132,33 +143,57 @@ const forum = {
             var author = users.find(function(u) { return u.id === post.authorId; }) || {};
             var category = appConfig.postCategories.find(function(c) { return c.id === post.category; });
             var timeAgo = utils.formatDate(post.createdAt);
-            var tags = post.tags ? post.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('') : '';
 
-            var avatarUrl = author.avatar || 'images/default-avatar.png';
-            if (avatarUrl.indexOf('data:') !== 0) avatarUrl = '../' + avatarUrl;
-            html += '<article class="post-item">' +
-                '<div class="post-item-header">' +
-                '<img src="' + avatarUrl + '" alt="" class="post-item-avatar">' +
-                '<div class="post-item-meta">' +
-                '<div class="post-item-author">' + (author.username || '匿名用户') + '</div>' +
-                '<div class="post-item-time">' + timeAgo + '</div>' +
+            var avatarUrl = author.avatar || '../images/default-avatar.png';
+            if (avatarUrl.indexOf('data:') !== 0 && avatarUrl.indexOf('http') !== 0) avatarUrl = '../' + avatarUrl;
+
+            html += '<article class="post-card">' +
+                '<div class="post-header">' +
+                '<img src="' + avatarUrl + '" alt="" class="post-avatar" onerror="this.src=\'../images/default-avatar.png\'">' +
+                '<div class="post-meta">' +
+                '<div class="post-author">' + (author.username || '匿名用户') + '</div>' +
+                '<div class="post-time">' + timeAgo + '</div>' +
                 '</div>' +
                 (category ? '<span class="post-category">' + category.icon + ' ' + category.name + '</span>' : '') +
                 '</div>' +
-                '<h2 class="post-item-title"><a href="post.html?id=' + post.id + '">' + post.title + '</a></h2>' +
-                '<p class="post-item-content">' + utils.truncateText(post.content, 300) + '</p>' +
-                '<div class="post-item-footer">' +
-                '<div class="post-item-stats">' +
-                '<span>👍 ' + (post.likesCount || 0) + '</span>' +
-                '<span>💬 ' + (post.commentsCount || 0) + '</span>' +
-                '<span>👁 ' + (post.viewsCount || 0) + '</span>' +
+                '<h3 class="post-title"><a href="post.html?id=' + post.id + '">' + post.title + '</a></h3>' +
+                '<p class="post-excerpt">' + utils.truncateText(post.content, 150) + '</p>' +
+                '<div class="post-footer">' +
+                '<div class="post-stats">' +
+                '<span><i class="ti ti-thumb-up"></i> ' + (post.likesCount || 0) + '</span>' +
+                '<span><i class="ti ti-message"></i> ' + (post.commentsCount || 0) + '</span>' +
+                '<span><i class="ti ti-eye"></i> ' + (post.viewsCount || 0) + '</span>' +
                 '</div>' +
-                '<div class="post-item-tags">' + tags + '</div>' +
+                (post.isEssence ? '<span class="badge badge-primary"><i class="ti ti-star"></i> 精华</span>' : '') +
                 '</div>' +
                 '</article>';
         });
 
         postsList.innerHTML = html;
+    },
+
+    loadForumStats() {
+        var statsEl = document.getElementById('forumStats');
+        if (!statsEl) return;
+
+        var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        var users = JSON.parse(localStorage.getItem('users') || '[]');
+
+        var totalComments = 0;
+        posts.forEach(function(p) { totalComments += (p.commentsCount || 0); });
+
+        statsEl.innerHTML =
+            '<p><span>帖子总数</span><span>' + posts.length + '</span></p>' +
+            '<p><span>评论总数</span><span>' + totalComments + '</span></p>' +
+            '<p><span>社区成员</span><span>' + users.length + '</span></p>' +
+            '<p><span>今日新帖</span><span>' + this.getTodayPosts(posts) + '</span></p>';
+    },
+
+    getTodayPosts(posts) {
+        var today = new Date().toDateString();
+        return posts.filter(function(p) {
+            return new Date(p.createdAt).toDateString() === today;
+        }).length;
     },
 
     showNewPostModal() {
@@ -170,27 +205,25 @@ const forum = {
         var category = document.getElementById('postCategory').value;
         var title = document.getElementById('postTitle').value.trim();
         var content = document.getElementById('postContent').value.trim();
-        var tagsInput = document.getElementById('postTags').value.trim();
 
         if (!authModule.isLoggedIn()) {
-            alert('请先登录后再发帖');
+            utils.showNotification('请先登录后再发帖', 'warning');
             authModule.showModal('login');
             return;
         }
 
         var savedForum = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}');
         if (savedForum.forumAllowPost === false) {
-            alert('管理员已关闭发帖功能');
+            utils.showNotification('管理员已关闭发帖功能', 'error');
             return;
         }
 
-        if (!category) { alert('请选择分类'); return; }
-        if (!title) { alert('请输入标题'); return; }
-        if (!content) { alert('请输入内容'); return; }
+        if (!category) { utils.showNotification('请选择分类', 'warning'); return; }
+        if (!title) { utils.showNotification('请输入标题', 'warning'); return; }
+        if (!content) { utils.showNotification('请输入内容', 'warning'); return; }
 
-        var tags = tagsInput ? tagsInput.split(',').map(function(t) { return t.trim(); }).filter(function(t) { return t; }) : [];
         var user = authModule.getCurrentUser();
-        if (!user) { alert('请先登录'); return; }
+        if (!user) { utils.showNotification('请先登录', 'warning'); return; }
 
         var needReview = savedForum.forumNeedReview === true;
 
@@ -200,7 +233,6 @@ const forum = {
             title: title,
             content: content,
             category: category,
-            tags: tags,
             authorId: user.id,
             likesCount: 0,
             commentsCount: 0,
@@ -215,10 +247,11 @@ const forum = {
 
         document.getElementById('newPostModal').style.display = 'none';
         document.getElementById('newPostForm').reset();
-        alert(needReview ? '发帖成功，等待管理员审核' : '发帖成功');
+        utils.showNotification(needReview ? '发帖成功，等待管理员审核' : '发帖成功', 'success');
         this.loadPosts();
         this.loadCategories();
-    },
+        this.loadForumStats();
+    }
 };
 
 document.addEventListener('DOMContentLoaded', function() {

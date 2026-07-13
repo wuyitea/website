@@ -4,412 +4,170 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="社区论坛 - 发表帖子、参与讨论、分享想法">
-    <meta name="keywords" content="论坛, 讨论, 社区, 帖子, 交流">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>论坛 - 社区平台</title>
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/pages/forum.html">
-    <meta property="og:title" content="论坛 - 社区平台">
-    <meta property="og:description" content="发表帖子、参与讨论、分享想法">
-    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://yourdomain.com/pages/forum.html">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
-    <style>
-        .forum-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-xl);
-            padding: var(--spacing-xl) 0;
-        }
-        
-        .sidebar {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-        
-        .sidebar-section {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            padding: var(--spacing-lg);
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .sidebar-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-        }
-        
-        .category-list {
-            list-style: none;
-        }
-        
-        .category-item {
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .category-link {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-sm) var(--spacing-md);
-            color: var(--text-secondary);
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-        
-        .category-link:hover,
-        .category-link.active {
-            background-color: var(--bg-tertiary);
-            color: var(--primary-color);
-        }
-        
-        .category-count {
-            margin-left: auto;
-            background-color: var(--bg-tertiary);
-            padding: 0.125rem 0.5rem;
-            border-radius: 10px;
-            font-size: var(--font-size-xs);
-        }
-        
-        .main-content {
-            min-width: 0;
-        }
-        
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .filter-tabs {
-            display: flex;
-            gap: var(--spacing-sm);
-            background-color: var(--bg-secondary);
-            padding: var(--spacing-xs);
-            border-radius: var(--border-radius);
-        }
-        
-        .filter-tab {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: none;
-            background: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-        
-        .filter-tab.active {
-            background-color: var(--bg-primary);
-            color: var(--primary-color);
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .posts-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-md);
-        }
-        
-        .post-item {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            padding: var(--spacing-lg);
-            transition: var(--transition);
-        }
-        
-        .post-item:hover {
-            box-shadow: var(--shadow-md);
-        }
-        
-        .post-item-header {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .post-item-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-        }
-        
-        .post-item-meta {
-            flex: 1;
-        }
-        
-        .post-item-author {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        
-        .post-item-time {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-        }
-        
-        .post-item-title {
-            font-size: var(--font-size-xl);
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .post-item-title a {
-            color: var(--text-primary);
-        }
-        
-        .post-item-title a:hover {
-            color: var(--primary-color);
-        }
-        
-        .post-item-content {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            line-height: 1.6;
-        }
-        
-        .post-item-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: var(--spacing-md);
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .post-item-stats {
-            display: flex;
-            gap: var(--spacing-lg);
-            color: var(--text-secondary);
-        }
-        
-        .post-item-tags {
-            display: flex;
-            gap: var(--spacing-sm);
-            flex-wrap: wrap;
-        }
-        
-        .tag {
-            display: inline-block;
-            padding: 0.125rem 0.5rem;
-            background-color: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border-radius: var(--border-radius);
-            font-size: var(--font-size-xs);
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-xl);
-        }
-        
-        .page-btn {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .page-btn:hover,
-        .page-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        @media (max-width: 1024px) {
-            .forum-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: var(--spacing-md);
-            }
-            
-            .sidebar-section {
-                margin-bottom: 0;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .content-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--spacing-md);
-            }
-            
-            .filter-tabs {
-                width: 100%;
-                overflow-x: auto;
-            }
-            
-            .post-item-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--spacing-md);
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- 导航栏 -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="../index.html">社区平台</a>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台</a>
+        </div>
+        <div class="nav-search" id="navSearch">
+            <div class="input-icon">
+                <i class="ti ti-search"></i>
+                <input type="search" placeholder="搜索帖子..." id="searchInput">
             </div>
-            
-            <div class="nav-search">
-                <input type="search" placeholder="搜索帖子、用户..." id="searchInput">
-                <button type="button" id="searchBtn">搜索</button>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="forum.html" class="active"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="market.html"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="messages.html"><i class="ti ti-mail"></i> 消息</a></li>
+            </ul>
+        </div>
+        <div class="nav-user">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-ghost" id="loginBtn">登录</button>
+                <button class="btn btn-primary" id="registerBtn">注册</button>
             </div>
-            
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="forum.html" class="active">论坛</a></li>
-                    <li><a href="market.html">市场</a></li>
-                    <li><a href="messages.html">消息</a></li>
-                </ul>
-            </div>
-            
-            <div class="nav-user">
-                <div class="user-actions" id="userActions">
-                    <button class="btn btn-outline" id="loginBtn">登录</button>
-                    <button class="btn btn-primary" id="registerBtn">注册</button>
-                </div>
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
-                    <div class="user-dropdown">
-                        <a href="profile.html">个人资料</a>
-                        <a href="settings.html">设置</a>
-                        <a href="#" id="logoutBtn">退出登录</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- 主要内容 -->
-    <main class="main">
-        <div class="container">
-            <div class="forum-layout">
-                <!-- 侧边栏 -->
-                <aside class="sidebar">
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">论坛分类</h3>
-                        <ul class="category-list" id="categoryList">
-                            <!-- 动态加载 -->
-                        </ul>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">热门标签</h3>
-                        <div class="post-item-tags" id="hotTags">
-                            <!-- 动态加载 -->
-                        </div>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">论坛统计</h3>
-                        <div class="forum-stats">
-                            <p>帖子总数: <span id="totalPosts">0</span></p>
-                            <p>用户总数: <span id="totalUsers">0</span></p>
-                            <p>今日新帖: <span id="todayPosts">0</span></p>
-                        </div>
-                    </div>
-                </aside>
-                
-                <!-- 主要内容区 -->
-                <div class="main-content">
-                    <div class="content-header">
-                        <h1>论坛</h1>
-                        <button class="btn btn-primary" id="newPostBtn">发表新帖</button>
-                    </div>
-                    
-                    <div class="filter-tabs">
-                        <button class="filter-tab active" data-filter="latest">最新</button>
-                        <button class="filter-tab" data-filter="hot">热门</button>
-                        <button class="filter-tab" data-filter="essence">精华</button>
-                        <button class="filter-tab" data-filter="noanswer">待回答</button>
-                    </div>
-                    
-                    <div class="posts-list" id="postsList">
-                        <!-- 动态加载 -->
-                    </div>
-                    
-                    <div class="pagination" id="pagination">
-                        <!-- 动态加载 -->
-                    </div>
+            <div class="user-profile" id="userProfile" style="display:none;">
+                <img src="../images/default-avatar.png" alt="头像" id="userAvatar">
+                <div class="user-dropdown">
+                    <a href="profile.html"><i class="ti ti-user"></i> 个人资料</a>
+                    <a href="settings.html"><i class="ti ti-settings"></i> 设置</a>
+                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
                 </div>
             </div>
         </div>
-    </main>
-
-    <!-- 页脚 -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 社区平台. 保留所有权利.</p>
-            </div>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
         </div>
-    </footer>
+    </nav>
+
+    <!-- 主内容 -->
+    <div style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem">
+        <div class="forum-layout">
+            <!-- 帖子列表 -->
+            <main>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-message-circle" style="margin-right:0.375rem"></i>论坛</h2>
+                    <button class="btn btn-primary" id="newPostBtn">
+                        <i class="ti ti-plus"></i> 发布帖子
+                    </button>
+                </div>
+
+                <!-- 分类筛选 -->
+                <div class="forum-filters" id="categoryFilters"></div>
+
+                <!-- 排序筛选 -->
+                <div style="display:flex;gap:0.5rem;margin-bottom:1rem">
+                    <button class="forum-filter-btn active" data-filter="latest">
+                        <i class="ti ti-clock"></i> 最新
+                    </button>
+                    <button class="forum-filter-btn" data-filter="hot">
+                        <i class="ti ti-flame"></i> 热门
+                    </button>
+                    <button class="forum-filter-btn" data-filter="essence">
+                        <i class="ti ti-star"></i> 精华
+                    </button>
+                </div>
+
+                <!-- 帖子列表 -->
+                <div class="posts-grid" id="postsList"></div>
+
+                <!-- 分页 -->
+                <div id="pagination" style="margin-top:1.5rem;text-align:center"></div>
+            </main>
+
+            <!-- 侧边栏 -->
+            <aside class="forum-sidebar">
+                <!-- 论坛统计 -->
+                <div class="admin-card" style="margin-bottom:1rem">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-chart-bar" style="margin-right:0.375rem"></i>论坛统计</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div class="forum-stats" id="forumStats"></div>
+                    </div>
+                </div>
+
+                <!-- 热门标签 -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-tags" style="margin-right:0.375rem"></i>热门标签</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div id="hotTags" style="display:flex;flex-wrap:wrap;gap:0.375rem"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- 发帖模态框 -->
+    <div class="modal" id="newPostModal">
+        <div class="modal-content" style="max-width:600px">
+            <span class="close-modal">&times;</span>
+            <h2><i class="ti ti-pencil" style="margin-right:0.375rem"></i>发布新帖子</h2>
+            <form id="newPostForm">
+                <div class="form-group">
+                    <label for="postTitle">标题</label>
+                    <input type="text" id="postTitle" placeholder="输入帖子标题" required>
+                </div>
+                <div class="form-group">
+                    <label for="postCategory">分类</label>
+                    <select id="postCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="postContent">内容</label>
+                    <textarea id="postContent" rows="8" placeholder="分享你的想法..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>图片（可选，最多9张）</label>
+                    <input type="file" id="postImages" accept="image/*" multiple style="display:none">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('postImages').click()">
+                        <i class="ti ti-photo"></i> 添加图片
+                    </button>
+                    <div id="imagePreview" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem"></div>
+                </div>
+                <div style="display:flex;gap:0.75rem;justify-content:flex-end">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('newPostModal').classList.remove('show')">取消</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti ti-send"></i> 发布
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- 登录模态框 -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>登录</h2>
+            <h2><i class="ti ti-login" style="margin-right:0.375rem"></i>登录</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">邮箱</label>
-                    <input type="email" id="loginEmail" required>
+                    <input type="email" id="loginEmail" placeholder="请输入邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码</label>
-                    <input type="password" id="loginPassword" required>
+                    <input type="password" id="loginPassword" placeholder="请输入密码" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">登录</button>
             </form>
-            <div class="modal-footer">
-                <p>还没有账号？<a href="#" id="showRegister">立即注册</a></p>
+            <div class="social-divider"><span>或使用以下方式登录</span></div>
+            <div class="social-login-btns">
+                <button class="social-btn wechat" onclick="socialLogin('wechat')">微信登录</button>
+                <button class="social-btn qq" onclick="socialLogin('qq')">QQ登录</button>
             </div>
+            <div class="modal-footer"><p>还没有账号？<a href="#" id="showRegister">立即注册</a></p></div>
         </div>
     </div>
 
@@ -417,69 +175,33 @@
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>注册</h2>
+            <h2><i class="ti ti-user-plus" style="margin-right:0.375rem"></i>注册</h2>
             <form id="registerForm">
                 <div class="form-group">
                     <label for="registerUsername">用户名</label>
-                    <input type="text" id="registerUsername" required>
+                    <input type="text" id="registerUsername" placeholder="请输入用户名" required>
                 </div>
                 <div class="form-group">
                     <label for="registerEmail">邮箱</label>
-                    <input type="email" id="registerEmail" required>
+                    <input type="email" id="registerEmail" placeholder="请输入邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" required minlength="6">
+                    <input type="password" id="registerPassword" placeholder="至少6位密码" required minlength="6">
                 </div>
                 <div class="form-group">
                     <label for="registerConfirmPassword">确认密码</label>
-                    <input type="password" id="registerConfirmPassword" required>
+                    <input type="password" id="registerConfirmPassword" placeholder="再次输入密码" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">注册</button>
             </form>
-            <div class="modal-footer">
-                <p>已有账号？<a href="#" id="showLogin">立即登录</a></p>
-            </div>
+            <div class="modal-footer"><p>已有账号？<a href="#" id="showLogin">立即登录</a></p></div>
         </div>
     </div>
 
-    <!-- 发帖模态框 -->
-    <div class="modal" id="newPostModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>发表新帖</h2>
-            <form id="newPostForm">
-                <div class="form-group">
-                    <label for="postCategory">分类</label>
-                    <select id="postCategory" required>
-                        <!-- 动态加载 -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="postTitle">标题</label>
-                    <input type="text" id="postTitle" placeholder="请输入帖子标题" required>
-                </div>
-                <div class="form-group">
-                    <label for="postContent">内容</label>
-                    <textarea id="postContent" rows="10" placeholder="请输入帖子内容..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="postTags">标签（用逗号分隔）</label>
-                    <input type="text" id="postTags" placeholder="例如: 讨论, 分享, 问题">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">发布帖子</button>
-            </form>
-        </div>
-    </div>
-
-
-    
-    <!-- JavaScript -->
-    b
-    <script src="../js/config.js?v=4"></script>
-    <script>var _sv="4";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
-    <script src="../js/auth.js?v=4"></script>
-    b
-    <script src="../js/forum.js?v=4"></script>
+    <script src="../js/config.js?v=5"></script>
+    <script>var _sv="5";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/forum.js?v=5"></script>
 </body>
 </html>

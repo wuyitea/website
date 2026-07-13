@@ -19,7 +19,7 @@ const market = {
         if (sellBtn) {
             sellBtn.addEventListener('click', function() {
                 if (!authModule.isLoggedIn()) {
-                    alert('请先登录');
+                    utils.showNotification('请先登录', 'warning');
                     authModule.showModal('login');
                     return;
                 }
@@ -54,12 +54,11 @@ const market = {
             });
         }
 
-        document.querySelectorAll('[data-status]').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('[data-status]').forEach(function(l) { l.classList.remove('active'); });
-                link.classList.add('active');
-                market.currentStatus = link.dataset.status;
+        document.querySelectorAll('[data-status]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('[data-status]').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                market.currentStatus = btn.dataset.status;
                 market.currentPage = 1;
                 market.loadProducts();
             });
@@ -81,9 +80,9 @@ const market = {
     },
 
     loadCategories() {
-        var categoryList = document.getElementById('categoryList');
+        var categoryFilters = document.getElementById('categoryFilters');
         var productCategory = document.getElementById('productCategory');
-        if (!categoryList) return;
+        if (!categoryFilters) return;
 
         var savedMarket = JSON.parse(localStorage.getItem('admin_settings_market') || '{}');
         if (savedMarket.marketCategories) {
@@ -93,23 +92,22 @@ const market = {
             });
         }
 
-        var html = '<li class="category-item"><a href="#" class="category-link active" data-category="all">全部分类</a></li>';
+        var html = '<button class="forum-filter-btn active" data-category="all">全部分类</button>';
         var selectHtml = '<option value="">请选择分类</option>';
 
         appConfig.productCategories.forEach(function(category) {
-            html += '<li class="category-item"><a href="#" class="category-link" data-category="' + category.id + '">' + category.icon + ' ' + category.name + '</a></li>';
+            html += '<button class="forum-filter-btn" data-category="' + category.id + '">' + category.icon + ' ' + category.name + '</button>';
             selectHtml += '<option value="' + category.id + '">' + category.icon + ' ' + category.name + '</option>';
         });
 
-        categoryList.innerHTML = html;
+        categoryFilters.innerHTML = html;
         if (productCategory) productCategory.innerHTML = selectHtml;
 
-        document.querySelectorAll('.category-link').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.category-link').forEach(function(l) { l.classList.remove('active'); });
-                link.classList.add('active');
-                market.currentCategory = link.dataset.category === 'all' ? null : link.dataset.category;
+        document.querySelectorAll('.forum-filter-btn[data-category]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.forum-filter-btn[data-category]').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                market.currentCategory = btn.dataset.category === 'all' ? null : btn.dataset.category;
                 market.currentPage = 1;
                 market.loadProducts();
             });
@@ -156,7 +154,7 @@ const market = {
         }
 
         if (filtered.length === 0) {
-            productsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🛒</div><h3>暂无商品</h3><p>成为第一个发布商品的人吧！</p></div>';
+            productsList.innerHTML = '<div class="empty-state" style="grid-column:1/-1;text-align:center;padding:3rem"><div><i class="ti ti-shopping-bag" style="font-size:3rem;color:var(--text-secondary)"></i></div><h3 style="margin:1rem 0 0.5rem">暂无商品</h3><p style="color:var(--text-secondary)">成为第一个发布商品的人吧！</p></div>';
             return;
         }
 
@@ -166,21 +164,31 @@ const market = {
             var category = appConfig.productCategories.find(function(c) { return c.id === product.category; });
 
             var imgSrc = (product.images && product.images[0]) ? product.images[0] : '../images/default-product.png';
-            if (imgSrc.indexOf('data:') !== 0) imgSrc = '../' + imgSrc;
-            html += '<article class="product-item">' +
-                '<img src="' + imgSrc + '" alt="' + product.title + '" class="product-item-image">' +
-                '<div class="product-item-info">' +
-                (category ? '<span class="post-category">' + category.icon + ' ' + category.name + '</span>' : '') +
-                '<h3 class="product-item-title"><a href="product.html?id=' + product.id + '">' + product.title + '</a></h3>' +
-                '<div class="product-item-price">¥' + product.price.toFixed(2) +
-                (product.originalPrice ? '<span class="product-item-original-price">¥' + product.originalPrice.toFixed(2) + '</span>' : '') +
+            if (imgSrc.indexOf('data:') !== 0 && imgSrc.indexOf('http') !== 0) imgSrc = '../' + imgSrc;
+
+            var sellerAvatar = seller.avatar || '../images/default-avatar.png';
+            if (sellerAvatar.indexOf('data:') !== 0 && sellerAvatar.indexOf('http') !== 0) sellerAvatar = '../' + sellerAvatar;
+
+            html += '<article class="product-card">' +
+                '<div style="position:relative">' +
+                '<img src="' + imgSrc + '" alt="' + product.title + '" class="product-image" onerror="this.src=\'../images/default-product.png\'">' +
+                (product.condition === 'new' ? '<span class="badge badge-success" style="position:absolute;top:0.75rem;right:0.75rem"><i class="ti ti-sparkles"></i> 全新</span>' : '') +
                 '</div>' +
-                '<div class="product-item-meta">' +
-                '<div class="product-item-seller"><img src="' + ((seller.avatar && seller.avatar.indexOf('data:') === 0) ? seller.avatar : '../' + (seller.avatar || 'images/default-avatar.png')) + '" alt=""><span>' + (seller.username || '匿名卖家') + '</span></div>' +
-                '<div class="product-item-stats"><span>👁 ' + (product.viewsCount || 0) + '</span></div>' +
+                '<div class="product-info">' +
+                (category ? '<span class="post-category" style="margin-bottom:0.5rem;display:inline-block">' + category.icon + ' ' + category.name + '</span>' : '') +
+                '<h3 class="product-title"><a href="product.html?id=' + product.id + '">' + product.title + '</a></h3>' +
+                '<div class="product-price">¥' + product.price.toFixed(2) +
+                (product.originalPrice ? '<span style="font-size:0.875rem;color:var(--text-secondary);text-decoration:line-through;margin-left:0.5rem">¥' + product.originalPrice.toFixed(2) + '</span>' : '') +
                 '</div>' +
-                '<div class="product-item-actions">' +
-                '<button class="btn btn-primary btn-sm buy-now" onclick="market.buyNow(\'' + product.id + '\')">立即购买</button>' +
+                '<div class="product-meta">' +
+                '<div style="display:flex;align-items:center;gap:0.5rem">' +
+                '<img src="' + sellerAvatar + '" alt="" style="width:20px;height:20px;border-radius:50%">' +
+                '<span>' + (seller.username || '匿名卖家') + '</span>' +
+                '</div>' +
+                '<span><i class="ti ti-eye"></i> ' + (product.viewsCount || 0) + '</span>' +
+                '</div>' +
+                '<div class="product-actions">' +
+                '<button class="btn btn-primary btn-sm buy-now" onclick="market.buyNow(\'' + product.id + '\')"><i class="ti ti-shopping-cart"></i> 立即购买</button>' +
                 '</div>' +
                 '</div>' +
                 '</article>';
@@ -196,14 +204,14 @@ const market = {
 
     async submitProduct() {
         if (!authModule.isLoggedIn()) {
-            alert('请先登录后再发布商品');
+            utils.showNotification('请先登录后再发布商品', 'warning');
             authModule.showModal('login');
             return;
         }
 
         var savedMarket = JSON.parse(localStorage.getItem('admin_settings_market') || '{}');
         if (savedMarket.marketAllowSell === false) {
-            alert('管理员已关闭商品发布功能');
+            utils.showNotification('管理员已关闭商品发布功能', 'error');
             return;
         }
 
@@ -215,10 +223,10 @@ const market = {
         var condition = document.getElementById('productCondition').value;
         var imageInput = document.getElementById('productImages');
 
-        if (!category) { alert('请选择分类'); return; }
-        if (!title) { alert('请输入商品名称'); return; }
-        if (!description) { alert('请输入商品描述'); return; }
-        if (isNaN(price) || price <= 0) { alert('请输入有效的价格'); return; }
+        if (!category) { utils.showNotification('请选择分类', 'warning'); return; }
+        if (!title) { utils.showNotification('请输入商品名称', 'warning'); return; }
+        if (!description) { utils.showNotification('请输入商品描述', 'warning'); return; }
+        if (isNaN(price) || price <= 0) { utils.showNotification('请输入有效的价格', 'warning'); return; }
 
         var images = [];
         if (imageInput && imageInput.files && imageInput.files.length > 0) {
@@ -226,7 +234,7 @@ const market = {
         }
 
         var user = authModule.getCurrentUser();
-        if (!user) { alert('请先登录'); return; }
+        if (!user) { utils.showNotification('请先登录', 'warning'); return; }
 
         var needReview = savedMarket.marketNeedReview === true;
 
@@ -253,7 +261,7 @@ const market = {
 
         document.getElementById('sellModal').style.display = 'none';
         document.getElementById('sellForm').reset();
-        alert(needReview ? '商品发布成功，等待管理员审核' : '商品发布成功');
+        utils.showNotification(needReview ? '商品发布成功，等待管理员审核' : '商品发布成功', 'success');
         this.loadProducts();
     },
 

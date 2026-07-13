@@ -4,343 +4,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="社区市场 - 发现优质商品，买卖二手物品">
-    <meta name="keywords" content="市场, 电商, 购物, 二手, 商品">
     <title>市场 - 社区平台</title>
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/pages/market.html">
-    <meta property="og:title" content="市场 - 社区平台">
-    <meta property="og:description" content="发现优质商品，买卖二手物品">
-    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://yourdomain.com/pages/market.html">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
-    <style>
-        .market-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-xl);
-            padding: var(--spacing-xl) 0;
-        }
-        
-        .market-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .market-filters {
-            display: flex;
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-        
-        .filter-label {
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-        
-        .filter-select {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-        
-        .products-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: var(--spacing-lg);
-        }
-        
-        .product-item {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-        
-        .product-item:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-        
-        .product-item-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background-color: var(--bg-tertiary);
-        }
-        
-        .product-item-info {
-            padding: var(--spacing-md);
-        }
-        
-        .product-item-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-        
-        .product-item-title a {
-            color: var(--text-primary);
-        }
-        
-        .product-item-title a:hover {
-            color: var(--primary-color);
-        }
-        
-        .product-item-price {
-            font-size: var(--font-size-xl);
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .product-item-original-price {
-            font-size: var(--font-size-sm);
-            color: var(--text-light);
-            text-decoration: line-through;
-            margin-left: var(--spacing-sm);
-        }
-        
-        .product-item-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-secondary);
-            font-size: var(--font-size-sm);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .product-item-seller {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-        }
-        
-        .product-item-seller img {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-        }
-        
-        .product-item-stats {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-        
-        .product-item-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-        
-        .product-item-actions .btn {
-            flex: 1;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-xl);
-        }
-        
-        .page-btn {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .page-btn:hover,
-        .page-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        @media (max-width: 1024px) {
-            .market-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: var(--spacing-md);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .market-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: var(--spacing-md);
-            }
-            
-            .market-filters {
-                width: 100%;
-                overflow-x: auto;
-            }
-            
-            .products-list {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .products-list {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="../index.html">社区平台</a>
-            </div>
-            
-            <div class="nav-search">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台</a>
+        </div>
+        <div class="nav-search" id="navSearch">
+            <div class="input-icon">
+                <i class="ti ti-search"></i>
                 <input type="search" placeholder="搜索商品..." id="searchInput">
-                <button type="button" id="searchBtn">搜索</button>
             </div>
-            
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="forum.html">论坛</a></li>
-                    <li><a href="market.html" class="active">市场</a></li>
-                    <li><a href="messages.html">消息</a></li>
-                </ul>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="market.html" class="active"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="messages.html"><i class="ti ti-mail"></i> 消息</a></li>
+            </ul>
+        </div>
+        <div class="nav-user">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-ghost" id="loginBtn">登录</button>
+                <button class="btn btn-primary" id="registerBtn">注册</button>
             </div>
-            
-            <div class="nav-user">
-                <div class="user-actions" id="userActions">
-                    <button class="btn btn-outline" id="loginBtn">登录</button>
-                    <button class="btn btn-primary" id="registerBtn">注册</button>
-                </div>
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
-                    <div class="user-dropdown">
-                        <a href="profile.html">个人资料</a>
-                        <a href="settings.html">设置</a>
-                        <a href="#" id="logoutBtn">退出登录</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- 主要内容 -->
-    <main class="main">
-        <div class="container">
-            <div class="market-layout">
-                <!-- 侧边栏 -->
-                <aside class="sidebar">
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">商品分类</h3>
-                        <ul class="category-list" id="categoryList">
-                            <!-- 动态加载 -->
-                        </ul>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">价格区间</h3>
-                        <div class="price-filter">
-                            <input type="number" placeholder="最低价" id="minPrice">
-                            <span>-</span>
-                            <input type="number" placeholder="最高价" id="maxPrice">
-                            <button class="btn btn-sm btn-primary" id="filterPriceBtn">筛选</button>
-                        </div>
-                    </div>
-                    
-                    <div class="sidebar-section">
-                        <h3 class="sidebar-title">商品状态</h3>
-                        <ul class="category-list">
-                            <li class="category-item">
-                                <a href="#" class="category-link active" data-status="all">全部</a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#" class="category-link" data-status="new">全新</a>
-                            </li>
-                            <li class="category-item">
-                                <a href="#" class="category-link" data-status="used">二手</a>
-                            </li>
-                        </ul>
-                    </div>
-                </aside>
-                
-                <!-- 主要内容区 -->
-                <div class="main-content">
-                    <div class="market-header">
-                        <h1>市场</h1>
-                        <button class="btn btn-primary" id="sellBtn">发布商品</button>
-                    </div>
-                    
-                    <div class="market-filters">
-                        <div class="filter-group">
-                            <span class="filter-label">排序:</span>
-                            <select class="filter-select" id="sortSelect">
-                                <option value="latest">最新发布</option>
-                                <option value="price-low">价格从低到高</option>
-                                <option value="price-high">价格从高到低</option>
-                                <option value="popular">最受欢迎</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="products-list" id="productsList">
-                        <!-- 动态加载 -->
-                    </div>
-                    
-                    <div class="pagination" id="pagination">
-                        <!-- 动态加载 -->
-                    </div>
+            <div class="user-profile" id="userProfile" style="display:none;">
+                <img src="../images/default-avatar.png" alt="头像" id="userAvatar">
+                <div class="user-dropdown">
+                    <a href="profile.html"><i class="ti ti-user"></i> 个人资料</a>
+                    <a href="settings.html"><i class="ti ti-settings"></i> 设置</a>
+                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
                 </div>
             </div>
         </div>
-    </main>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
 
-    <!-- 页脚 -->
+    <div style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem">
+        <div class="forum-layout">
+            <main>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i>市场</h2>
+                    <button class="btn btn-primary" id="sellBtn">
+                        <i class="ti ti-plus"></i> 发布商品
+                    </button>
+                </div>
+
+                <!-- 排序和筛选 -->
+                <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+                    <select class="form-select" id="sortSelect" style="padding:0.5rem 1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
+                        <option value="latest"><i class="ti ti-clock"></i> 最新发布</option>
+                        <option value="price-low">价格从低到高</option>
+                        <option value="price-high">价格从高到低</option>
+                        <option value="popular">最受欢迎</option>
+                    </select>
+                </div>
+
+                <!-- 商品列表 -->
+                <div class="products-grid" id="productsList"></div>
+
+                <div id="pagination" style="margin-top:1.5rem;text-align:center"></div>
+            </main>
+
+            <aside class="forum-sidebar">
+                <div class="admin-card" style="margin-bottom:1rem">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-category" style="margin-right:0.375rem"></i>商品分类</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div id="categoryFilters" style="display:flex;flex-direction:column;gap:0.25rem"></div>
+                    </div>
+                </div>
+
+                <div class="admin-card" style="margin-bottom:1rem">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-filter" style="margin-right:0.375rem"></i>价格筛选</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem">
+                            <input type="number" placeholder="最低价" id="minPrice" style="flex:1;padding:0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
+                            <span style="color:var(--text-secondary)">-</span>
+                            <input type="number" placeholder="最高价" id="maxPrice" style="flex:1;padding:0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="filterPriceBtn" style="width:100%">
+                            <i class="ti ti-search"></i> 筛选
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2><i class="ti ti-package" style="margin-right:0.375rem"></i>商品状态</h2>
+                    </div>
+                    <div style="padding:1rem">
+                        <div style="display:flex;flex-direction:column;gap:0.25rem">
+                            <button class="forum-filter-btn active" data-status="all">全部</button>
+                            <button class="forum-filter-btn" data-status="new"><i class="ti ti-sparkles"></i> 全新</button>
+                            <button class="forum-filter-btn" data-status="used"><i class="ti ti-recycle"></i> 二手</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -349,21 +126,70 @@
         </div>
     </footer>
 
+    <!-- 发布商品模态框 -->
+    <div class="modal" id="sellModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="ti ti-plus-circle" style="margin-right:0.375rem"></i>发布商品</h2>
+            <form id="sellForm">
+                <div class="form-group">
+                    <label for="productCategory"><i class="ti ti-category"></i> 分类</label>
+                    <select id="productCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="productTitle"><i class="ti ti-tag"></i> 商品名称</label>
+                    <input type="text" id="productTitle" placeholder="请输入商品名称" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription"><i class="ti ti-file-text"></i> 商品描述</label>
+                    <textarea id="productDescription" rows="5" placeholder="请详细描述商品信息..." required></textarea>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group">
+                        <label for="productPrice"><i class="ti ti-currency-yuan"></i> 价格 (¥)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="originalPrice"><i class="ti ti-currency-yuan"></i> 原价 (¥)</label>
+                        <input type="number" id="originalPrice" step="0.01" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productCondition"><i class="ti ti-package"></i> 商品状态</label>
+                    <select id="productCondition" required>
+                        <option value="new"><i class="ti ti-sparkles"></i> 全新</option>
+                        <option value="used"><i class="ti ti-recycle"></i> 二手</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productImages"><i class="ti ti-photo"></i> 商品图片</label>
+                    <input type="file" id="productImages" multiple accept="image/*" required>
+                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 最多上传5张图片，每张不超过5MB</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ti ti-send"></i> 发布商品
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- 登录模态框 -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>登录</h2>
+            <h2><i class="ti ti-login" style="margin-right:0.375rem"></i>登录</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginEmail">邮箱</label>
+                    <label for="loginEmail"><i class="ti ti-mail"></i> 邮箱</label>
                     <input type="email" id="loginEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">密码</label>
+                    <label for="loginPassword"><i class="ti ti-lock"></i> 密码</label>
                     <input type="password" id="loginPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">登录</button>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ti ti-login"></i> 登录
+                </button>
             </form>
             <div class="modal-footer">
                 <p>还没有账号？<a href="#" id="showRegister">立即注册</a></p>
@@ -375,25 +201,27 @@
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>注册</h2>
+            <h2><i class="ti ti-user-plus" style="margin-right:0.375rem"></i>注册</h2>
             <form id="registerForm">
                 <div class="form-group">
-                    <label for="registerUsername">用户名</label>
+                    <label for="registerUsername"><i class="ti ti-user"></i> 用户名</label>
                     <input type="text" id="registerUsername" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">邮箱</label>
+                    <label for="registerEmail"><i class="ti ti-mail"></i> 邮箱</label>
                     <input type="email" id="registerEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">密码</label>
+                    <label for="registerPassword"><i class="ti ti-lock"></i> 密码</label>
                     <input type="password" id="registerPassword" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="registerConfirmPassword">确认密码</label>
+                    <label for="registerConfirmPassword"><i class="ti ti-lock-check"></i> 确认密码</label>
                     <input type="password" id="registerConfirmPassword" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">注册</button>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="ti ti-user-plus"></i> 注册
+                </button>
             </form>
             <div class="modal-footer">
                 <p>已有账号？<a href="#" id="showLogin">立即登录</a></p>
@@ -401,59 +229,9 @@
         </div>
     </div>
 
-    <!-- 发布商品模态框 -->
-    <div class="modal" id="sellModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>发布商品</h2>
-            <form id="sellForm">
-                <div class="form-group">
-                    <label for="productCategory">分类</label>
-                    <select id="productCategory" required>
-                        <!-- 动态加载 -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productTitle">商品名称</label>
-                    <input type="text" id="productTitle" placeholder="请输入商品名称" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">商品描述</label>
-                    <textarea id="productDescription" rows="5" placeholder="请详细描述商品信息..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="productPrice">价格 (¥)</label>
-                    <input type="number" id="productPrice" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="originalPrice">原价 (¥)</label>
-                    <input type="number" id="originalPrice" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label for="productCondition">商品状态</label>
-                    <select id="productCondition" required>
-                        <option value="new">全新</option>
-                        <option value="used">二手</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productImages">商品图片</label>
-                    <input type="file" id="productImages" multiple accept="image/*" required>
-                    <small>最多上传5张图片，每张不超过5MB</small>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">发布商品</button>
-            </form>
-        </div>
-    </div>
-
-
-    
-    <!-- JavaScript -->
-    b
-    <script src="../js/config.js?v=4"></script>
-    <script>var _sv="4";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
-    <script src="../js/auth.js?v=4"></script>
-    b
-    <script src="../js/market.js?v=4"></script>
+    <script src="../js/config.js?v=5"></script>
+    <script>var _sv="5";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/market.js?v=5"></script>
 </body>
 </html>

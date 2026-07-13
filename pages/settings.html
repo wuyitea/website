@@ -4,376 +4,212 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="账户设置 - 管理个人信息、安全设置、通知偏好">
     <title>设置 - 社区平台</title>
-    
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
-    <style>
-        .settings-layout {
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: var(--spacing-xl);
-            padding: var(--spacing-xl) 0;
-        }
-        
-        .settings-sidebar {
-            position: sticky;
-            top: 80px;
-            height: fit-content;
-        }
-        
-        .settings-nav {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-        }
-        
-        .settings-nav-item {
-            display: block;
-            padding: var(--spacing-md) var(--spacing-lg);
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-color);
-            transition: var(--transition);
-        }
-        
-        .settings-nav-item:last-child {
-            border-bottom: none;
-        }
-        
-        .settings-nav-item:hover {
-            background-color: var(--bg-secondary);
-            color: var(--primary-color);
-        }
-        
-        .settings-nav-item.active {
-            background-color: var(--bg-tertiary);
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-        
-        .settings-content {
-            background-color: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-lg);
-            padding: var(--spacing-xl);
-        }
-        
-        .settings-header {
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .settings-title {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-        
-        .settings-description {
-            color: var(--text-secondary);
-        }
-        
-        .settings-section {
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .settings-section-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-        }
-        
-        .settings-group {
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .settings-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
-        }
-        
-        .settings-help {
-            font-size: var(--font-size-sm);
-            color: var(--text-secondary);
-            margin-top: var(--spacing-xs);
-        }
-        
-        .settings-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-lg);
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .danger-zone {
-            background-color: rgba(239, 68, 68, 0.05);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: var(--border-radius-lg);
-            padding: var(--spacing-lg);
-            margin-top: var(--spacing-xl);
-        }
-        
-        .danger-zone-title {
-            color: var(--danger-color);
-            font-weight: 600;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        @media (max-width: 1024px) {
-            .settings-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .settings-sidebar {
-                position: static;
-            }
-            
-            .settings-nav {
-                display: flex;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .settings-nav-item {
-                border-bottom: none;
-                border-right: 1px solid var(--border-color);
-                padding: var(--spacing-md);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .settings-content {
-                padding: var(--spacing-lg);
-            }
-            
-            .settings-actions {
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="../index.html">社区平台</a>
-            </div>
-            
-            <div class="nav-search">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台</a>
+        </div>
+        <div class="nav-search" id="navSearch">
+            <div class="input-icon">
+                <i class="ti ti-search"></i>
                 <input type="search" placeholder="搜索..." id="searchInput">
-                <button type="button" id="searchBtn">搜索</button>
             </div>
-            
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="forum.html">论坛</a></li>
-                    <li><a href="market.html">市场</a></li>
-                    <li><a href="messages.html">消息</a></li>
-                </ul>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="market.html"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="messages.html"><i class="ti ti-mail"></i> 消息</a></li>
+            </ul>
+        </div>
+        <div class="nav-user">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-ghost" id="loginBtn">登录</button>
+                <button class="btn btn-primary" id="registerBtn">注册</button>
             </div>
-            
-            <div class="nav-user">
-                <div class="user-actions" id="userActions">
-                    <button class="btn btn-outline" id="loginBtn">登录</button>
-                    <button class="btn btn-primary" id="registerBtn">注册</button>
-                </div>
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <img src="../images/default-avatar.png" alt="用户头像" id="userAvatar">
-                    <div class="user-dropdown">
-                        <a href="profile.html">个人资料</a>
-                        <a href="settings.html">设置</a>
-                        <a href="#" id="logoutBtn">退出登录</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
-
-    <!-- 主要内容 -->
-    <main class="main">
-        <div class="container">
-            <div class="settings-layout">
-                <div class="settings-sidebar">
-                    <nav class="settings-nav">
-                        <a href="#profile" class="settings-nav-item active">个人资料</a>
-                        <a href="#security" class="settings-nav-item">安全设置</a>
-                        <a href="#notifications" class="settings-nav-item">通知设置</a>
-                        <a href="#privacy" class="settings-nav-item">隐私设置</a>
-                        <a href="#account" class="settings-nav-item">账户管理</a>
-                    </nav>
-                </div>
-                
-                <div class="settings-content">
-                    <div class="settings-header">
-                        <h1 class="settings-title">设置</h1>
-                        <p class="settings-description">管理您的账户设置和偏好</p>
-                    </div>
-                    
-                    <!-- 个人资料设置 -->
-                    <div class="settings-section" id="profile">
-                        <h2 class="settings-section-title">个人资料</h2>
-                        
-                        <form id="profileForm">
-                            <div class="settings-group">
-                                <label class="settings-label" for="username">用户名</label>
-                                <input type="text" id="username" class="form-input" required>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label" for="email">邮箱</label>
-                                <input type="email" id="email" class="form-input" disabled>
-                                <p class="settings-help">邮箱用于登录，如需修改请联系管理员</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label" for="bio">个人简介</label>
-                                <textarea id="bio" class="form-input" rows="3" placeholder="介绍一下自己..."></textarea>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label" for="avatar">头像</label>
-                                <input type="file" id="avatar" accept="image/*">
-                                <p class="settings-help">支持 JPG、PNG、GIF 格式，最大 5MB</p>
-                            </div>
-                            
-                            <div class="settings-actions">
-                                <button type="submit" class="btn btn-primary">保存修改</button>
-                                <button type="reset" class="btn btn-outline">重置</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- 安全设置 -->
-                    <div class="settings-section" id="security" style="display: none;">
-                        <h2 class="settings-section-title">安全设置</h2>
-                        
-                        <form id="passwordForm">
-                            <div class="settings-group">
-                                <label class="settings-label" for="currentPassword">当前密码</label>
-                                <input type="password" id="currentPassword" class="form-input" required>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label" for="newPassword">新密码</label>
-                                <input type="password" id="newPassword" class="form-input" required minlength="6">
-                                <p class="settings-help">密码至少需要6个字符</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label" for="confirmPassword">确认新密码</label>
-                                <input type="password" id="confirmPassword" class="form-input" required>
-                            </div>
-                            
-                            <div class="settings-actions">
-                                <button type="submit" class="btn btn-primary">修改密码</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- 通知设置 -->
-                    <div class="settings-section" id="notifications" style="display: none;">
-                        <h2 class="settings-section-title">通知设置</h2>
-                        
-                        <form id="notificationsForm">
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="emailNotifications" checked>
-                                    接收邮件通知
-                                </label>
-                                <p class="settings-help">当有人回复您的帖子或评论时发送邮件通知</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="pushNotifications" checked>
-                                    接收推送通知
-                                </label>
-                                <p class="settings-help">在浏览器中接收实时通知</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="messageNotifications" checked>
-                                    私信通知
-                                </label>
-                                <p class="settings-help">当收到新私信时通知您</p>
-                            </div>
-                            
-                            <div class="settings-actions">
-                                <button type="submit" class="btn btn-primary">保存设置</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- 隐私设置 -->
-                    <div class="settings-section" id="privacy" style="display: none;">
-                        <h2 class="settings-section-title">隐私设置</h2>
-                        
-                        <form id="privacyForm">
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="showProfile" checked>
-                                    公开个人资料
-                                </label>
-                                <p class="settings-help">允许其他用户查看您的个人资料</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="showPosts" checked>
-                                    公开发帖记录
-                                </label>
-                                <p class="settings-help">允许其他用户查看您发布的帖子</p>
-                            </div>
-                            
-                            <div class="settings-group">
-                                <label class="settings-label">
-                                    <input type="checkbox" id="allowMessages" checked>
-                                    允许私信
-                                </label>
-                                <p class="settings-help">允许其他用户向您发送私信</p>
-                            </div>
-                            
-                            <div class="settings-actions">
-                                <button type="submit" class="btn btn-primary">保存设置</button>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <!-- 账户管理 -->
-                    <div class="settings-section" id="account" style="display: none;">
-                        <h2 class="settings-section-title">账户管理</h2>
-                        
-                        <div class="danger-zone">
-                            <h3 class="danger-zone-title">危险操作</h3>
-                            <p style="margin-bottom: var(--spacing-md);">删除账户后，所有数据将被永久删除且无法恢复。</p>
-                            <button class="btn btn-danger" id="deleteAccountBtn">删除账户</button>
-                        </div>
-                    </div>
+            <div class="user-profile" id="userProfile" style="display:none;">
+                <img src="../images/default-avatar.png" alt="头像" id="userAvatar">
+                <div class="user-dropdown">
+                    <a href="profile.html"><i class="ti ti-user"></i> 个人资料</a>
+                    <a href="settings.html"><i class="ti ti-settings"></i> 设置</a>
+                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
                 </div>
             </div>
         </div>
-    </main>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
 
-    <!-- 页脚 -->
+    <div style="max-width:1000px;margin:0 auto;padding:1.5rem 1rem">
+        <div class="forum-layout">
+            <main>
+                <div class="admin-card">
+                    <div style="padding:1.5rem">
+                        <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:1.5rem;color:var(--text-primary)"><i class="ti ti-settings" style="margin-right:0.375rem"></i>设置</h2>
+
+                        <!-- 个人资料 -->
+                        <div class="settings-section" id="profile">
+                            <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text-primary)"><i class="ti ti-user" style="margin-right:0.375rem"></i>个人资料</h3>
+                            <form id="profileForm">
+                                <div class="form-group">
+                                    <label for="username"><i class="ti ti-user"></i> 用户名</label>
+                                    <input type="text" id="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><i class="ti ti-mail"></i> 邮箱</label>
+                                    <input type="email" id="email" disabled>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 邮箱用于登录，如需修改请联系管理员</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bio"><i class="ti ti-file-text"></i> 个人简介</label>
+                                    <textarea id="bio" rows="3" placeholder="介绍一下自己..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="avatar"><i class="ti ti-photo"></i> 头像</label>
+                                    <input type="file" id="avatar" accept="image/*">
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 支持 JPG、PNG、GIF 格式，最大 5MB</small>
+                                </div>
+                                <div style="display:flex;gap:0.75rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> 保存修改</button>
+                                    <button type="reset" class="btn btn-outline"><i class="ti ti-refresh"></i> 重置</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 安全设置 -->
+                        <div class="settings-section" id="security" style="display:none">
+                            <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text-primary)"><i class="ti ti-lock" style="margin-right:0.375rem"></i>安全设置</h3>
+                            <form id="passwordForm">
+                                <div class="form-group">
+                                    <label for="currentPassword"><i class="ti ti-lock"></i> 当前密码</label>
+                                    <input type="password" id="currentPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword"><i class="ti ti-lock"></i> 新密码</label>
+                                    <input type="password" id="newPassword" required minlength="6">
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 密码至少需要6个字符</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword"><i class="ti ti-lock-check"></i> 确认新密码</label>
+                                    <input type="password" id="confirmPassword" required>
+                                </div>
+                                <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> 修改密码</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 通知设置 -->
+                        <div class="settings-section" id="notifications" style="display:none">
+                            <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text-primary)"><i class="ti ti-bell" style="margin-right:0.375rem"></i>通知设置</h3>
+                            <form id="notificationsForm">
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="emailNotifications" checked>
+                                        <i class="ti ti-mail"></i> 接收邮件通知
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 当有人回复您的帖子或评论时发送邮件通知</small>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="pushNotifications" checked>
+                                        <i class="ti ti-bell"></i> 接收推送通知
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 在浏览器中接收实时通知</small>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="messageNotifications" checked>
+                                        <i class="ti ti-mail"></i> 私信通知
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 当收到新私信时通知您</small>
+                                </div>
+                                <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> 保存设置</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 隐私设置 -->
+                        <div class="settings-section" id="privacy" style="display:none">
+                            <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text-primary)"><i class="ti ti-eye" style="margin-right:0.375rem"></i>隐私设置</h3>
+                            <form id="privacyForm">
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="showProfile" checked>
+                                        <i class="ti ti-user"></i> 公开个人资料
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 允许其他用户查看您的个人资料</small>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="showPosts" checked>
+                                        <i class="ti ti-message-circle"></i> 公开发帖记录
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 允许其他用户查看您发布的帖子</small>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                                        <input type="checkbox" id="allowMessages" checked>
+                                        <i class="ti ti-mail"></i> 允许私信
+                                    </label>
+                                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 允许其他用户向您发送私信</small>
+                                </div>
+                                <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> 保存设置</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 账户管理 -->
+                        <div class="settings-section" id="account" style="display:none">
+                            <h3 style="font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--danger-color)"><i class="ti ti-alert-triangle" style="margin-right:0.375rem"></i>账户管理</h3>
+                            <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);border-radius:var(--border-radius);padding:1.25rem">
+                                <h4 style="color:var(--danger-color);font-weight:600;margin-bottom:0.75rem"><i class="ti ti-alert-triangle"></i> 危险操作</h4>
+                                <p style="margin-bottom:1rem;color:var(--text-secondary)">删除账户后，所有数据将被永久删除且无法恢复。</p>
+                                <button class="btn btn-danger" id="deleteAccountBtn"><i class="ti ti-trash"></i> 删除账户</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="forum-sidebar">
+                <div class="admin-card" style="position:sticky;top:80px">
+                    <div style="padding:1rem">
+                        <div style="display:flex;flex-direction:column;gap:0.25rem">
+                            <a href="#profile" class="settings-nav-item active" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:var(--border-radius);text-decoration:none;color:var(--text-secondary);transition:var(--transition)">
+                                <i class="ti ti-user"></i> 个人资料
+                            </a>
+                            <a href="#security" class="settings-nav-item" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:var(--border-radius);text-decoration:none;color:var(--text-secondary);transition:var(--transition)">
+                                <i class="ti ti-lock"></i> 安全设置
+                            </a>
+                            <a href="#notifications" class="settings-nav-item" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:var(--border-radius);text-decoration:none;color:var(--text-secondary);transition:var(--transition)">
+                                <i class="ti ti-bell"></i> 通知设置
+                            </a>
+                            <a href="#privacy" class="settings-nav-item" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:var(--border-radius);text-decoration:none;color:var(--text-secondary);transition:var(--transition)">
+                                <i class="ti ti-eye"></i> 隐私设置
+                            </a>
+                            <a href="#account" class="settings-nav-item" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:var(--border-radius);text-decoration:none;color:var(--text-secondary);transition:var(--transition)">
+                                <i class="ti ti-settings"></i> 账户管理
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-bottom">
@@ -382,14 +218,9 @@
         </div>
     </footer>
 
-
-    
-    <!-- JavaScript -->
-    b
-    <script src="../js/config.js?v=4"></script>
-    <script>var _sv="4";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
-    <script src="../js/auth.js?v=4"></script>
-    b
-    <script src="../js/settings.js?v=4"></script>
+    <script src="../js/config.js?v=5"></script>
+    <script>var _sv="5";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
+    <script src="../js/auth.js?v=5"></script>
+    <script src="../js/settings.js?v=5"></script>
 </body>
 </html>

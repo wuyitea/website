@@ -255,7 +255,8 @@ const post = {
 
         if (postComments.length === 0) {
             commentsList.innerHTML = `
-                <div class="empty-state">
+                <div class="empty-state" style="text-align:center;padding:2rem;color:var(--text-secondary)">
+                    <i class="ti ti-message" style="font-size:2rem;display:block;margin-bottom:0.5rem"></i>
                     <p>暂无评论，快来发表第一条评论吧！</p>
                 </div>
             `;
@@ -278,23 +279,23 @@ const post = {
         const commentSrc = (commentAv && commentAv.indexOf('data:') === 0) ? commentAv : '../' + commentAv.replace(/^\.\.\//, '');
 
         return `
-            <div class="comment-item">
-                <div class="comment-header">
+            <div class="comment-item" style="padding:1rem;background:var(--bg-secondary);border-radius:var(--border-radius);margin-bottom:0.75rem">
+                <div class="comment-header" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem">
                     <img src="${commentSrc}" 
                          alt="${userData?.username || '用户'}" 
-                         class="comment-avatar">
+                         class="comment-avatar" style="width:36px;height:36px;border-radius:50%">
                     <div class="comment-meta">
-                        <div class="comment-author">${userData?.username || '匿名用户'}</div>
-                        <div class="comment-time">${timeAgo}</div>
+                        <div class="comment-author" style="font-weight:600;color:var(--text-primary)">${userData?.username || '匿名用户'}</div>
+                        <div class="comment-time" style="font-size:0.75rem;color:var(--text-secondary)">${timeAgo}</div>
                     </div>
                 </div>
-                <div class="comment-content">${comment.content}</div>
-                <div class="comment-actions">
-                    <button class="comment-action reply-btn" data-id="${comment.id}" data-author="${userData?.username || '用户'}">
-                        回复
+                <div class="comment-content" style="color:var(--text-primary);line-height:1.6;margin-bottom:0.5rem">${comment.content}</div>
+                <div class="comment-actions" style="display:flex;gap:1rem">
+                    <button class="comment-action reply-btn" data-id="${comment.id}" data-author="${userData?.username || '用户'}" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.875rem;display:flex;align-items:center;gap:0.25rem">
+                        <i class="ti ti-message"></i> 回复
                     </button>
-                    <button class="comment-action like-comment-btn" data-id="${comment.id}">
-                        👍 ${comment.likesCount || 0}
+                    <button class="comment-action like-comment-btn" data-id="${comment.id}" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:0.875rem;display:flex;align-items:center;gap:0.25rem">
+                        <i class="ti ti-thumb-up"></i> ${comment.likesCount || 0}
                     </button>
                 </div>
             </div>
@@ -355,18 +356,16 @@ const post = {
             .slice(0, 5);
 
         if (related.length === 0) {
-            relatedPosts.innerHTML = '<p>暂无相关帖子</p>';
+            relatedPosts.innerHTML = '<p style="color:var(--text-secondary);font-size:0.875rem;text-align:center;padding:1rem">暂无相关帖子</p>';
             return;
         }
 
         let html = '';
         for (const rp of related) {
             html += `
-                <a href="post.html?id=${rp.id}" class="related-post">
-                    <div>
-                        <div class="related-post-title">${rp.title}</div>
-                        <div class="related-post-meta">${utils.formatDate(rp.createdAt)} · 👍 ${rp.likesCount || 0}</div>
-                    </div>
+                <a href="post.html?id=${rp.id}" class="related-post" style="display:block;padding:0.5rem;border-radius:var(--border-radius);text-decoration:none;transition:var(--transition);margin-bottom:0.25rem">
+                    <div class="related-post-title" style="font-weight:500;color:var(--text-primary);margin-bottom:0.25rem;font-size:0.875rem">${rp.title}</div>
+                    <div class="related-post-meta" style="font-size:0.75rem;color:var(--text-secondary)"><i class="ti ti-clock"></i> ${utils.formatDate(rp.createdAt)} · <i class="ti ti-thumb-up"></i> ${rp.likesCount || 0}</div>
                 </a>
             `;
         }

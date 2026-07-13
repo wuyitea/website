@@ -4,141 +4,140 @@
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="社区论坛与电商平台 - 分享、交流、购物一站式体验">
     <meta name="keywords" content="论坛, 社区, 电商, 购物, 社交">
     <meta name="author" content="社区平台">
     <title>社区平台 - 论坛 · 电商 · 社交</title>
-    
-    <!-- Open Graph / Facebook -->
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/">
+    <meta property="og:url" content="https://youtea.net/">
     <meta property="og:title" content="社区平台 - 论坛 · 电商 · 社交">
     <meta property="og:description" content="分享、交流、购物一站式体验">
-    <meta property="og:image" content="https://yourdomain.com/images/og-image.jpg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://yourdomain.com/">
-    <meta property="twitter:title" content="社区平台 - 论坛 · 电商 · 社交">
-    <meta property="twitter:description" content="分享、交流、购物一站式体验">
-    <meta property="twitter:image" content="https://yourdomain.com/images/og-image.jpg">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://yourdomain.com/">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    
+
+    <!-- Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
     <!-- 导航栏 -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="index.html">社区平台</a>
-            </div>
-            
-            <div class="nav-search">
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <i class="ti ti-brand-community" style="margin-right:0.375rem"></i>社区平台
+            </a>
+        </div>
+
+        <div class="nav-search" id="navSearch">
+            <div class="input-icon">
+                <i class="ti ti-search"></i>
                 <input type="search" placeholder="搜索帖子、商品、用户..." id="searchInput">
-                <button type="button" id="searchBtn">搜索</button>
             </div>
-            
-            <div class="nav-menu">
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active">首页</a></li>
-                    <li><a href="pages/forum.html">论坛</a></li>
-                    <li><a href="pages/market.html">市场</a></li>
-                    <li><a href="pages/messages.html">消息</a></li>
-                </ul>
-            </div>
-            
-            <div class="nav-user">
-                <div class="user-actions" id="userActions">
-                    <button class="btn btn-outline" id="loginBtn">登录</button>
-                    <button class="btn btn-primary" id="registerBtn">注册</button>
-                </div>
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <img src="images/default-avatar.png" alt="用户头像" id="userAvatar">
-                    <div class="user-dropdown">
-                        <a href="pages/profile.html">个人资料</a>
-                        <a href="pages/settings.html">设置</a>
-                        <a href="#" id="logoutBtn">退出登录</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="nav-toggle" id="navToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
+        </div>
 
-    <!-- 主要内容 -->
-    <main class="main">
-        <!-- 英雄区域 -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>欢迎来到社区平台</h1>
-                <p>在这里分享想法、交流经验、发现好物</p>
-                <div class="hero-buttons">
-                    <a href="pages/forum.html" class="btn btn-primary">进入论坛</a>
-                    <a href="pages/market.html" class="btn btn-secondary">逛逛市场</a>
-                </div>
-            </div>
-        </section>
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><i class="ti ti-home"></i> 首页</a></li>
+                <li><a href="pages/forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
+                <li><a href="pages/market.html"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="pages/messages.html"><i class="ti ti-mail"></i> 消息</a></li>
+            </ul>
+        </div>
 
-        <!-- 热门帖子 -->
-        <section class="section hot-posts">
-            <div class="container">
-                <div class="section-header">
-                    <h2>热门讨论</h2>
-                    <a href="pages/forum.html" class="view-all">查看全部</a>
-                </div>
-                <div class="posts-grid" id="hotPosts">
-                    <!-- 动态加载 -->
+        <div class="nav-user">
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-ghost" id="loginBtn">登录</button>
+                <button class="btn btn-primary" id="registerBtn">注册</button>
+            </div>
+            <div class="user-profile" id="userProfile" style="display: none;">
+                <img src="images/default-avatar.png" alt="头像" id="userAvatar">
+                <div class="user-dropdown">
+                    <a href="pages/profile.html"><i class="ti ti-user"></i> 个人资料</a>
+                    <a href="pages/settings.html"><i class="ti ti-settings"></i> 设置</a>
+                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- 推荐商品 -->
-        <section class="section featured-products">
-            <div class="container">
-                <div class="section-header">
-                    <h2>精选好物</h2>
-                    <a href="pages/market.html" class="view-all">查看全部</a>
-                </div>
-                <div class="products-grid" id="featuredProducts">
-                    <!-- 动态加载 -->
-                </div>
-            </div>
-        </section>
+        <div class="nav-toggle" id="navToggle">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
 
-        <!-- 活跃用户 -->
-        <section class="section active-users">
-            <div class="container">
-                <div class="section-header">
-                    <h2>活跃成员</h2>
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>欢迎来到社区平台</h1>
+            <p>在这里分享想法、交流经验、发现好物<br>一个集论坛、电商、社交于一体的社区</p>
+            <div class="hero-buttons">
+                <a href="pages/forum.html" class="btn btn-primary">
+                    <i class="ti ti-message-circle"></i> 进入论坛
+                </a>
+                <a href="pages/market.html" class="btn btn-secondary">
+                    <i class="ti ti-shopping-bag"></i> 逛逛市场
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="statUsers">0</span>
+                    <span class="hero-stat-label">社区成员</span>
                 </div>
-                <div class="users-grid" id="activeUsers">
-                    <!-- 动态加载 -->
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="statPosts">0</span>
+                    <span class="hero-stat-label">精彩帖子</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="statProducts">0</span>
+                    <span class="hero-stat-label">在售商品</span>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- 热门帖子 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="ti ti-flame" style="color:var(--warning-color);margin-right:0.375rem"></i>热门讨论</h2>
+                <a href="pages/forum.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="posts-grid" id="hotPosts"></div>
+        </div>
+    </section>
+
+    <!-- 推荐商品 -->
+    <section class="section" style="background:var(--bg-secondary)">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="ti ti-star" style="color:var(--warning-color);margin-right:0.375rem"></i>精选好物</h2>
+                <a href="pages/market.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="featuredProducts"></div>
+        </div>
+    </section>
+
+    <!-- 活跃用户 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="ti ti-users" style="color:var(--primary-color);margin-right:0.375rem"></i>活跃成员</h2>
+            </div>
+            <div class="users-grid" id="activeUsers"></div>
+        </div>
+    </section>
 
     <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-section">
-                    <h3>关于我们</h3>
-                    <p>社区平台是一个集论坛、电商、社交于一体的综合性社区。</p>
+                    <h3>关于社区平台</h3>
+                    <p>社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。</p>
                 </div>
                 <div class="footer-section">
                     <h3>快速链接</h3>
@@ -159,8 +158,7 @@
                 </div>
                 <div class="footer-section">
                     <h3>联系我们</h3>
-                    <p>邮箱：contact@yourdomain.com</p>
-                    <p>电话：+86 123 4567 8910</p>
+                    <p><i class="ti ti-mail" style="margin-right:0.25rem"></i> contact@youtea.net</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -173,26 +171,26 @@
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>登录</h2>
+            <h2><i class="ti ti-login" style="margin-right:0.375rem"></i>登录</h2>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">邮箱</label>
-                    <input type="email" id="loginEmail" required>
+                    <input type="email" id="loginEmail" placeholder="请输入邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码</label>
-                    <input type="password" id="loginPassword" required>
+                    <input type="password" id="loginPassword" placeholder="请输入密码" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">登录</button>
             </form>
             <div class="social-divider"><span>或使用以下方式登录</span></div>
             <div class="social-login-btns">
                 <button class="social-btn wechat" onclick="socialLogin('wechat')">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#07c160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.564 2.888c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.022-6.088v-.012c-.276-.016-.55-.031-.816-.001zm-2.745 3.39c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/></svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#07c160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.564 2.888c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.022-6.088v-.012c-.276-.016-.55-.031-.816-.001zm-2.745 3.39c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/></svg>
                     微信登录
                 </button>
                 <button class="social-btn qq" onclick="socialLogin('qq')">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#12b7f5"><path d="M21.395 15.035a39.548 39.548 0 00-1.51-3.642c.89-2.07 1.263-3.884 1.263-5.57 0-3.237-1.803-5.01-4.243-5.01-1.726 0-3.086.875-3.804 2.147a6.286 6.286 0 00-2.058-.858C9.61 2.1 8.238 2.86 7.286 4.288c-1.244 1.872-.76 4.488.694 7.107a39.014 39.014 0 00-1.51 3.642c-.623 1.677-.14 3.29.51 4.366.66 1.088 1.738 1.618 2.657 1.618.32 0 .624-.062.898-.18a3.537 3.537 0 001.842.506c.654 0 1.278-.18 1.842-.506.274.118.578.18.898.18.92 0 1.997-.53 2.657-1.618.65-1.076 1.133-2.689.51-4.366zM7.607 9.57c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797zm8.786 0c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797z"/></svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#12b7f5"><path d="M21.395 15.035a39.548 39.548 0 00-1.51-3.642c.89-2.07 1.263-3.884 1.263-5.57 0-3.237-1.803-5.01-4.243-5.01-1.726 0-3.086.875-3.804 2.147a6.286 6.286 0 00-2.058-.858C9.61 2.1 8.238 2.86 7.286 4.288c-1.244 1.872-.76 4.488.694 7.107a39.014 39.014 0 00-1.51 3.642c-.623 1.677-.14 3.29.51 4.366.66 1.088 1.738 1.618 2.657 1.618.32 0 .624-.062.898-.18a3.537 3.537 0 001.842.506c.654 0 1.278-.18 1.842-.506.274.118.578.18.898.18.92 0 1.997-.53 2.657-1.618.65-1.076 1.133-2.689.51-4.366zM7.607 9.57c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797zm8.786 0c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797z"/></svg>
                     QQ登录
                 </button>
             </div>
@@ -206,34 +204,34 @@
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
-            <h2>注册</h2>
+            <h2><i class="ti ti-user-plus" style="margin-right:0.375rem"></i>注册</h2>
             <form id="registerForm">
                 <div class="form-group">
                     <label for="registerUsername">用户名</label>
-                    <input type="text" id="registerUsername" required>
+                    <input type="text" id="registerUsername" placeholder="请输入用户名" required>
                 </div>
                 <div class="form-group">
                     <label for="registerEmail">邮箱</label>
-                    <input type="email" id="registerEmail" required>
+                    <input type="email" id="registerEmail" placeholder="请输入邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" required minlength="6">
+                    <input type="password" id="registerPassword" placeholder="至少6位密码" required minlength="6">
                 </div>
                 <div class="form-group">
                     <label for="registerConfirmPassword">确认密码</label>
-                    <input type="password" id="registerConfirmPassword" required>
+                    <input type="password" id="registerConfirmPassword" placeholder="再次输入密码" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">注册</button>
             </form>
             <div class="social-divider"><span>或使用以下方式注册</span></div>
             <div class="social-login-btns">
                 <button class="social-btn wechat" onclick="socialLogin('wechat')">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#07c160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.564 2.888c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.022-6.088v-.012c-.276-.016-.55-.031-.816-.001zm-2.745 3.39c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/></svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#07c160"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm3.564 2.888c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.022-6.088v-.012c-.276-.016-.55-.031-.816-.001zm-2.745 3.39c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982z"/></svg>
                     微信注册
                 </button>
                 <button class="social-btn qq" onclick="socialLogin('qq')">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#12b7f5"><path d="M21.395 15.035a39.548 39.548 0 00-1.51-3.642c.89-2.07 1.263-3.884 1.263-5.57 0-3.237-1.803-5.01-4.243-5.01-1.726 0-3.086.875-3.804 2.147a6.286 6.286 0 00-2.058-.858C9.61 2.1 8.238 2.86 7.286 4.288c-1.244 1.872-.76 4.488.694 7.107a39.014 39.014 0 00-1.51 3.642c-.623 1.677-.14 3.29.51 4.366.66 1.088 1.738 1.618 2.657 1.618.32 0 .624-.062.898-.18a3.537 3.537 0 001.842.506c.654 0 1.278-.18 1.842-.506.274.118.578.18.898.18.92 0 1.997-.53 2.657-1.618.65-1.076 1.133-2.689.51-4.366zM7.607 9.57c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797zm8.786 0c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797z"/></svg>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#12b7f5"><path d="M21.395 15.035a39.548 39.548 0 00-1.51-3.642c.89-2.07 1.263-3.884 1.263-5.57 0-3.237-1.803-5.01-4.243-5.01-1.726 0-3.086.875-3.804 2.147a6.286 6.286 0 00-2.058-.858C9.61 2.1 8.238 2.86 7.286 4.288c-1.244 1.872-.76 4.488.694 7.107a39.014 39.014 0 00-1.51 3.642c-.623 1.677-.14 3.29.51 4.366.66 1.088 1.738 1.618 2.657 1.618.32 0 .624-.062.898-.18a3.537 3.537 0 001.842.506c.654 0 1.278-.18 1.842-.506.274.118.578.18.898.18.92 0 1.997-.53 2.657-1.618.65-1.076 1.133-2.689.51-4.366zM7.607 9.57c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797zm8.786 0c-.436 0-.79-.357-.79-.797s.354-.797.79-.797c.436 0 .79.357.79.797s-.354.797-.79.797z"/></svg>
                     QQ注册
                 </button>
             </div>
@@ -244,12 +242,9 @@
     </div>
 
     <!-- JavaScript -->
-    <!-- JavaScript -->
-    b
-    <script src="js/config.js?v=4"></script>
-    <script>var _sv="4";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
-    <script src="js/auth.js?v=4"></script>
-    b
-    <script src="js/app.js?v=4"></script>
+    <script src="js/config.js?v=5"></script>
+    <script>var _sv="5";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.href=location.href.split("?")[0]+"?_t="+Date.now();}else{localStorage.setItem("site_version",_sv);}</script>
+    <script src="js/auth.js?v=5"></script>
+    <script src="js/app.js?v=5"></script>
 </body>
 </html>

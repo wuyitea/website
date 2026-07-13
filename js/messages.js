@@ -29,15 +29,15 @@ const messages = {
         if (!messagesList) return;
 
         if (!authModule.isLoggedIn()) {
-            messagesList.innerHTML = '<div class="empty-state"><p>请先登录</p></div>';
+            messagesList.innerHTML = '<div class="empty-state" style="text-align:center;padding:3rem"><i class="ti ti-login" style="font-size:3rem;color:var(--text-secondary)"></i><h3 style="margin:1rem 0 0.5rem">请先登录</h3><p style="color:var(--text-secondary)">登录后即可查看消息</p></div>';
             return;
         }
 
         messagesList.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">💬</div>
-                <h3>暂无消息</h3>
-                <p>开始与社区成员互动吧！</p>
+            <div class="empty-state" style="text-align:center;padding:3rem">
+                <i class="ti ti-message" style="font-size:3rem;color:var(--text-secondary)"></i>
+                <h3 style="margin:1rem 0 0.5rem">暂无消息</h3>
+                <p style="color:var(--text-secondary)">开始与社区成员互动吧！</p>
             </div>
         `;
     },
@@ -47,15 +47,11 @@ const messages = {
         if (!chatArea) return;
 
         chatArea.innerHTML = `
-            <div class="chat-header">
-                <div class="chat-user-info">
-                    <div class="chat-username">消息</div>
-                </div>
+            <div style="padding:1rem;border-bottom:1px solid var(--border-color)">
+                <div style="font-weight:600;color:var(--text-primary)"><i class="ti ti-message"></i> 消息</div>
             </div>
-            <div class="chat-messages">
-                <div class="empty-state">
-                    <p>${message}</p>
-                </div>
+            <div style="padding:2rem;text-align:center;color:var(--text-secondary)">
+                <p>${message}</p>
             </div>
         `;
     }

@@ -161,10 +161,10 @@ const profile = {
 
         if (userPosts.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">📝</div>
-                    <h3>暂无帖子</h3>
-                    <p>该用户还没有发布过帖子</p>
+                <div class="empty-state" style="text-align:center;padding:3rem">
+                    <i class="ti ti-pencil" style="font-size:3rem;color:var(--text-secondary)"></i>
+                    <h3 style="margin:1rem 0 0.5rem">暂无帖子</h3>
+                    <p style="color:var(--text-secondary)">该用户还没有发布过帖子</p>
                 </div>
             `;
             return;
@@ -184,23 +184,21 @@ const profile = {
         const timeAgo = utils.formatDate(post.createdAt);
 
         return `
-            <article class="post-item">
-                <div class="post-item-header">
-                    <div class="post-item-meta">
-                        <div class="post-item-time">${timeAgo}</div>
+            <article class="post-card" style="margin-bottom:0.75rem">
+                <div class="post-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                    <div class="post-meta">
+                        <div class="post-time" style="font-size:0.875rem;color:var(--text-secondary)">${timeAgo}</div>
                     </div>
                     ${category ? `<span class="post-category">${category.icon} ${category.name}</span>` : ''}
                 </div>
-                <h3 class="post-item-title">
+                <h3 class="post-title" style="font-size:1rem;font-weight:600;margin-bottom:0.5rem">
                     <a href="post.html?id=${post.id}">${post.title}</a>
                 </h3>
-                <p class="post-item-content">${utils.truncateText(post.content, 200)}</p>
-                <div class="post-item-footer">
-                    <div class="post-item-stats">
-                        <span>👍 ${post.likesCount || 0}</span>
-                        <span>💬 ${post.commentsCount || 0}</span>
-                        <span>👁 ${post.viewsCount || 0}</span>
-                    </div>
+                <p class="post-excerpt" style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:0.75rem">${utils.truncateText(post.content, 200)}</p>
+                <div class="post-footer" style="display:flex;gap:1rem;font-size:0.875rem;color:var(--text-secondary)">
+                    <span><i class="ti ti-thumb-up"></i> ${post.likesCount || 0}</span>
+                    <span><i class="ti ti-message"></i> ${post.commentsCount || 0}</span>
+                    <span><i class="ti ti-eye"></i> ${post.viewsCount || 0}</span>
                 </div>
             </article>
         `;
@@ -214,10 +212,10 @@ const profile = {
 
         if (userProducts.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">🛒</div>
-                    <h3>暂无商品</h3>
-                    <p>该用户还没有发布过商品</p>
+                <div class="empty-state" style="text-align:center;padding:3rem">
+                    <i class="ti ti-shopping-bag" style="font-size:3rem;color:var(--text-secondary)"></i>
+                    <h3 style="margin:1rem 0 0.5rem">暂无商品</h3>
+                    <p style="color:var(--text-secondary)">该用户还没有发布过商品</p>
                 </div>
             `;
             return;
@@ -243,17 +241,16 @@ const profile = {
                      alt="${product.title}" 
                      class="product-image">
                 <div class="product-info">
-                    ${category ? `<span class="post-category">${category.icon} ${category.name}</span>` : ''}
+                    ${category ? `<span class="post-category" style="margin-bottom:0.5rem;display:inline-block">${category.icon} ${category.name}</span>` : ''}
                     <h3 class="product-title">
                         <a href="product.html?id=${product.id}">${product.title}</a>
                     </h3>
                     <div class="product-price">
                         ${utils.formatPrice(product.price)}
-                        ${product.originalPrice ? `<span class="product-original-price">${utils.formatPrice(product.originalPrice)}</span>` : ''}
+                        ${product.originalPrice ? `<span style="font-size:0.875rem;color:var(--text-secondary);text-decoration:line-through;margin-left:0.5rem">${utils.formatPrice(product.originalPrice)}</span>` : ''}
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-primary btn-sm">加入购物车</button>
-                        <button class="btn btn-outline btn-sm">立即购买</button>
+                        <button class="btn btn-primary btn-sm"><i class="ti ti-shopping-cart"></i> 加入购物车</button>
                     </div>
                 </div>
             </article>
@@ -270,10 +267,10 @@ const profile = {
 
         if (likedPosts.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">👍</div>
-                    <h3>暂无点赞</h3>
-                    <p>该用户还没有点赞过任何帖子</p>
+                <div class="empty-state" style="text-align:center;padding:3rem">
+                    <i class="ti ti-thumb-up" style="font-size:3rem;color:var(--text-secondary)"></i>
+                    <h3 style="margin:1rem 0 0.5rem">暂无点赞</h3>
+                    <p style="color:var(--text-secondary)">该用户还没有点赞过任何帖子</p>
                 </div>
             `;
             return;
@@ -298,10 +295,10 @@ const profile = {
 
         if (bookmarkedPosts.length === 0) {
             container.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">⭐</div>
-                    <h3>暂无收藏</h3>
-                    <p>该用户还没有收藏过任何帖子</p>
+                <div class="empty-state" style="text-align:center;padding:3rem">
+                    <i class="ti ti-bookmark" style="font-size:3rem;color:var(--text-secondary)"></i>
+                    <h3 style="margin:1rem 0 0.5rem">暂无收藏</h3>
+                    <p style="color:var(--text-secondary)">该用户还没有收藏过任何帖子</p>
                 </div>
             `;
             return;

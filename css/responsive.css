@@ -1,217 +1,387 @@
-/* 响应式设计 */
+/* ==========================================
+   响应式设计
+   ========================================== */
 
 /* 平板设备 */
 @media (max-width: 1024px) {
-    .container {
-        padding: 0 var(--spacing-lg);
-    }
-    
-    .navbar {
-        padding: var(--spacing-md) var(--spacing-lg);
-    }
-    
-    .nav-search {
-        max-width: 300px;
-    }
-    
     .hero h1 {
-        font-size: var(--font-size-2xl);
+        font-size: 2rem;
     }
-    
-    .hero p {
-        font-size: var(--font-size-base);
+
+    .hero-stats {
+        gap: 2rem;
     }
-    
-    .posts-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+    .forum-layout {
+        grid-template-columns: 1fr;
     }
-    
-    .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+
+    .forum-sidebar {
+        position: static;
+    }
+
+    .product-detail {
+        grid-template-columns: 1fr;
+    }
+
+    .product-gallery {
+        position: static;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar {
+        position: static;
+    }
+
+    .messages-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .messages-list {
+        display: none;
+    }
+
+    .messages-list.show {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 10;
+    }
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-summary {
+        position: static;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-nav {
+        position: static;
+        display: flex;
+        overflow-x: auto;
+        gap: 0.25rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .settings-nav a {
+        white-space: nowrap;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 /* 移动设备 */
 @media (max-width: 768px) {
+    /* 导航栏 */
     .navbar {
-        flex-wrap: wrap;
-        padding: var(--spacing-sm) var(--spacing-md);
+        padding: 0 1rem;
+        height: 3rem;
     }
-    
-    .nav-brand {
-        order: 1;
-        flex: 1;
-    }
-    
-    .nav-toggle {
-        display: flex;
-        order: 2;
-    }
-    
+
     .nav-search {
-        order: 3;
-        width: 100%;
-        max-width: none;
-        margin: var(--spacing-sm) 0;
         display: none;
+        position: fixed;
+        top: 3rem;
+        left: 0;
+        right: 0;
+        padding: 0.75rem 1rem;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 999;
+        max-width: none;
+        margin: 0;
     }
-    
+
     .nav-search.show {
         display: flex;
     }
-    
+
     .nav-menu {
-        order: 4;
-        width: 100%;
         display: none;
+        position: fixed;
+        top: 3rem;
+        left: 0;
+        right: 0;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 998;
+        box-shadow: var(--shadow-lg);
     }
-    
+
     .nav-menu.show {
         display: block;
     }
-    
+
     .nav-links {
         flex-direction: column;
-        gap: var(--spacing-xs);
-        padding: var(--spacing-sm) 0;
+        padding: 0.5rem;
     }
-    
+
     .nav-links a {
-        display: block;
-        padding: var(--spacing-sm);
+        padding: 0.75rem 1rem;
     }
-    
-    .nav-user {
-        order: 5;
-        margin-left: auto;
+
+    .nav-toggle {
+        display: flex;
     }
-    
+
     .user-actions {
         display: none;
     }
-    
+
     .user-actions.show {
         display: flex;
+        position: fixed;
+        top: calc(3rem + 50px);
+        left: 0;
+        right: 0;
+        padding: 0.75rem 1rem;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 997;
+        justify-content: center;
     }
-    
+
+    /* 英雄区域 */
     .hero {
-        padding: var(--spacing-xl) var(--spacing-md);
+        padding: 2.5rem 1rem;
     }
-    
+
     .hero h1 {
-        font-size: var(--font-size-xl);
+        font-size: 1.5rem;
     }
-    
+
     .hero p {
-        font-size: var(--font-size-sm);
+        font-size: 0.875rem;
     }
-    
+
     .hero-buttons {
         flex-direction: column;
-        gap: var(--spacing-sm);
+        gap: 0.75rem;
     }
-    
+
     .hero-buttons .btn {
-        padding: 0.5rem 1rem;
-        font-size: var(--font-size-base);
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
     }
-    
+
+    .hero-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero-stat-value {
+        font-size: 1.25rem;
+    }
+
+    /* 区块 */
     .section {
-        padding: var(--spacing-xl) 0;
+        padding: 2rem 0;
     }
-    
+
     .section-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: var(--spacing-sm);
+        gap: 0.5rem;
     }
-    
+
+    /* 帖子/商品/用户网格 */
     .posts-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
     }
-    
+
     .users-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
     }
-    
+
+    /* 页脚 */
+    .footer {
+        padding: 2rem 0 1rem;
+        margin-top: 2rem;
+    }
+
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        gap: 1.5rem;
     }
-    
+
+    /* 模态框 */
+    .modal {
+        padding: 1rem 0.5rem;
+    }
+
     .modal-content {
-        margin: 20% auto;
-        padding: var(--spacing-lg);
-        width: 95%;
+        padding: 1.5rem;
+        max-width: none;
+    }
+
+    /* 管理后台 */
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    /* 论坛过滤器 */
+    .forum-filters {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+    }
+
+    /* 帖子详情 */
+    .post-detail-content {
+        padding: 1.25rem;
+    }
+
+    .post-detail-content .post-images {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* 设置 */
+    .settings-nav {
+        flex-wrap: nowrap;
     }
 }
 
 /* 小型移动设备 */
 @media (max-width: 480px) {
-    .container {
-        padding: 0 var(--spacing-sm);
-    }
-    
     .navbar {
-        padding: var(--spacing-xs) var(--spacing-sm);
+        padding: 0 0.75rem;
     }
-    
+
     .nav-brand a {
-        font-size: var(--font-size-lg);
+        font-size: 1rem;
     }
-    
+
     .hero {
-        padding: var(--spacing-lg) var(--spacing-sm);
+        padding: 2rem 0.75rem;
     }
-    
+
     .hero h1 {
-        font-size: var(--font-size-lg);
+        font-size: 1.25rem;
     }
-    
-    .post-card {
-        padding: var(--spacing-md);
+
+    .hero p {
+        font-size: 0.8125rem;
     }
-    
+
+    .products-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
     .product-info {
-        padding: var(--spacing-sm);
+        padding: 0.625rem;
     }
-    
+
     .product-title {
-        font-size: var(--font-size-base);
+        font-size: 0.8125rem;
     }
-    
+
     .product-price {
-        font-size: var(--font-size-lg);
+        font-size: 1rem;
     }
-    
+
+    .product-actions {
+        flex-direction: column;
+    }
+
+    .product-actions .btn {
+        font-size: 0.75rem;
+    }
+
+    .users-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
     .user-card {
-        padding: var(--spacing-md);
+        padding: 1rem;
     }
-    
+
     .user-card img {
-        width: 60px;
-        height: 60px;
+        width: 3rem;
+        height: 3rem;
     }
-    
+
     .user-stats {
-        gap: var(--spacing-md);
+        gap: 0.75rem;
     }
-    
-    /* 手机端模态框优化 */
-    .modal {
-        padding: 10px 0;
+
+    .post-card {
+        padding: 1rem;
     }
-    
-    .modal-content {
-        width: 95%;
-        max-width: none;
-        max-height: 85vh;
-        margin: 0 auto;
-        padding: var(--spacing-lg);
+
+    .order-item {
+        flex-direction: column;
+    }
+
+    .order-image {
+        width: 100%;
+        height: 120px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-table {
+        font-size: 0.75rem;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 0.5rem 0.75rem;
     }
 }
 
@@ -221,16 +391,18 @@
         min-height: 44px;
         min-width: 44px;
     }
-    
+
     .nav-links a {
         min-height: 44px;
-        display: flex;
-        align-items: center;
     }
-    
+
     .post-action {
         min-height: 44px;
         min-width: 44px;
+    }
+
+    .social-btn {
+        min-height: 44px;
     }
 }
 
@@ -239,30 +411,38 @@
     .header,
     .footer,
     .nav-toggle,
+    .nav-search,
     .modal,
-    .notification {
+    .notification,
+    .admin-sidebar {
         display: none !important;
     }
-    
+
     body {
         font-size: 12pt;
         line-height: 1.5;
+        color: #000;
+        background: #fff;
     }
-    
-    .container {
-        max-width: 100%;
-        padding: 0;
+
+    .hero {
+        background: #f0f0f0 !important;
+        color: #000 !important;
     }
-    
+
     a {
         text-decoration: underline;
         color: #000;
     }
-    
+
     .btn {
         border: 1px solid #000;
         background: #fff;
         color: #000;
+    }
+
+    .admin-main {
+        margin-left: 0;
     }
 }
 
@@ -275,12 +455,12 @@
         --bg-primary: #fff;
         --bg-secondary: #f0f0f0;
     }
-    
+
     .btn-primary {
         background-color: #000;
         color: #fff;
     }
-    
+
     .btn-outline {
         border: 2px solid #000;
     }
@@ -295,7 +475,7 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-    
+
     html {
         scroll-behavior: auto;
     }
@@ -303,14 +483,10 @@
 
 /* 大屏幕 */
 @media (min-width: 1400px) {
-    .container {
-        max-width: 1320px;
-    }
-    
     .posts-grid {
         grid-template-columns: repeat(4, 1fr);
     }
-    
+
     .products-grid {
         grid-template-columns: repeat(5, 1fr);
     }
