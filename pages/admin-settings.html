@@ -68,6 +68,7 @@
                             <a href="#market" onclick="switchTab(this, 'market')"><i class="ti ti-shopping-bag"></i> 商城设置</a>
                             <a href="#security" onclick="switchTab(this, 'security')"><i class="ti ti-shield"></i> 安全设置</a>
                             <a href="#notifications" onclick="switchTab(this, 'notifications')"><i class="ti ti-bell"></i> 通知设置</a>
+                            <a href="#appearance" onclick="switchTab(this, 'appearance')"><i class="ti ti-palette"></i> 界面外观</a>
                         </div>
                         <div class="settings-body">
                             <!-- 基本设置 -->
@@ -320,6 +321,156 @@
                                 </div>
                                 <button class="btn-admin btn-admin-primary" onclick="saveSettings('notifications')"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存设置</button>
                             </div>
+
+                            <!-- 界面外观 -->
+                            <div id="tab-appearance" class="settings-tab" style="display:none">
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-palette" style="margin-right:0.375rem"></i>主题色</h3>
+                                    <p class="desc">自定义网站的主题配色方案</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem">
+                                            <div class="form-group">
+                                                <label>主色调</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#4f46e5" id="themePrimaryColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themePrimaryColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#4f46e5</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>辅助色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#6b7280" id="themeSecondaryColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeSecondaryColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#6b7280</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>成功色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#10b981" id="themeSuccessColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeSuccessColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#10b981</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>警告色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#f59e0b" id="themeWarningColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeWarningColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#f59e0b</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>危险色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#ef4444" id="themeDangerColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeDangerColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#ef4444</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>信息色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#3b82f6" id="themeInfoColor" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeInfoColorText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#3b82f6</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-brush" style="margin-right:0.375rem"></i>预设方案</h3>
+                                    <p class="desc">一键应用预设的主题配色</p>
+                                    <div style="display:flex;flex-wrap:wrap;gap:0.75rem" id="themePresets">
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('indigo')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#4f46e5;margin-right:0.375rem;vertical-align:middle"></span>靛蓝（默认）</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('blue')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#3b82f6;margin-right:0.375rem;vertical-align:middle"></span>经典蓝</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('green')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#10b981;margin-right:0.375rem;vertical-align:middle"></span>翡翠绿</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('rose')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#f43f5e;margin-right:0.375rem;vertical-align:middle"></span>玫瑰红</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('amber')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#f59e0b;margin-right:0.375rem;vertical-align:middle"></span>琥珀黄</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('purple')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#8b5cf6;margin-right:0.375rem;vertical-align:middle"></span>梦幻紫</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('cyan')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#06b6d4;margin-right:0.375rem;vertical-align:middle"></span>青空蓝</button>
+                                        <button class="btn-admin btn-admin-outline" onclick="applyPreset('dark')"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1f2937;margin-right:0.375rem;vertical-align:middle"></span>暗夜模式</button>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-layout" style="margin-right:0.375rem"></i>圆角大小</h3>
+                                    <p class="desc">调整卡片和按钮的圆角半径</p>
+                                    <div class="admin-form">
+                                        <div class="form-group">
+                                            <label>圆角 <span id="radiusValue" style="color:var(--primary-color)">0.5rem</span></label>
+                                            <input type="range" min="0" max="1.5" step="0.1" value="0.5" id="themeBorderRadius" style="width:100%;accent-color:var(--primary-color)">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-font" style="margin-right:0.375rem"></i>字体</h3>
+                                    <p class="desc">选择网站的显示字体</p>
+                                    <div class="admin-form">
+                                        <div class="form-group">
+                                            <label>字体系列</label>
+                                            <select id="themeFontFamily" style="width:100%">
+                                                <option value="'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">系统默认</option>
+                                                <option value="'Inter', 'PingFang SC', sans-serif">Inter（现代简洁）</option>
+                                                <option value="'Noto Sans SC', 'PingFang SC', sans-serif">Noto Sans（优雅大方）</option>
+                                                <option value="'JetBrains Mono', 'Fira Code', monospace">JetBrains Mono（等宽编程）</option>
+                                                <option value="Georgia, 'Noto Serif SC', serif">Georgia（经典衬线）</option>
+                                                <option value="system-ui, sans-serif">系统UI</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-eye" style="margin-right:0.375rem"></i>背景色</h3>
+                                    <p class="desc">自定义页面背景颜色</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>页面背景</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#ffffff" id="themeBgPrimary" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeBgPrimaryText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#ffffff</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>卡片背景</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#f9fafb" id="themeBgSecondary" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeBgSecondaryText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#f9fafb</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-formatted-text" style="margin-right:0.375rem"></i>文字色</h3>
+                                    <p class="desc">自定义文字颜色</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>主文字色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#1f2937" id="themeTextPrimary" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeTextPrimaryText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#1f2937</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>次要文字色</label>
+                                                <div style="display:flex;gap:0.5rem;align-items:center">
+                                                    <input type="color" value="#6b7280" id="themeTextSecondary" style="width:40px;height:40px;border:none;border-radius:var(--border-radius);cursor:pointer;background:none">
+                                                    <span id="themeTextSecondaryText" style="font-size:var(--font-size-sm);color:var(--text-secondary)">#6b7280</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+                                    <button class="btn-admin btn-admin-primary" onclick="saveAppearance()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存并应用</button>
+                                    <button class="btn-admin btn-admin-outline" onclick="previewAppearance()"><i class="ti ti-eye" style="margin-right:0.375rem"></i>实时预览</button>
+                                    <button class="btn-admin btn-admin-danger" onclick="resetAppearance()"><i class="ti ti-refresh" style="margin-right:0.375rem"></i>恢复默认</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -414,6 +565,163 @@
                 });
             }
         });
+
+        // 界面外观
+        var presets = {
+            indigo: { primaryColor: '#4f46e5', secondaryColor: '#6b7280', successColor: '#10b981', warningColor: '#f59e0b', dangerColor: '#ef4444', infoColor: '#3b82f6' },
+            blue: { primaryColor: '#3b82f6', secondaryColor: '#64748b', successColor: '#22c55e', warningColor: '#eab308', dangerColor: '#ef4444', infoColor: '#0ea5e9' },
+            green: { primaryColor: '#10b981', secondaryColor: '#6b7280', successColor: '#059669', warningColor: '#f59e0b', dangerColor: '#ef4444', infoColor: '#06b6d4' },
+            rose: { primaryColor: '#f43f5e', secondaryColor: '#6b7280', successColor: '#10b981', warningColor: '#f59e0b', dangerColor: '#dc2626', infoColor: '#8b5cf6' },
+            amber: { primaryColor: '#f59e0b', secondaryColor: '#6b7280', successColor: '#10b981', warningColor: '#d97706', dangerColor: '#ef4444', infoColor: '#3b82f6' },
+            purple: { primaryColor: '#8b5cf6', secondaryColor: '#6b7280', successColor: '#10b981', warningColor: '#f59e0b', dangerColor: '#ef4444', infoColor: '#a78bfa' },
+            cyan: { primaryColor: '#06b6d4', secondaryColor: '#6b7280', successColor: '#10b981', warningColor: '#f59e0b', dangerColor: '#ef4444', infoColor: '#22d3ee' },
+            dark: { primaryColor: '#818cf8', secondaryColor: '#94a3b8', successColor: '#34d399', warningColor: '#fbbf24', dangerColor: '#f87171', infoColor: '#60a5fa', bgPrimary: '#111827', bgSecondary: '#1f2937', textPrimary: '#f9fafb', textSecondary: '#d1d5db' }
+        };
+
+        function loadAppearance() {
+            var saved = localStorage.getItem('site_theme');
+            if (!saved) return;
+            try {
+                var theme = JSON.parse(saved);
+                if (theme.primaryColor) { document.getElementById('themePrimaryColor').value = theme.primaryColor; document.getElementById('themePrimaryColorText').textContent = theme.primaryColor; }
+                if (theme.secondaryColor) { document.getElementById('themeSecondaryColor').value = theme.secondaryColor; document.getElementById('themeSecondaryColorText').textContent = theme.secondaryColor; }
+                if (theme.successColor) { document.getElementById('themeSuccessColor').value = theme.successColor; document.getElementById('themeSuccessColorText').textContent = theme.successColor; }
+                if (theme.warningColor) { document.getElementById('themeWarningColor').value = theme.warningColor; document.getElementById('themeWarningColorText').textContent = theme.warningColor; }
+                if (theme.dangerColor) { document.getElementById('themeDangerColor').value = theme.dangerColor; document.getElementById('themeDangerColorText').textContent = theme.dangerColor; }
+                if (theme.infoColor) { document.getElementById('themeInfoColor').value = theme.infoColor; document.getElementById('themeInfoColorText').textContent = theme.infoColor; }
+                if (theme.borderRadius) { document.getElementById('themeBorderRadius').value = parseFloat(theme.borderRadius); document.getElementById('radiusValue').textContent = theme.borderRadius; }
+                if (theme.fontFamily) document.getElementById('themeFontFamily').value = theme.fontFamily;
+                if (theme.bgPrimary) { document.getElementById('themeBgPrimary').value = theme.bgPrimary; document.getElementById('themeBgPrimaryText').textContent = theme.bgPrimary; }
+                if (theme.bgSecondary) { document.getElementById('themeBgSecondary').value = theme.bgSecondary; document.getElementById('themeBgSecondaryText').textContent = theme.bgSecondary; }
+                if (theme.textPrimary) { document.getElementById('themeTextPrimary').value = theme.textPrimary; document.getElementById('themeTextPrimaryText').textContent = theme.textPrimary; }
+                if (theme.textSecondary) { document.getElementById('themeTextSecondary').value = theme.textSecondary; document.getElementById('themeTextSecondaryText').textContent = theme.textSecondary; }
+            } catch (e) {}
+        }
+
+        function collectTheme() {
+            return {
+                primaryColor: document.getElementById('themePrimaryColor').value,
+                secondaryColor: document.getElementById('themeSecondaryColor').value,
+                successColor: document.getElementById('themeSuccessColor').value,
+                warningColor: document.getElementById('themeWarningColor').value,
+                dangerColor: document.getElementById('themeDangerColor').value,
+                infoColor: document.getElementById('themeInfoColor').value,
+                borderRadius: document.getElementById('themeBorderRadius').value + 'rem',
+                fontFamily: document.getElementById('themeFontFamily').value,
+                bgPrimary: document.getElementById('themeBgPrimary').value,
+                bgSecondary: document.getElementById('themeBgSecondary').value,
+                textPrimary: document.getElementById('themeTextPrimary').value,
+                textSecondary: document.getElementById('themeTextSecondary').value
+            };
+        }
+
+        function applyThemeToPage(theme) {
+            var root = document.documentElement;
+            if (theme.primaryColor) {
+                root.style.setProperty('--primary-color', theme.primaryColor);
+                var r = parseInt(theme.primaryColor.slice(1, 3), 16);
+                var g = parseInt(theme.primaryColor.slice(3, 5), 16);
+                var b = parseInt(theme.primaryColor.slice(5, 7), 16);
+                root.style.setProperty('--primary-dark', 'rgb(' + Math.max(0, r - 15) + ',' + Math.max(0, g - 15) + ',' + Math.max(0, b - 15) + ')');
+                root.style.setProperty('--primary-light', 'rgb(' + Math.min(255, r + 20) + ',' + Math.min(255, g + 20) + ',' + Math.min(255, b + 20) + ')');
+            }
+            if (theme.secondaryColor) root.style.setProperty('--secondary-color', theme.secondaryColor);
+            if (theme.successColor) root.style.setProperty('--success-color', theme.successColor);
+            if (theme.warningColor) root.style.setProperty('--warning-color', theme.warningColor);
+            if (theme.dangerColor) root.style.setProperty('--danger-color', theme.dangerColor);
+            if (theme.infoColor) root.style.setProperty('--info-color', theme.infoColor);
+            if (theme.borderRadius) {
+                root.style.setProperty('--border-radius', theme.borderRadius);
+                root.style.setProperty('--border-radius-lg', (parseFloat(theme.borderRadius) * 1.5) + 'rem');
+            }
+            if (theme.fontFamily) root.style.setProperty('--font-family', theme.fontFamily);
+            if (theme.bgPrimary) root.style.setProperty('--bg-primary', theme.bgPrimary);
+            if (theme.bgSecondary) root.style.setProperty('--bg-secondary', theme.bgSecondary);
+            if (theme.textPrimary) root.style.setProperty('--text-primary', theme.textPrimary);
+            if (theme.textSecondary) root.style.setProperty('--text-secondary', theme.textSecondary);
+        }
+
+        function previewAppearance() {
+            applyThemeToPage(collectTheme());
+        }
+
+        function saveAppearance() {
+            var theme = collectTheme();
+            localStorage.setItem('site_theme', JSON.stringify(theme));
+            applyThemeToPage(theme);
+            alert('主题已保存并应用到所有页面');
+        }
+
+        function resetAppearance() {
+            if (!confirm('确定要恢复默认主题吗？')) return;
+            localStorage.removeItem('site_theme');
+            var root = document.documentElement;
+            ['--primary-color', '--primary-dark', '--primary-light', '--secondary-color', '--success-color', '--warning-color', '--danger-color', '--info-color', '--border-radius', '--border-radius-lg', '--font-family', '--bg-primary', '--bg-secondary', '--text-primary', '--text-secondary'].forEach(function(v) {
+                root.style.removeProperty(v);
+            });
+            loadAppearanceDefaults();
+            alert('已恢复默认主题');
+        }
+
+        function loadAppearanceDefaults() {
+            document.getElementById('themePrimaryColor').value = '#4f46e5';
+            document.getElementById('themePrimaryColorText').textContent = '#4f46e5';
+            document.getElementById('themeSecondaryColor').value = '#6b7280';
+            document.getElementById('themeSecondaryColorText').textContent = '#6b7280';
+            document.getElementById('themeSuccessColor').value = '#10b981';
+            document.getElementById('themeSuccessColorText').textContent = '#10b981';
+            document.getElementById('themeWarningColor').value = '#f59e0b';
+            document.getElementById('themeWarningColorText').textContent = '#f59e0b';
+            document.getElementById('themeDangerColor').value = '#ef4444';
+            document.getElementById('themeDangerColorText').textContent = '#ef4444';
+            document.getElementById('themeInfoColor').value = '#3b82f6';
+            document.getElementById('themeInfoColorText').textContent = '#3b82f6';
+            document.getElementById('themeBorderRadius').value = 0.5;
+            document.getElementById('radiusValue').textContent = '0.5rem';
+            document.getElementById('themeFontFamily').value = "'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+            document.getElementById('themeBgPrimary').value = '#ffffff';
+            document.getElementById('themeBgPrimaryText').textContent = '#ffffff';
+            document.getElementById('themeBgSecondary').value = '#f9fafb';
+            document.getElementById('themeBgSecondaryText').textContent = '#f9fafb';
+            document.getElementById('themeTextPrimary').value = '#1f2937';
+            document.getElementById('themeTextPrimaryText').textContent = '#1f2937';
+            document.getElementById('themeTextSecondary').value = '#6b7280';
+            document.getElementById('themeTextSecondaryText').textContent = '#6b7280';
+        }
+
+        function applyPreset(name) {
+            var p = presets[name];
+            if (!p) return;
+            if (p.primaryColor) { document.getElementById('themePrimaryColor').value = p.primaryColor; document.getElementById('themePrimaryColorText').textContent = p.primaryColor; }
+            if (p.secondaryColor) { document.getElementById('themeSecondaryColor').value = p.secondaryColor; document.getElementById('themeSecondaryColorText').textContent = p.secondaryColor; }
+            if (p.successColor) { document.getElementById('themeSuccessColor').value = p.successColor; document.getElementById('themeSuccessColorText').textContent = p.successColor; }
+            if (p.warningColor) { document.getElementById('themeWarningColor').value = p.warningColor; document.getElementById('themeWarningColorText').textContent = p.warningColor; }
+            if (p.dangerColor) { document.getElementById('themeDangerColor').value = p.dangerColor; document.getElementById('themeDangerColorText').textContent = p.dangerColor; }
+            if (p.infoColor) { document.getElementById('themeInfoColor').value = p.infoColor; document.getElementById('themeInfoColorText').textContent = p.infoColor; }
+            if (p.bgPrimary) { document.getElementById('themeBgPrimary').value = p.bgPrimary; document.getElementById('themeBgPrimaryText').textContent = p.bgPrimary; }
+            else { document.getElementById('themeBgPrimary').value = '#ffffff'; document.getElementById('themeBgPrimaryText').textContent = '#ffffff'; }
+            if (p.bgSecondary) { document.getElementById('themeBgSecondary').value = p.bgSecondary; document.getElementById('themeBgSecondaryText').textContent = p.bgSecondary; }
+            else { document.getElementById('themeBgSecondary').value = '#f9fafb'; document.getElementById('themeBgSecondaryText').textContent = '#f9fafb'; }
+            if (p.textPrimary) { document.getElementById('themeTextPrimary').value = p.textPrimary; document.getElementById('themeTextPrimaryText').textContent = p.textPrimary; }
+            else { document.getElementById('themeTextPrimary').value = '#1f2937'; document.getElementById('themeTextPrimaryText').textContent = '#1f2937'; }
+            if (p.textSecondary) { document.getElementById('themeTextSecondary').value = p.textSecondary; document.getElementById('themeTextSecondaryText').textContent = p.textSecondary; }
+            else { document.getElementById('themeTextSecondary').value = '#6b7280'; document.getElementById('themeTextSecondaryText').textContent = '#6b7280'; }
+            applyThemeToPage(p);
+        }
+
+        // Color input live text update
+        document.querySelectorAll('#tab-appearance input[type="color"]').forEach(function(input) {
+            input.addEventListener('input', function() {
+                var textEl = document.getElementById(this.id + 'Text');
+                if (textEl) textEl.textContent = this.value;
+            });
+        });
+
+        document.getElementById('themeBorderRadius').addEventListener('input', function() {
+            document.getElementById('radiusValue').textContent = this.value + 'rem';
+        });
+
+        loadAppearance();
     </script>
 </body>
 </html>

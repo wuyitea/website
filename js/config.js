@@ -151,5 +151,36 @@ const utils = {
         if (!url) return (prefix || '') + 'images/default-avatar.png';
         if (url.indexOf('data:') === 0) return url;
         return (prefix || '') + url;
+    },
+
+    applyTheme() {
+        var saved = localStorage.getItem('site_theme');
+        if (!saved) return;
+        try {
+            var theme = JSON.parse(saved);
+            var root = document.documentElement;
+            if (theme.primaryColor) {
+                root.style.setProperty('--primary-color', theme.primaryColor);
+                var r = parseInt(theme.primaryColor.slice(1, 3), 16);
+                var g = parseInt(theme.primaryColor.slice(3, 5), 16);
+                var b = parseInt(theme.primaryColor.slice(5, 7), 16);
+                root.style.setProperty('--primary-dark', 'rgb(' + Math.max(0, r - 15) + ',' + Math.max(0, g - 15) + ',' + Math.max(0, b - 15) + ')');
+                root.style.setProperty('--primary-light', 'rgb(' + Math.min(255, r + 20) + ',' + Math.min(255, g + 20) + ',' + Math.min(255, b + 20) + ')');
+            }
+            if (theme.secondaryColor) root.style.setProperty('--secondary-color', theme.secondaryColor);
+            if (theme.successColor) root.style.setProperty('--success-color', theme.successColor);
+            if (theme.warningColor) root.style.setProperty('--warning-color', theme.warningColor);
+            if (theme.dangerColor) root.style.setProperty('--danger-color', theme.dangerColor);
+            if (theme.infoColor) root.style.setProperty('--info-color', theme.infoColor);
+            if (theme.borderRadius) root.style.setProperty('--border-radius', theme.borderRadius);
+            if (theme.borderRadiusLg) root.style.setProperty('--border-radius-lg', theme.borderRadiusLg);
+            if (theme.fontFamily) root.style.setProperty('--font-family', theme.fontFamily);
+            if (theme.bgPrimary) root.style.setProperty('--bg-primary', theme.bgPrimary);
+            if (theme.bgSecondary) root.style.setProperty('--bg-secondary', theme.bgSecondary);
+            if (theme.textPrimary) root.style.setProperty('--text-primary', theme.textPrimary);
+            if (theme.textSecondary) root.style.setProperty('--text-secondary', theme.textSecondary);
+        } catch (e) {}
     }
 };
+
+utils.applyTheme();
