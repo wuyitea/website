@@ -117,7 +117,10 @@ const profile = {
         const followersCount = document.getElementById('followersCount');
         const followingCount = document.getElementById('followingCount');
 
-        if (profileAvatar) profileAvatar.src = this.userData.avatar || '../images/default-avatar.png';
+        if (profileAvatar) {
+            const av = this.userData.avatar || '../images/default-avatar.png';
+            profileAvatar.src = (av && av.indexOf('data:') === 0) ? av : '../' + av.replace(/^\.\.\//, '');
+        }
         if (profileUsername) profileUsername.textContent = this.userData.username;
         if (profileBio) profileBio.textContent = this.userData.bio || '这个人很懒，什么都没写';
         if (postsCount) postsCount.textContent = this.userData.postsCount || 0;
@@ -231,10 +234,12 @@ const profile = {
 
     createProductItem(product) {
         const category = appConfig.productCategories.find(c => c.id === product.category);
+        const imgSrc = product.images?.[0] || '../images/default-product.png';
+        const imgFinal = (imgSrc && imgSrc.indexOf('data:') === 0) ? imgSrc : '../' + imgSrc.replace(/^\.\.\//, '');
 
         return `
             <article class="product-card">
-                <img src="${product.images?.[0] || '../images/default-product.png'}" 
+                <img src="${imgFinal}" 
                      alt="${product.title}" 
                      class="product-image">
                 <div class="product-info">

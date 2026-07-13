@@ -134,9 +134,11 @@ const forum = {
             var timeAgo = utils.formatDate(post.createdAt);
             var tags = post.tags ? post.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('') : '';
 
+            var avatarUrl = author.avatar || 'images/default-avatar.png';
+            if (avatarUrl.indexOf('data:') !== 0) avatarUrl = '../' + avatarUrl;
             html += '<article class="post-item">' +
                 '<div class="post-item-header">' +
-                '<img src="../' + (author.avatar || 'images/default-avatar.png') + '" alt="" class="post-item-avatar">' +
+                '<img src="' + avatarUrl + '" alt="" class="post-item-avatar">' +
                 '<div class="post-item-meta">' +
                 '<div class="post-item-author">' + (author.username || '匿名用户') + '</div>' +
                 '<div class="post-item-time">' + timeAgo + '</div>' +

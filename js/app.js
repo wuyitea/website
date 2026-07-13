@@ -124,7 +124,7 @@ const app = {
         return `
             <article class="post-card" data-id="${post.id}">
                 <div class="post-header">
-                    <img src="${userData?.avatar || 'images/default-avatar.png'}" 
+                    <img src="${utils.imagePath(userData?.avatar, '')}" 
                          alt="${userData?.username || '用户'}" 
                          class="post-avatar">
                     <div class="post-meta">
@@ -284,7 +284,7 @@ const app = {
 
         return `
             <article class="product-card" data-id="${product.id}">
-                <img src="${product.images?.[0] || 'images/default-product.png'}" 
+                <img src="${utils.imagePath(product.images?.[0], '')}" 
                      alt="${product.title}" 
                      class="product-image">
                 <div class="product-info">
@@ -297,7 +297,7 @@ const app = {
                         ${product.originalPrice ? `<span class="product-original-price">${utils.formatPrice(product.originalPrice)}</span>` : ''}
                     </div>
                     <div class="product-seller">
-                        <img src="${userData?.avatar || 'images/default-avatar.png'}" 
+                        <img src="${utils.imagePath(userData?.avatar, '')}" 
                              alt="${userData?.username || '卖家'}">
                         <span>${userData?.username || '匿名卖家'}</span>
                     </div>
@@ -346,7 +346,7 @@ const app = {
     createUserCard(user) {
         return `
             <article class="user-card">
-                <img src="${user.avatar || 'images/default-avatar.png'}" 
+                <img src="${utils.imagePath(user.avatar, '')}" 
                      alt="${user.username}" 
                      class="user-avatar">
                 <h3>${user.username}</h3>

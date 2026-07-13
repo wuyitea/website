@@ -165,8 +165,10 @@ const market = {
             var seller = users.find(function(u) { return u.id === product.sellerId; }) || {};
             var category = appConfig.productCategories.find(function(c) { return c.id === product.category; });
 
+            var imgSrc = (product.images && product.images[0]) ? product.images[0] : '../images/default-product.png';
+            if (imgSrc.indexOf('data:') !== 0) imgSrc = '../' + imgSrc;
             html += '<article class="product-item">' +
-                '<img src="../' + (product.images && product.images[0] ? product.images[0] : 'images/default-product.png') + '" alt="' + product.title + '" class="product-item-image">' +
+                '<img src="' + imgSrc + '" alt="' + product.title + '" class="product-item-image">' +
                 '<div class="product-item-info">' +
                 (category ? '<span class="post-category">' + category.icon + ' ' + category.name + '</span>' : '') +
                 '<h3 class="product-item-title"><a href="product.html?id=' + product.id + '">' + product.title + '</a></h3>' +
@@ -174,7 +176,7 @@ const market = {
                 (product.originalPrice ? '<span class="product-item-original-price">¥' + product.originalPrice.toFixed(2) + '</span>' : '') +
                 '</div>' +
                 '<div class="product-item-meta">' +
-                '<div class="product-item-seller"><img src="../' + (seller.avatar || 'images/default-avatar.png') + '" alt=""><span>' + (seller.username || '匿名卖家') + '</span></div>' +
+                '<div class="product-item-seller"><img src="' + ((seller.avatar && seller.avatar.indexOf('data:') === 0) ? seller.avatar : '../' + (seller.avatar || 'images/default-avatar.png')) + '" alt=""><span>' + (seller.username || '匿名卖家') + '</span></div>' +
                 '<div class="product-item-stats"><span>👁 ' + (product.viewsCount || 0) + '</span></div>' +
                 '</div>' +
                 '<div class="product-item-actions">' +

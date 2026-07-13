@@ -180,8 +180,10 @@
                     '<button class="btn-admin btn-admin-danger" onclick="banUser(\'' + user.id + '\')">封禁</button>';
                 var date = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
 
+                var avUrl = user.avatar || 'images/default-avatar.png';
+                if (avUrl.indexOf('data:') !== 0) avUrl = '../' + avUrl;
                 html += '<tr data-status="' + status + '">' +
-                    '<td><div class="user-cell"><img src="../' + (user.avatar || 'images/default-avatar.png') + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td>' +
+                    '<td><div class="user-cell"><img src="' + avUrl + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td>' +
                     '<td>' + (user.email || '-') + '</td>' +
                     '<td>' + date + '</td>' +
                     '<td>' + userPosts + '</td>' +

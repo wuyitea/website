@@ -87,7 +87,10 @@ const post = {
         const likesCount = document.getElementById('likesCount');
         const commentsCount = document.getElementById('commentsCount');
 
-        if (postAvatar) postAvatar.src = this.authorData?.avatar || '../images/default-avatar.png';
+        if (postAvatar) {
+            const av = this.authorData?.avatar || '../images/default-avatar.png';
+            postAvatar.src = (av && av.indexOf('data:') === 0) ? av : '../' + av.replace(/^\.\.\//, '');
+        }
         if (postAuthor) postAuthor.textContent = this.authorData?.username || '匿名用户';
         if (postTime) postTime.textContent = utils.formatDate(this.postData.createdAt);
 
@@ -114,7 +117,10 @@ const post = {
         const authorBio = document.getElementById('authorBio');
         const authorLink = document.getElementById('authorLink');
 
-        if (authorAvatar) authorAvatar.src = this.authorData?.avatar || '../images/default-avatar.png';
+        if (authorAvatar) {
+            const av = this.authorData?.avatar || '../images/default-avatar.png';
+            authorAvatar.src = (av && av.indexOf('data:') === 0) ? av : '../' + av.replace(/^\.\.\//, '');
+        }
         if (authorName) authorName.textContent = this.authorData?.username || '匿名用户';
         if (authorBio) authorBio.textContent = this.authorData?.bio || '这个人很懒，什么都没写';
         if (authorLink) authorLink.href = `profile.html?id=${this.postData.authorId}`;
@@ -268,10 +274,13 @@ const post = {
     createCommentItem(comment, userData) {
         const timeAgo = utils.formatDate(comment.createdAt);
 
+        const commentAv = userData?.avatar || '../images/default-avatar.png';
+        const commentSrc = (commentAv && commentAv.indexOf('data:') === 0) ? commentAv : '../' + commentAv.replace(/^\.\.\//, '');
+
         return `
             <div class="comment-item">
                 <div class="comment-header">
-                    <img src="${userData?.avatar || '../images/default-avatar.png'}" 
+                    <img src="${commentSrc}" 
                          alt="${userData?.username || '用户'}" 
                          class="comment-avatar">
                     <div class="comment-meta">

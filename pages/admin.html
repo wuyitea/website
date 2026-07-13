@@ -209,7 +209,9 @@
         var sortedUsers = users.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 4);
         sortedUsers.forEach(function(user) {
             var date = user.createdAt ? new Date(user.createdAt).toLocaleDateString('zh-CN') : '-';
-            recentUsersHtml += '<tr><td><div class="user-cell"><img src="../' + (user.avatar || 'images/default-avatar.png') + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td><td>' + date + '</td><td><span class="badge badge-success">正常</span></td></tr>';
+            var avUrl = user.avatar || 'images/default-avatar.png';
+            if (avUrl.indexOf('data:') !== 0) avUrl = '../' + avUrl;
+            recentUsersHtml += '<tr><td><div class="user-cell"><img src="' + avUrl + '" class="avatar-sm" alt=""> ' + (user.username || '未知') + '</div></td><td>' + date + '</td><td><span class="badge badge-success">正常</span></td></tr>';
         });
         if (sortedUsers.length === 0) recentUsersHtml = '<tr><td colspan="3" style="text-align:center;color:#9ca3af">暂无用户</td></tr>';
         document.getElementById('recentUsers').innerHTML = recentUsersHtml;

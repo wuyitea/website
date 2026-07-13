@@ -171,12 +171,17 @@ const authModule = {
         const userActions = document.getElementById('userActions');
         const userProfile = document.getElementById('userProfile');
         const userName = document.getElementById('userName');
+        const userAvatar = document.getElementById('userAvatar');
 
         if (isLoggedIn && this.currentUser) {
             if (userActions) userActions.style.display = 'none';
             if (userProfile) {
                 userProfile.style.display = 'flex';
                 if (userName) userName.textContent = this.currentUser.username;
+                if (userAvatar) {
+                    const av = this.currentUser.avatar;
+                    userAvatar.src = (av && av.indexOf('data:') === 0) ? av : '../' + (av || 'images/default-avatar.png');
+                }
             }
         } else {
             if (userActions) userActions.style.display = 'flex';

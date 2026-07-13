@@ -189,17 +189,22 @@
                 if (status === 'onsale') {
                     statusBadge = '<span class="badge badge-success">在售</span>';
                     actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="removeProduct(' + index + ')">下架</button>';
+                              '<button class="btn-admin btn-admin-danger" onclick="removeProduct(' + index + ')">下架</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deleteProduct(' + index + ')">删除</button>';
                 } else if (status === 'pending') {
                     statusBadge = '<span class="badge badge-warning">待审核</span>';
                     actions = '<button class="btn-admin btn-admin-success" onclick="approveProduct(' + index + ')">通过</button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="rejectProduct(' + index + ')">拒绝</button>';
+                              '<button class="btn-admin btn-admin-danger" onclick="rejectProduct(' + index + ')">拒绝</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deleteProduct(' + index + ')">删除</button>';
                 } else if (status === 'sold') {
                     statusBadge = '<span class="badge badge-info">已售出</span>';
-                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deleteProduct(' + index + ')">删除</button>';
                 } else {
                     statusBadge = '<span class="badge badge-secondary">已下架</span>';
-                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button>';
+                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewProduct(' + index + ')">查看</button> ' +
+                              '<button class="btn-admin btn-admin-success" onclick="approveProduct(' + index + ')">恢复</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deleteProduct(' + index + ')">删除</button>';
                 }
                 var date = product.createdAt ? new Date(product.createdAt).toLocaleDateString('zh-CN') : '-';
                 var price = product.price ? ('¥' + Number(product.price).toLocaleString()) : '-';
@@ -292,6 +297,15 @@
             localStorage.setItem('products', JSON.stringify(products));
             loadProducts();
             alert('商品已下架');
+        }
+
+        function deleteProduct(index) {
+            if (!confirm('确定要删除该商品吗？此操作不可恢复！')) return;
+            var products = JSON.parse(localStorage.getItem('products') || '[]');
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            loadProducts();
+            alert('商品已删除');
         }
 
         loadProducts();

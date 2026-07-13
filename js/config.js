@@ -144,5 +144,11 @@ const utils = {
             }
         }
         return result;
+    },
+
+    imagePath(url, prefix) {
+        if (!url) return (prefix || '') + 'images/default-avatar.png';
+        if (url.indexOf('data:') === 0) return url;
+        return (prefix || '') + url;
     }
 };

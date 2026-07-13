@@ -75,24 +75,29 @@ const product = {
         }
 
         if (this.productData.images && this.productData.images.length > 0) {
-            document.getElementById('mainImage').src = this.productData.images[0];
+            var mainImg = this.productData.images[0];
+            document.getElementById('mainImage').src = (mainImg && mainImg.indexOf('data:') === 0) ? mainImg : '../' + mainImg.replace(/^\.\.\//, '');
 
             const thumbnailList = document.getElementById('thumbnailList');
-            thumbnailList.innerHTML = this.productData.images.map((img, index) => `
-                <img src="${img}" alt="商品图片${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
-            `).join('');
+            thumbnailList.innerHTML = this.productData.images.map((img, index) => {
+                const src = (img && img.indexOf('data:') === 0) ? img : '../' + img.replace(/^\.\.\//, '');
+                return `<img src="${src}" alt="商品图片${index + 1}" class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">`;
+            }).join('');
 
             thumbnailList.querySelectorAll('.thumbnail').forEach(thumb => {
                 thumb.addEventListener('click', () => {
                     document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
                     thumb.classList.add('active');
-                    document.getElementById('mainImage').src = this.productData.images[thumb.dataset.index];
+                    const idx = thumb.dataset.index;
+                    const src = this.productData.images[idx];
+                    document.getElementById('mainImage').src = (src && src.indexOf('data:') === 0) ? src : '../' + src.replace(/^\.\.\//, '');
                 });
             });
         }
 
         if (this.sellerData) {
-            document.getElementById('sellerAvatar').src = this.sellerData.avatar || '../images/default-avatar.png';
+            const sav = this.sellerData.avatar || '../images/default-avatar.png';
+            document.getElementById('sellerAvatar').src = (sav && sav.indexOf('data:') === 0) ? sav : '../' + sav.replace(/^\.\.\//, '');
             document.getElementById('sellerName').textContent = this.sellerData.username;
             document.getElementById('sellerStats').textContent = `${this.sellerData.postsCount || 0}帖 · ${this.sellerData.productsCount || 0}商品`;
             document.getElementById('sellerLink').href = `profile.html?id=${this.productData.sellerId}`;
