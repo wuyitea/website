@@ -268,7 +268,7 @@ utils.applyCopySettings();
 var GITHUB_OWNER = 'wuyitea';
 var GITHUB_REPO = 'website';
 var CONFIG_PATH = 'data/site-config.json';
-var CONFIG_RAW_URL = 'https://raw.githubusercontent.com/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/main/' + CONFIG_PATH;
+var CONFIG_RAW_URL = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + CONFIG_PATH;
 var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + CONFIG_PATH;
 
 var _lsKeyMap = {
@@ -286,7 +286,7 @@ var _lsKeyMap = {
 
 utils.syncFromGitHub = function() {
     var url = CONFIG_RAW_URL + '?t=' + Date.now();
-    return fetch(url).then(function(r) {
+    return fetch(url, { headers: { 'Accept': 'application/vnd.github.v3.raw' } }).then(function(r) {
         if (!r.ok) throw new Error('fetch failed');
         return r.json();
     }).then(function(data) {
