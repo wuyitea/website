@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '8';
+const SITE_VERSION = '9';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
@@ -263,3 +263,72 @@ utils.applyCopySettings = function() {
 };
 
 utils.applyCopySettings();
+
+// ========== GitHub 远程同步 ==========
+var GITHUB_OWNER = 'wuyitea';
+var GITHUB_REPO = 'website';
+var CONFIG_PATH = 'data/site-config.json';
+var CONFIG_RAW_URL = 'https://raw.githubusercontent.com/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/main/' + CONFIG_PATH;
+var GITHUB_API = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + CONFIG_PATH;
+
+var _lsKeyMap = {
+    general: 'admin_settings_general',
+    copy: 'admin_settings_copy',
+    theme: 'site_theme',
+    slides: 'admin_homepage_slides',
+    banners: 'admin_market_banners',
+    shopLinks: 'admin_shop_links',
+    forum: 'admin_settings_forum',
+    market: 'admin_settings_market',
+    security: 'admin_settings_security',
+    notifications: 'admin_settings_notifications'
+};
+
+utils.syncFromGitHub = function() {
+    var url = CONFIG_RAW_URL + '?t=' + Date.now();
+    return fetch(url).then(function(r) {
+        if (!r.ok) throw new Error('fetch failed');
+        return r.json();
+    }).then(function(data) {
+        Object.keys(_lsKeyMap).forEach(function(k) {
+            if (data[k] !== undefined && data[k] !== null) {
+                var v = typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k]);
+                localStorage.setItem(_lsKeyMap[k], v);
+            }
+        });
+        utils.applyTheme();
+        utils.applyGeneralSettings();
+        utils.applyCopySettings();
+        window._siteConfigReady = true;
+    }).catch(function() {
+        window._siteConfigReady = true;
+    });
+};
+
+utils.syncFromGitHub();
+
+utils.saveConfigToGitHub = function(token) {
+    var payload = {};
+    Object.keys(_lsKeyMap).forEach(function(k) {
+        var raw = localStorage.getItem(_lsKeyMap[k]);
+        if (raw) {
+            try { payload[k] = JSON.parse(raw); } catch(e) { payload[k] = raw; }
+        } else {
+            payload[k] = typeof {} === 'object' ? {} : '';
+        }
+    });
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    return fetch(GITHUB_API, {
+        method: 'GET',
+        headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+    }).then(function(r) { return r.json(); }).then(function(file) {
+        var sha = file.sha || '';
+        var body = { message: 'update site config', content: content, branch: 'main' };
+        if (sha) body.sha = sha;
+        return fetch(GITHUB_API, {
+            method: 'PUT',
+            headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+            body: JSON.stringify(body)
+        });
+    }).then(function(r) { return r.json(); });
+};
