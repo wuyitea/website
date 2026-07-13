@@ -70,16 +70,33 @@
         grid-template-columns: 1fr;
     }
 
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+
     .settings-nav {
         position: static;
         display: flex;
         overflow-x: auto;
         gap: 0.25rem;
         padding-bottom: 0.5rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .settings-nav a {
         white-space: nowrap;
+        border-right: none;
+        border-bottom: 2px solid transparent;
+    }
+
+    .settings-nav a.active {
+        border-right: none;
+        border-bottom-color: var(--primary-color);
+    }
+
+    .settings-body {
+        padding: 1.25rem;
     }
 
     .footer-grid {
