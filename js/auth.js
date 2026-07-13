@@ -182,6 +182,9 @@ const authModule = {
                     const av = this.currentUser.avatar;
                     userAvatar.src = (av && av.indexOf('data:') === 0) ? av : '../' + (av || 'images/default-avatar.png');
                 }
+                document.querySelectorAll('.admin-link').forEach(function(el) {
+                    el.style.display = authModule.isAdmin() ? 'flex' : 'none';
+                });
             }
         } else {
             if (userActions) userActions.style.display = 'flex';
