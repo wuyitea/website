@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="../css/style.css?v=10">
-    <link rel="stylesheet" href="../css/responsive.css?v=10">
+    <link rel="stylesheet" href="../css/style.css?v=11">
+    <link rel="stylesheet" href="../css/responsive.css?v=11">
 </head>
 <body>
     <div class="admin-layout">
@@ -392,8 +392,8 @@
                                 </div>
 
                                 <div class="settings-group">
-                                    <h3><i class="ti ti-link" style="margin-right:0.375rem"></i>页脚链接文字</h3>
-                                    <p class="desc">配置页脚中各链接的显示文字</p>
+                                    <h3><i class="ti ti-link" style="margin-right:0.375rem"></i>页脚链接文字与地址</h3>
+                                    <p class="desc">配置页脚中各链接的显示文字和跳转地址</p>
                                     <div class="admin-form">
                                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
                                             <div class="form-group">
@@ -404,36 +404,39 @@
                                                 <label>法律信息标题</label>
                                                 <input type="text" id="copyFooterLegal" placeholder="例如：法律信息">
                                             </div>
-                                            <div class="form-group">
-                                                <label>论坛链接</label>
-                                                <input type="text" id="copyFooterLinkForum" placeholder="例如：论坛">
+                                        </div>
+                                        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;font-size:var(--font-size-xs);color:var(--text-secondary);font-weight:600"><span>显示文字</span><span>跳转链接</span></div>
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkForum" placeholder="论坛">
+                                                <input type="text" id="copyFooterUrlForum" placeholder="pages/forum.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>商城链接</label>
-                                                <input type="text" id="copyFooterLinkMarket" placeholder="例如：商城">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkMarket" placeholder="商城">
+                                                <input type="text" id="copyFooterUrlMarket" placeholder="pages/market.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>关于我们链接</label>
-                                                <input type="text" id="copyFooterLinkAbout" placeholder="例如：关于我们">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkAbout" placeholder="关于我们">
+                                                <input type="text" id="copyFooterUrlAbout" placeholder="pages/about.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>联系我们链接</label>
-                                                <input type="text" id="copyFooterLinkContact" placeholder="例如：联系我们">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkContact" placeholder="联系我们">
+                                                <input type="text" id="copyFooterUrlContact" placeholder="pages/contact.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>服务条款链接</label>
-                                                <input type="text" id="copyFooterLinkTerms" placeholder="例如：服务条款">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkTerms" placeholder="服务条款">
+                                                <input type="text" id="copyFooterUrlTerms" placeholder="pages/terms.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>隐私政策链接</label>
-                                                <input type="text" id="copyFooterLinkPrivacy" placeholder="例如：隐私政策">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkPrivacy" placeholder="隐私政策">
+                                                <input type="text" id="copyFooterUrlPrivacy" placeholder="pages/privacy.html 或 https://...">
                                             </div>
-                                            <div class="form-group">
-                                                <label>Cookie政策链接</label>
-                                                <input type="text" id="copyFooterLinkCookies" placeholder="例如：Cookie政策">
+                                            <div style="display:grid;grid-template-columns:1fr 2fr;gap:0.5rem;align-items:center">
+                                                <input type="text" id="copyFooterLinkCookies" placeholder="Cookie政策">
+                                                <input type="text" id="copyFooterUrlCookies" placeholder="pages/cookies.html 或 https://...">
                                             </div>
                                         </div>
-                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                        <button class="btn-admin btn-admin-primary" style="margin-top:1rem" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
                                     </div>
                                 </div>
 
@@ -640,7 +643,7 @@
         </main>
     </div>
 
-    <script src="../js/config.js?v=10"></script>
+    <script src="../js/config.js?v=11"></script>
     <script>
         if (localStorage.getItem('admin_logged_in') !== 'true') {
             window.location.href = 'admin-login.html';
@@ -909,7 +912,14 @@
             footerLinkContact: '联系我们',
             footerLinkTerms: '服务条款',
             footerLinkPrivacy: '隐私政策',
-            footerLinkCookies: 'Cookie政策'
+            footerLinkCookies: 'Cookie政策',
+            footerUrlForum: 'pages/forum.html',
+            footerUrlMarket: 'pages/market.html',
+            footerUrlAbout: 'pages/about.html',
+            footerUrlContact: 'pages/contact.html',
+            footerUrlTerms: 'pages/terms.html',
+            footerUrlPrivacy: 'pages/privacy.html',
+            footerUrlCookies: 'pages/cookies.html'
         };
 
         function loadCopySettings() {
@@ -947,7 +957,14 @@
                 footerLinkContact: document.getElementById('copyFooterLinkContact').value,
                 footerLinkTerms: document.getElementById('copyFooterLinkTerms').value,
                 footerLinkPrivacy: document.getElementById('copyFooterLinkPrivacy').value,
-                footerLinkCookies: document.getElementById('copyFooterLinkCookies').value
+                footerLinkCookies: document.getElementById('copyFooterLinkCookies').value,
+                footerUrlForum: document.getElementById('copyFooterUrlForum').value,
+                footerUrlMarket: document.getElementById('copyFooterUrlMarket').value,
+                footerUrlAbout: document.getElementById('copyFooterUrlAbout').value,
+                footerUrlContact: document.getElementById('copyFooterUrlContact').value,
+                footerUrlTerms: document.getElementById('copyFooterUrlTerms').value,
+                footerUrlPrivacy: document.getElementById('copyFooterUrlPrivacy').value,
+                footerUrlCookies: document.getElementById('copyFooterUrlCookies').value
             };
         }
 

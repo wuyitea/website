@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '10';
+const SITE_VERSION = '11';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
@@ -258,6 +258,10 @@ utils.applyCopySettings = function() {
                     el.textContent = s[key];
                 }
             });
+        });
+        document.querySelectorAll('[data-copy-link]').forEach(function(el) {
+            var key = el.getAttribute('data-copy-link');
+            if (s[key]) el.href = s[key];
         });
     } catch (e) {}
 };
