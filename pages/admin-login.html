@@ -9,12 +9,14 @@
     <title>管理员登录 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body class="admin-login-body">
     <div class="admin-login-card">
-        <h1><i class="ti ti-shield-lock" style="margin-right:0.375rem"></i>管理后台</h1>
-        <p class="subtitle"><i class="ti ti-building-community"></i> 社区平台管理系统</p>
+        <div class="admin-login-logo">
+            <i class="ti ti-shield-lock"></i>
+        </div>
+        <h1>管理后台</h1>
+        <p class="subtitle">社区平台管理系统</p>
         <form id="adminLoginForm">
             <div class="form-group">
                 <label for="adminUser"><i class="ti ti-user"></i> 管理员账号</label>
@@ -27,6 +29,7 @@
             <button type="submit" class="admin-login-btn"><i class="ti ti-login"></i> 登录</button>
             <div class="admin-login-error" id="loginError"><i class="ti ti-alert-circle"></i> 账号或密码错误</div>
         </form>
+        <a href="../index.html" class="admin-login-back"><i class="ti ti-arrow-left"></i> 返回前台</a>
     </div>
 
     <script src="../js/config.js?v=5"></script>

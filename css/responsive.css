@@ -265,10 +265,20 @@
         gap: 0.75rem;
     }
 
-    .stat-card {
-        flex-direction: column;
-        text-align: center;
-        padding: 1rem;
+    .quick-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .welcome-banner .welcome-stats {
+        gap: 1rem;
+    }
+
+    .welcome-banner {
+        padding: 1.5rem;
+    }
+
+    .welcome-banner h2 {
+        font-size: 1.25rem;
     }
 
     /* 论坛过滤器 */
@@ -373,6 +383,15 @@
 
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-banner .welcome-stats {
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 
     .admin-table {

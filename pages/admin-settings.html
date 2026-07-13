@@ -9,38 +9,53 @@
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
 </head>
 <body>
     <div class="admin-layout">
         <aside class="admin-sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2><i class="ti ti-brand-community"></i> 社区平台</h2>
-                <p>管理后台</p>
+                <div class="sidebar-logo"><i class="ti ti-brand-community"></i></div>
+                <div>
+                    <h2>社区平台</h2>
+                    <p>管理后台</p>
+                </div>
             </div>
             <nav class="sidebar-nav">
                 <a href="admin.html"><i class="ti ti-dashboard"></i> 仪表盘</a>
                 <a href="admin-forum.html"><i class="ti ti-message-circle"></i> 论坛管理</a>
                 <a href="admin-market.html"><i class="ti ti-shopping-bag"></i> 商城管理</a>
                 <a href="admin-users.html"><i class="ti ti-users"></i> 用户管理</a>
-                <div class="sidebar-section">系统</div>
+                <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html" class="active"><i class="ti ti-settings"></i> 网站设置</a>
                 <a href="../index.html" target="_blank"><i class="ti ti-external-link"></i> 查看前台</a>
                 <a href="#" id="adminLogout"><i class="ti ti-logout"></i> 退出登录</a>
             </nav>
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar"><i class="ti ti-user-circle"></i></div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">管理员</div>
+                    <div class="sidebar-user-role">超级管理员</div>
+                </div>
+            </div>
         </aside>
 
         <main class="admin-main">
             <div class="admin-topbar">
-                <div style="display:flex;align-items:center;gap:0.75rem">
-                    <button class="btn btn-ghost" id="sidebarToggle" style="display:none;padding:0.375rem">
+                <div class="admin-topbar-left">
+                    <button class="admin-topbar-btn" id="sidebarToggle" style="display:none">
                         <i class="ti ti-menu-2" style="font-size:1.25rem"></i>
                     </button>
-                    <h1><i class="ti ti-settings" style="margin-right:0.375rem"></i>网站设置</h1>
+                    <h1>网站设置</h1>
                 </div>
-                <div style="display:flex;align-items:center;gap:0.75rem">
-                    <span style="font-size:var(--font-size-sm);color:var(--text-secondary)">
-                        <i class="ti ti-user-circle"></i> 管理员
-                    </span>
+                <div class="admin-topbar-right">
+                    <button class="admin-topbar-btn" title="通知">
+                        <i class="ti ti-bell"></i>
+                        <span class="notif-dot"></span>
+                    </button>
+                    <button class="admin-topbar-btn" title="设置">
+                        <i class="ti ti-settings"></i>
+                    </button>
                 </div>
             </div>
 
@@ -325,12 +340,18 @@
         // 侧边栏切换（移动端）
         var sidebarToggle = document.getElementById('sidebarToggle');
         var sidebar = document.getElementById('sidebar');
-        if (window.innerWidth <= 768) sidebarToggle.style.display = 'block';
-        window.addEventListener('resize', function() {
-            sidebarToggle.style.display = window.innerWidth <= 768 ? 'block' : 'none';
-        });
+        function checkSidebar() {
+            sidebarToggle.style.display = window.innerWidth <= 1024 ? 'flex' : 'none';
+        }
+        checkSidebar();
+        window.addEventListener('resize', checkSidebar);
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('show');
+        });
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 1024 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
         });
 
         function switchTab(el, tab) {
