@@ -184,3 +184,44 @@ const utils = {
 };
 
 utils.applyTheme();
+
+utils.applyGeneralSettings = function() {
+    var saved = localStorage.getItem('admin_settings_general');
+    if (!saved) return;
+    try {
+        var s = JSON.parse(saved);
+        if (s.siteName) {
+            document.querySelectorAll('[data-setting="siteName"]').forEach(function(el) {
+                el.textContent = s.siteName;
+            });
+            var titleParts = document.title.split(' - ');
+            if (titleParts.length > 1) {
+                titleParts[titleParts.length - 1] = s.siteName;
+                document.title = titleParts.join(' - ');
+            } else {
+                document.title = s.siteName;
+            }
+        }
+        if (s.siteDesc) {
+            var meta = document.querySelector('meta[name="description"]');
+            if (meta) meta.setAttribute('content', s.siteDesc);
+        }
+        if (s.siteICP) {
+            document.querySelectorAll('[data-setting="siteICP"]').forEach(function(el) {
+                el.textContent = s.siteICP;
+                el.style.display = '';
+            });
+        } else {
+            document.querySelectorAll('[data-setting="siteICP"]').forEach(function(el) {
+                el.style.display = 'none';
+            });
+        }
+        if (s.siteEmail) {
+            document.querySelectorAll('[data-setting="siteEmail"]').forEach(function(el) {
+                el.textContent = s.siteEmail;
+            });
+        }
+    } catch (e) {}
+};
+
+utils.applyGeneralSettings();
