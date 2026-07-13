@@ -62,6 +62,14 @@ const forum = {
         var postCategory = document.getElementById('postCategory');
         if (!categoryList) return;
 
+        var savedForum = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}');
+        if (savedForum.forumCategories) {
+            var customNames = savedForum.forumCategories.split('\n').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+            appConfig.postCategories = customNames.map(function(name, i) {
+                return { id: 'cat_' + i, name: name, icon: '📁' };
+            });
+        }
+
         var posts = JSON.parse(localStorage.getItem('posts') || '[]');
         var counts = {};
         posts.forEach(function(p) {
@@ -168,6 +176,12 @@ const forum = {
             return;
         }
 
+        var savedForum = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}');
+        if (savedForum.forumAllowPost === false) {
+            alert('管理员已关闭发帖功能');
+            return;
+        }
+
         if (!category) { alert('请选择分类'); return; }
         if (!title) { alert('请输入标题'); return; }
         if (!content) { alert('请输入内容'); return; }
@@ -175,6 +189,8 @@ const forum = {
         var tags = tagsInput ? tagsInput.split(',').map(function(t) { return t.trim(); }).filter(function(t) { return t; }) : [];
         var user = authModule.getCurrentUser();
         if (!user) { alert('请先登录'); return; }
+
+        var needReview = savedForum.forumNeedReview === true;
 
         var posts = JSON.parse(localStorage.getItem('posts') || '[]');
         var newPost = {
@@ -188,6 +204,7 @@ const forum = {
             commentsCount: 0,
             viewsCount: 0,
             isEssence: false,
+            status: needReview ? 'pending' : 'published',
             createdAt: new Date().toISOString()
         };
 
@@ -196,7 +213,7 @@ const forum = {
 
         document.getElementById('newPostModal').style.display = 'none';
         document.getElementById('newPostForm').reset();
-        alert('发帖成功');
+        alert(needReview ? '发帖成功，等待管理员审核' : '发帖成功');
         this.loadPosts();
         this.loadCategories();
     },

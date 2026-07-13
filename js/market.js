@@ -85,6 +85,14 @@ const market = {
         var productCategory = document.getElementById('productCategory');
         if (!categoryList) return;
 
+        var savedMarket = JSON.parse(localStorage.getItem('admin_settings_market') || '{}');
+        if (savedMarket.marketCategories) {
+            var customNames = savedMarket.marketCategories.split('\n').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
+            appConfig.productCategories = customNames.map(function(name, i) {
+                return { id: 'pcat_' + i, name: name, icon: '📦' };
+            });
+        }
+
         var html = '<li class="category-item"><a href="#" class="category-link active" data-category="all">全部分类</a></li>';
         var selectHtml = '<option value="">请选择分类</option>';
 
@@ -191,6 +199,12 @@ const market = {
             return;
         }
 
+        var savedMarket = JSON.parse(localStorage.getItem('admin_settings_market') || '{}');
+        if (savedMarket.marketAllowSell === false) {
+            alert('管理员已关闭商品发布功能');
+            return;
+        }
+
         var category = document.getElementById('productCategory').value;
         var title = document.getElementById('productTitle').value.trim();
         var description = document.getElementById('productDescription').value.trim();
@@ -211,6 +225,9 @@ const market = {
 
         var user = authModule.getCurrentUser();
         if (!user) { alert('请先登录'); return; }
+
+        var needReview = savedMarket.marketNeedReview === true;
+
         var products = JSON.parse(localStorage.getItem('products') || '[]');
         var newProduct = {
             id: Date.now().toString(),
@@ -225,7 +242,7 @@ const market = {
             viewsCount: 0,
             likesCount: 0,
             salesCount: 0,
-            status: 'active',
+            status: needReview ? 'pending' : 'active',
             createdAt: new Date().toISOString()
         };
 
@@ -234,7 +251,7 @@ const market = {
 
         document.getElementById('sellModal').style.display = 'none';
         document.getElementById('sellForm').reset();
-        alert('商品发布成功');
+        alert(needReview ? '商品发布成功，等待管理员审核' : '商品发布成功');
         this.loadProducts();
     },
 

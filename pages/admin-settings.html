@@ -82,7 +82,7 @@
                                             <p class="help">新用户是否可以发布帖子</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="forumAllowPost">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -92,7 +92,7 @@
                                             <p class="help">新帖子是否需要管理员审核</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="forumNeedReview">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -102,7 +102,7 @@
                                             <p class="help">用户是否可以评论帖子</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="forumAllowComment">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -112,7 +112,7 @@
                                             <p class="help">用户是否可以匿名发布内容</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="forumAllowAnonymous">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -145,7 +145,7 @@
                                             <p class="help">用户是否可以发布商品</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="marketAllowSell">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -155,7 +155,7 @@
                                             <p class="help">新商品是否需要管理员审核</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox">
+                                            <input type="checkbox" id="marketNeedReview">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -165,7 +165,7 @@
                                             <p class="help">买家是否可以与卖家议价</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="marketAllowBargain">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -199,7 +199,7 @@
                                             <p class="help">新用户注册时是否需要邮箱验证</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="securityRegisterVerify">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -209,7 +209,7 @@
                                             <p class="help">连续5次登录失败后锁定账户</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="securityLoginLimit">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -219,11 +219,12 @@
                                             <p class="help">自动过滤敏感词汇</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="securityContentFilter">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
                                 </div>
+                                <button class="btn-admin btn-admin-primary" onclick="saveSettings('security')">保存设置</button>
                                 <div class="settings-group">
                                     <h3>管理员账号</h3>
                                     <p class="desc">修改管理员登录密码</p>
@@ -256,7 +257,7 @@
                                             <p class="help">有新用户注册时发送管理员通知</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="notifyNewUser">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -266,7 +267,7 @@
                                             <p class="help">有新帖子待审核时发送通知</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="notifyNewPost">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -276,7 +277,7 @@
                                             <p class="help">有新商品待审核时发送通知</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="notifyNewProduct">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -286,7 +287,7 @@
                                             <p class="help">有内容被举报时发送通知</p>
                                         </div>
                                         <label class="toggle">
-                                            <input type="checkbox" checked>
+                                            <input type="checkbox" checked id="notifyReport">
                                             <span class="toggle-slider"></span>
                                         </label>
                                     </div>
@@ -354,7 +355,7 @@
         }
 
         // Load saved settings
-        ['general', 'forum', 'market', 'notifications'].forEach(function(type) {
+        ['general', 'forum', 'market', 'security', 'notifications'].forEach(function(type) {
             var saved = localStorage.getItem('admin_settings_' + type);
             if (saved) {
                 var settings = JSON.parse(saved);
