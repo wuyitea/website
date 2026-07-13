@@ -68,6 +68,7 @@
                             <a href="#market" onclick="switchTab(this, 'market')"><i class="ti ti-shopping-bag"></i> 商城设置</a>
                             <a href="#security" onclick="switchTab(this, 'security')"><i class="ti ti-shield"></i> 安全设置</a>
                             <a href="#notifications" onclick="switchTab(this, 'notifications')"><i class="ti ti-bell"></i> 通知设置</a>
+                            <a href="#copy" onclick="switchTab(this, 'copy')"><i class="ti ti-article"></i> 网站文案</a>
                             <a href="#appearance" onclick="switchTab(this, 'appearance')"><i class="ti ti-palette"></i> 界面外观</a>
                         </div>
                         <div class="settings-body">
@@ -320,6 +321,101 @@
                                     </div>
                                 </div>
                                 <button class="btn-admin btn-admin-primary" onclick="saveSettings('notifications')"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存设置</button>
+                            </div>
+
+                            <!-- 网站文案 -->
+                            <div id="tab-copy" class="settings-tab" style="display:none">
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-home" style="margin-right:0.375rem"></i>首页 - 英雄区域</h3>
+                                    <p class="desc">配置首页顶部展示的文字内容</p>
+                                    <div class="admin-form">
+                                        <div class="form-group">
+                                            <label>主标题</label>
+                                            <input type="text" id="copyHeroTitle" placeholder="例如：欢迎来到社区平台">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>副标题</label>
+                                            <textarea rows="2" id="copyHeroSubtitle" placeholder="例如：在这里分享想法、交流经验、发现好物"></textarea>
+                                        </div>
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>主按钮文字</label>
+                                                <input type="text" id="copyHeroBtn1" placeholder="例如：进入论坛">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>次按钮文字</label>
+                                                <input type="text" id="copyHeroBtn2" placeholder="例如：逛逛市场">
+                                            </div>
+                                        </div>
+                                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>统计标签1</label>
+                                                <input type="text" id="copyStat1" placeholder="例如：社区成员">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>统计标签2</label>
+                                                <input type="text" id="copyStat2" placeholder="例如：精彩帖子">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>统计标签3</label>
+                                                <input type="text" id="copyStat3" placeholder="例如：在售商品">
+                                            </div>
+                                        </div>
+                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-layout-list" style="margin-right:0.375rem"></i>首页 - 区块标题</h3>
+                                    <p class="desc">配置首页各区块的标题文字</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>热门帖子区块</label>
+                                                <input type="text" id="copySectionHot" placeholder="例如：热门讨论">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>推荐商品区块</label>
+                                                <input type="text" id="copySectionProduct" placeholder="例如：精选好物">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>活跃用户区块</label>
+                                                <input type="text" id="copySectionUser" placeholder="例如：活跃成员">
+                                            </div>
+                                        </div>
+                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-brand-footer" style="margin-right:0.375rem"></i>页脚区域</h3>
+                                    <p class="desc">配置网站页脚显示的文字</p>
+                                    <div class="admin-form">
+                                        <div class="form-group">
+                                            <label>关于我们的描述</label>
+                                            <textarea rows="2" id="copyFooterAbout" placeholder="例如：社区平台是一个集论坛、电商、社交于一体的综合性社区..."></textarea>
+                                        </div>
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>联系区块标题</label>
+                                                <input type="text" id="copyFooterContact" placeholder="例如：联系我们">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>联系邮箱</label>
+                                                <input type="text" id="copyFooterEmail" placeholder="例如：contact@youtea.net">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>版权信息</label>
+                                            <input type="text" id="copyFooterCopyright" placeholder="例如：© 2026 社区平台. 保留所有权利.">
+                                        </div>
+                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;gap:0.75rem">
+                                    <button class="btn-admin btn-admin-outline" onclick="resetCopySettings()"><i class="ti ti-refresh" style="margin-right:0.375rem"></i>恢复默认文案</button>
+                                </div>
                             </div>
 
                             <!-- 界面外观 -->
@@ -720,6 +816,72 @@
         document.getElementById('themeBorderRadius').addEventListener('input', function() {
             document.getElementById('radiusValue').textContent = this.value + 'rem';
         });
+
+        // 网站文案
+        var copyDefaults = {
+            heroTitle: '欢迎来到社区平台',
+            heroSubtitle: '在这里分享想法、交流经验、发现好物\n一个集论坛、电商、社交于一体的社区',
+            heroBtn1: '进入论坛',
+            heroBtn2: '逛逛市场',
+            stat1: '社区成员',
+            stat2: '精彩帖子',
+            stat3: '在售商品',
+            sectionHot: '热门讨论',
+            sectionProduct: '精选好物',
+            sectionUser: '活跃成员',
+            footerAbout: '社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。',
+            footerContact: '联系我们',
+            footerEmail: 'contact@youtea.net',
+            footerCopyright: '© 2026 社区平台. 保留所有权利.'
+        };
+
+        function loadCopySettings() {
+            var saved = localStorage.getItem('admin_settings_copy');
+            if (!saved) return;
+            try {
+                var s = JSON.parse(saved);
+                Object.keys(s).forEach(function(key) {
+                    var el = document.getElementById('copy' + key.charAt(0).toUpperCase() + key.slice(1));
+                    if (el) el.value = s[key];
+                });
+            } catch (e) {}
+        }
+
+        function collectCopySettings() {
+            return {
+                heroTitle: document.getElementById('copyHeroTitle').value,
+                heroSubtitle: document.getElementById('copyHeroSubtitle').value,
+                heroBtn1: document.getElementById('copyHeroBtn1').value,
+                heroBtn2: document.getElementById('copyHeroBtn2').value,
+                stat1: document.getElementById('copyStat1').value,
+                stat2: document.getElementById('copyStat2').value,
+                stat3: document.getElementById('copyStat3').value,
+                sectionHot: document.getElementById('copySectionHot').value,
+                sectionProduct: document.getElementById('copySectionProduct').value,
+                sectionUser: document.getElementById('copySectionUser').value,
+                footerAbout: document.getElementById('copyFooterAbout').value,
+                footerContact: document.getElementById('copyFooterContact').value,
+                footerEmail: document.getElementById('copyFooterEmail').value,
+                footerCopyright: document.getElementById('copyFooterCopyright').value
+            };
+        }
+
+        function saveCopySettings() {
+            localStorage.setItem('admin_settings_copy', JSON.stringify(collectCopySettings()));
+            alert('文案已保存，刷新前台页面即可看到效果');
+        }
+
+        function resetCopySettings() {
+            if (!confirm('确定要恢复默认文案吗？')) return;
+            localStorage.removeItem('admin_settings_copy');
+            Object.keys(copyDefaults).forEach(function(key) {
+                var el = document.getElementById('copy' + key.charAt(0).toUpperCase() + key.slice(1));
+                if (el) el.value = copyDefaults[key];
+            });
+            alert('已恢复默认文案');
+        }
+
+        loadCopySettings();
 
         loadAppearance();
     </script>

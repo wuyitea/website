@@ -75,28 +75,28 @@
     <!-- 英雄区域 -->
     <section class="hero">
         <div class="hero-content">
-            <h1>欢迎来到社区平台</h1>
-            <p>在这里分享想法、交流经验、发现好物<br>一个集论坛、电商、社交于一体的社区</p>
+            <h1 data-copy="heroTitle">欢迎来到社区平台</h1>
+            <p data-copy="heroSubtitle">在这里分享想法、交流经验、发现好物<br>一个集论坛、电商、社交于一体的社区</p>
             <div class="hero-buttons">
                 <a href="pages/forum.html" class="btn btn-primary">
-                    <i class="ti ti-message-circle"></i> 进入论坛
+                    <i class="ti ti-message-circle"></i> <span data-copy="heroBtn1">进入论坛</span>
                 </a>
                 <a href="pages/market.html" class="btn btn-secondary">
-                    <i class="ti ti-shopping-bag"></i> 逛逛市场
+                    <i class="ti ti-shopping-bag"></i> <span data-copy="heroBtn2">逛逛市场</span>
                 </a>
             </div>
             <div class="hero-stats">
                 <div class="hero-stat">
                     <span class="hero-stat-value" id="statUsers">0</span>
-                    <span class="hero-stat-label">社区成员</span>
+                    <span class="hero-stat-label" data-copy="stat1">社区成员</span>
                 </div>
                 <div class="hero-stat">
                     <span class="hero-stat-value" id="statPosts">0</span>
-                    <span class="hero-stat-label">精彩帖子</span>
+                    <span class="hero-stat-label" data-copy="stat2">精彩帖子</span>
                 </div>
                 <div class="hero-stat">
                     <span class="hero-stat-value" id="statProducts">0</span>
-                    <span class="hero-stat-label">在售商品</span>
+                    <span class="hero-stat-label" data-copy="stat3">在售商品</span>
                 </div>
             </div>
         </div>
@@ -106,7 +106,7 @@
     <section class="section">
         <div class="container">
             <div class="section-header">
-                <h2><i class="ti ti-flame" style="color:var(--warning-color);margin-right:0.375rem"></i>热门讨论</h2>
+                <h2><i class="ti ti-flame" style="color:var(--warning-color);margin-right:0.375rem"></i><span data-copy="sectionHot">热门讨论</span></h2>
                 <a href="pages/forum.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="posts-grid" id="hotPosts"></div>
@@ -117,7 +117,7 @@
     <section class="section" style="background:var(--bg-secondary)">
         <div class="container">
             <div class="section-header">
-                <h2><i class="ti ti-star" style="color:var(--warning-color);margin-right:0.375rem"></i>精选好物</h2>
+                <h2><i class="ti ti-star" style="color:var(--warning-color);margin-right:0.375rem"></i><span data-copy="sectionProduct">精选好物</span></h2>
                 <a href="pages/market.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
             </div>
             <div class="products-grid" id="featuredProducts"></div>
@@ -128,7 +128,7 @@
     <section class="section">
         <div class="container">
             <div class="section-header">
-                <h2><i class="ti ti-users" style="color:var(--primary-color);margin-right:0.375rem"></i>活跃成员</h2>
+                <h2><i class="ti ti-users" style="color:var(--primary-color);margin-right:0.375rem"></i><span data-copy="sectionUser">活跃成员</span></h2>
             </div>
             <div class="users-grid" id="activeUsers"></div>
         </div>
@@ -139,8 +139,8 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-section">
-                    <h3>关于社区平台</h3>
-                    <p>社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。</p>
+                    <h3>关于<span data-setting="siteName">社区平台</span></h3>
+                    <p data-copy="footerAbout">社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。</p>
                 </div>
                 <div class="footer-section">
                     <h3>快速链接</h3>
@@ -160,12 +160,12 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>联系我们</h3>
-                    <p><i class="ti ti-mail" style="margin-right:0.25rem"></i> <span data-setting="siteEmail">contact@youtea.net</span></p>
+                    <h3 data-copy="footerContact">联系我们</h3>
+                    <p><i class="ti ti-mail" style="margin-right:0.25rem"></i> <span data-setting="siteEmail" data-copy="footerEmail">contact@youtea.net</span></p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 <span data-setting="siteName">社区平台</span>. 保留所有权利. <span data-setting="siteICP" style="display:none"></span></p>
+                <p data-copy="footerCopyright">&copy; 2026 <span data-setting="siteName">社区平台</span>. 保留所有权利. <span data-setting="siteICP" style="display:none"></span></p>
             </div>
         </div>
     </footer>

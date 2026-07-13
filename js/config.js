@@ -225,3 +225,41 @@ utils.applyGeneralSettings = function() {
 };
 
 utils.applyGeneralSettings();
+
+utils.applyCopySettings = function() {
+    var saved = localStorage.getItem('admin_settings_copy');
+    if (!saved) return;
+    try {
+        var s = JSON.parse(saved);
+        Object.keys(s).forEach(function(key) {
+            if (!s[key]) return;
+            var els = document.querySelectorAll('[data-copy="' + key + '"]');
+            els.forEach(function(el) {
+                if (key === 'heroSubtitle') {
+                    el.innerHTML = s[key].replace(/\n/g, '<br>');
+                } else if (key === 'footerCopyright') {
+                    var siteNameEl = el.querySelector('[data-setting="siteName"]');
+                    var icpEl = el.querySelector('[data-setting="siteICP"]');
+                    var parts = s[key].split('社区平台');
+                    el.textContent = '';
+                    if (parts[0]) el.appendChild(document.createTextNode(parts[0]));
+                    if (siteNameEl) {
+                        var snClone = siteNameEl.cloneNode(true);
+                        snClone.removeAttribute('data-setting');
+                        el.appendChild(snClone);
+                    }
+                    if (parts[1]) {
+                        var midParts = parts[1].split('社区平台');
+                        el.appendChild(document.createTextNode(midParts[0]));
+                        if (midParts[1]) el.appendChild(document.createTextNode(midParts[1]));
+                    }
+                    if (icpEl) el.appendChild(icpEl);
+                } else {
+                    el.textContent = s[key];
+                }
+            });
+        });
+    } catch (e) {}
+};
+
+utils.applyCopySettings();
