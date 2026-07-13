@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '5';
+const SITE_VERSION = '6';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
