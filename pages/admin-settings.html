@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="../css/style.css?v=7">
-    <link rel="stylesheet" href="../css/responsive.css?v=7">
+    <link rel="stylesheet" href="../css/style.css?v=8">
+    <link rel="stylesheet" href="../css/responsive.css?v=8">
 </head>
 <body>
     <div class="admin-layout">
@@ -71,6 +71,7 @@
                             <a href="#notifications" onclick="switchTab(this, 'notifications')"><i class="ti ti-bell"></i> 通知设置</a>
                             <a href="#copy" onclick="switchTab(this, 'copy')"><i class="ti ti-article"></i> 网站文案</a>
                             <a href="#appearance" onclick="switchTab(this, 'appearance')"><i class="ti ti-palette"></i> 界面外观</a>
+                            <a href="#sync" onclick="switchTab(this, 'sync')"><i class="ti ti-cloud-upload"></i> 数据同步</a>
                         </div>
                         <div class="settings-body">
                             <!-- 基本设置 -->
@@ -588,6 +589,26 @@
                                     <button class="btn-admin btn-admin-primary" onclick="saveAppearance()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存并应用</button>
                                     <button class="btn-admin btn-admin-outline" onclick="previewAppearance()"><i class="ti ti-eye" style="margin-right:0.375rem"></i>实时预览</button>
                                     <button class="btn-admin btn-admin-danger" onclick="resetAppearance()"><i class="ti ti-refresh" style="margin-right:0.375rem"></i>恢复默认</button>
+                                </div>
+                            </div>
+
+                            <!-- 数据同步 -->
+                            <div id="tab-sync" class="settings-tab" style="display:none">
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-cloud-upload" style="margin-right:0.375rem"></i>导出设置</h3>
+                                    <p class="desc">将所有管理设置导出为 JSON 文件，可在其他设备上导入同步</p>
+                                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem">
+                                        <button class="btn-admin btn-admin-primary" onclick="exportAllSettings()"><i class="ti ti-download" style="margin-right:0.375rem"></i>导出全部设置</button>
+                                    </div>
+                                </div>
+                                <div class="settings-group" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <h3><i class="ti ti-cloud-download" style="margin-right:0.375rem"></i>导入设置</h3>
+                                    <p class="desc">从 JSON 文件导入设置，覆盖当前所有配置</p>
+                                    <div style="margin-top:1rem">
+                                        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importAllSettings(this)">
+                                        <button class="btn-admin btn-admin-outline" onclick="document.getElementById('importFile').click()"><i class="ti ti-upload" style="margin-right:0.375rem"></i>选择文件并导入</button>
+                                    </div>
+                                    <p style="margin-top:1rem;font-size:var(--font-size-sm);color:var(--text-secondary)"><i class="ti ti-alert-triangle" style="margin-right:0.25rem"></i>导入会覆盖当前所有设置，建议先导出备份</p>
                                 </div>
                             </div>
                         </div>
@@ -1208,6 +1229,57 @@
         loadShopLinksEditor();
 
         loadAppearance();
+
+        // 数据同步 - 导出/导入
+        function exportAllSettings() {
+            var data = {};
+            var keys = [
+                'admin_settings_general', 'admin_settings_copy', 'admin_settings_forum',
+                'admin_settings_market', 'admin_settings_security', 'admin_settings_notifications',
+                'admin_homepage_slides', 'admin_market_banners', 'admin_shop_links',
+                'site_theme', 'admin_password'
+            ];
+            keys.forEach(function(key) {
+                var val = localStorage.getItem(key);
+                if (val) data[key] = val;
+            });
+            data._exportDate = new Date().toISOString();
+            data._version = '7';
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'site-settings-' + new Date().toISOString().slice(0,10) + '.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            alert('设置已导出，请将文件保存好，在其他设备上导入即可同步');
+        }
+
+        function importAllSettings(input) {
+            if (!input.files || !input.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (!confirm('即将导入设置文件，这会覆盖当前所有配置，确定继续？')) {
+                        input.value = '';
+                        return;
+                    }
+                    var count = 0;
+                    Object.keys(data).forEach(function(key) {
+                        if (key.charAt(0) === '_') return;
+                        localStorage.setItem(key, data[key]);
+                        count++;
+                    });
+                    alert('成功导入 ' + count + ' 项设置！页面将自动刷新');
+                    input.value = '';
+                    location.reload();
+                } catch (err) {
+                    alert('导入失败：文件格式不正确');
+                    input.value = '';
+                }
+            };
+            reader.readAsText(input.files[0]);
+        }
     </script>
 </body>
 </html>
