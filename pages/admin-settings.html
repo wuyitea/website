@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="../css/style.css?v=9">
-    <link rel="stylesheet" href="../css/responsive.css?v=9">
+    <link rel="stylesheet" href="../css/style.css?v=10">
+    <link rel="stylesheet" href="../css/responsive.css?v=10">
 </head>
 <body>
     <div class="admin-layout">
@@ -608,6 +608,15 @@
                                 </div>
 
                                 <div class="settings-group" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                                    <h3><i class="ti ti-cloud-upload" style="margin-right:0.375rem"></i>同步到 GitHub</h3>
+                                    <p class="desc">将当前所有设置推送到 GitHub 仓库，让所有访客看到最新内容</p>
+                                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem">
+                                        <button class="btn-admin btn-admin-primary" onclick="pushAllToGitHub()"><i class="ti ti-upload" style="margin-right:0.375rem"></i>一键同步到 GitHub</button>
+                                    </div>
+                                    <p id="syncStatus" style="margin-top:0.5rem;font-size:var(--font-size-sm);color:var(--text-secondary)"></p>
+                                </div>
+
+                                <div class="settings-group" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
                                     <h3><i class="ti ti-cloud-upload" style="margin-right:0.375rem"></i>导出设置</h3>
                                     <p class="desc">将所有管理设置导出为 JSON 文件，可在其他设备上导入同步</p>
                                     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem">
@@ -631,7 +640,7 @@
         </main>
     </div>
 
-    <script src="../js/config.js?v=9"></script>
+    <script src="../js/config.js?v=10"></script>
     <script>
         if (localStorage.getItem('admin_logged_in') !== 'true') {
             window.location.href = 'admin-login.html';
@@ -1280,6 +1289,35 @@
                 }
             }).catch(function(e) {
                 console.error('GitHub sync failed:', e);
+            });
+        }
+
+        function pushAllToGitHub() {
+            var token = localStorage.getItem('github_token');
+            if (!token) {
+                alert('请先在上方保存 GitHub Token');
+                return;
+            }
+            if (typeof utils === 'undefined' || !utils.saveConfigToGitHub) {
+                alert('配置加载中，请稍后重试');
+                return;
+            }
+            var statusEl = document.getElementById('syncStatus');
+            statusEl.textContent = '正在同步...';
+            statusEl.style.color = 'var(--primary-color)';
+            utils.saveConfigToGitHub(token).then(function(res) {
+                if (res && res.commit) {
+                    statusEl.textContent = '同步成功！所有访客现在可以看到最新内容';
+                    statusEl.style.color = 'var(--success-color)';
+                } else {
+                    statusEl.textContent = '同步失败: ' + JSON.stringify(res).slice(0, 100);
+                    statusEl.style.color = 'var(--danger-color)';
+                    console.warn('sync response:', res);
+                }
+            }).catch(function(e) {
+                statusEl.textContent = '同步失败: ' + e.message;
+                statusEl.style.color = 'var(--danger-color)';
+                console.error('sync error:', e);
             });
         }
 
