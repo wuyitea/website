@@ -72,65 +72,19 @@
         </div>
     </nav>
 
-    <!-- 英雄区域 -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 data-copy="heroTitle">欢迎来到社区平台</h1>
-            <p data-copy="heroSubtitle">在这里分享想法、交流经验、发现好物<br>一个集论坛、电商、社交于一体的社区</p>
-            <div class="hero-buttons">
-                <a href="pages/forum.html" class="btn btn-primary">
-                    <i class="ti ti-message-circle"></i> <span data-copy="heroBtn1">进入论坛</span>
-                </a>
-                <a href="pages/market.html" class="btn btn-secondary">
-                    <i class="ti ti-shopping-bag"></i> <span data-copy="heroBtn2">逛逛市场</span>
-                </a>
+    <!-- 首页轮播 -->
+    <section id="heroCarousel" style="position:relative;width:100%;height:calc(100vh - 60px);min-height:500px;max-height:800px;overflow:hidden;background:#000;display:none">
+        <div id="heroSlides" style="display:flex;width:100%;height:100%;transition:transform 0.6s ease"></div>
+        <button onclick="heroPrev()" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:none;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;transition:background 0.3s" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'"><i class="ti ti-chevron-left"></i></button>
+        <button onclick="heroNext()" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:none;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);color:#fff;font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;transition:background 0.3s" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'"><i class="ti ti-chevron-right"></i></button>
+        <div id="heroDots" style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:3"></div>
+        <div id="heroFallback" style="width:100%;height:100%;background:linear-gradient(135deg,var(--primary-color),var(--primary-light));display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;padding:2rem">
+            <h1 data-copy="heroTitle" style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;margin-bottom:1rem">欢迎来到社区平台</h1>
+            <p data-copy="heroSubtitle" style="font-size:clamp(1rem,2vw,1.25rem);opacity:0.9;max-width:600px;line-height:1.6">在这里分享想法、交流经验、发现好物</p>
+            <div style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;justify-content:center">
+                <a href="pages/forum.html" class="btn btn-primary" style="padding:0.75rem 2rem;font-size:1.05rem"><i class="ti ti-message-circle"></i> <span data-copy="heroBtn1">进入论坛</span></a>
+                <a href="pages/market.html" class="btn btn-secondary" style="padding:0.75rem 2rem;font-size:1.05rem;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3)"><i class="ti ti-shopping-bag"></i> <span data-copy="heroBtn2">逛逛商城</span></a>
             </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <span class="hero-stat-value" id="statUsers">0</span>
-                    <span class="hero-stat-label" data-copy="stat1">社区成员</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value" id="statPosts">0</span>
-                    <span class="hero-stat-label" data-copy="stat2">精彩帖子</span>
-                </div>
-                <div class="hero-stat">
-                    <span class="hero-stat-value" id="statProducts">0</span>
-                    <span class="hero-stat-label" data-copy="stat3">在售商品</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 热门帖子 -->
-    <section class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2><i class="ti ti-flame" style="color:var(--warning-color);margin-right:0.375rem"></i><span data-copy="sectionHot">热门讨论</span></h2>
-                <a href="pages/forum.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
-            </div>
-            <div class="posts-grid" id="hotPosts"></div>
-        </div>
-    </section>
-
-    <!-- 推荐商品 -->
-    <section class="section" style="background:var(--bg-secondary)">
-        <div class="container">
-            <div class="section-header">
-                <h2><i class="ti ti-star" style="color:var(--warning-color);margin-right:0.375rem"></i><span data-copy="sectionProduct">精选好物</span></h2>
-                <a href="pages/market.html" class="view-all">查看全部 <i class="ti ti-arrow-right"></i></a>
-            </div>
-            <div class="products-grid" id="featuredProducts"></div>
-        </div>
-    </section>
-
-    <!-- 活跃用户 -->
-    <section class="section">
-        <div class="container">
-            <div class="section-header">
-                <h2><i class="ti ti-users" style="color:var(--primary-color);margin-right:0.375rem"></i><span data-copy="sectionUser">活跃成员</span></h2>
-            </div>
-            <div class="users-grid" id="activeUsers"></div>
         </div>
     </section>
 
@@ -244,9 +198,59 @@
         </div>
     </div>
 
+    <!-- 首页轮播脚本 -->
+    <script>
+    var heroIndex = 0, heroTimer = null;
+    function loadHeroSlides() {
+        var saved = localStorage.getItem('admin_homepage_slides');
+        var slides = [];
+        try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+        slides = slides.filter(function(s) { return s.media; });
+        if (!slides.length) {
+            document.getElementById('heroCarousel').style.display = 'none';
+            document.getElementById('heroFallback').style.display = 'flex';
+            return;
+        }
+        document.getElementById('heroCarousel').style.display = 'block';
+        document.getElementById('heroFallback').style.display = 'none';
+        var container = document.getElementById('heroSlides');
+        var dotsEl = document.getElementById('heroDots');
+        container.innerHTML = slides.map(function(s) {
+            var tag = '';
+            if (s.type === 'video') {
+                tag = '<video src="' + s.media + '" muted loop playsinline autoplay style="width:100%;height:100%;object-fit:cover"></video>';
+            } else {
+                tag = '<img src="' + s.media + '" alt="" style="width:100%;height:100%;object-fit:cover">';
+            }
+            var wrap = s.link ? '<a href="' + s.link + '" target="_blank" style="display:block;width:100%;height:100%">' + tag + '</a>' : tag;
+            return '<div style="min-width:100%;height:100%;position:relative;flex-shrink:0">' + wrap + '</div>';
+        }).join('');
+        dotsEl.innerHTML = slides.map(function(_, i) {
+            return '<div onclick="goHero(' + i + ')" style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.3s' + (i === 0 ? ';background:#fff;transform:scale(1.2)' : '') + '"></div>';
+        }).join('');
+        if (slides.length > 1) { clearInterval(heroTimer); heroTimer = setInterval(heroNext, 5000); }
+    }
+    function updateHero() {
+        var slides = document.getElementById('heroSlides');
+        var dots = document.getElementById('heroDots');
+        if (!slides.children.length) return;
+        slides.style.transform = 'translateX(-' + (heroIndex * 100) + '%)';
+        Array.from(dots.children).forEach(function(d, i) {
+            d.style.background = i === heroIndex ? '#fff' : 'rgba(255,255,255,0.4)';
+            d.style.transform = i === heroIndex ? 'scale(1.2)' : 'scale(1)';
+        });
+        var videos = slides.querySelectorAll('video');
+        videos.forEach(function(v, i) { i === heroIndex ? v.play().catch(function(){}) : v.pause(); });
+    }
+    function heroNext() { var t = document.getElementById('heroSlides').children.length; if (!t) return; heroIndex = (heroIndex + 1) % t; updateHero(); }
+    function heroPrev() { var t = document.getElementById('heroSlides').children.length; if (!t) return; heroIndex = (heroIndex - 1 + t) % t; updateHero(); }
+    function goHero(i) { heroIndex = i; updateHero(); }
+    loadHeroSlides();
+    </script>
+
     <!-- JavaScript -->
-    <script src="js/config.js?v=5"></script>
+    <script src="js/config.js?v=6"></script>
     <script src="js/auth.js?v=5"></script>
-    <script src="js/app.js?v=5"></script>
+    <script src="js/app.js?v=6"></script>
 </body>
 </html>

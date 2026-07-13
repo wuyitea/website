@@ -64,6 +64,7 @@
                     <div class="settings-grid">
                         <div class="settings-nav">
                             <a href="#general" class="active" onclick="switchTab(this, 'general')"><i class="ti ti-info-circle"></i> 基本设置</a>
+                            <a href="#homepage" onclick="switchTab(this, 'homepage')"><i class="ti ti-photo"></i> 首页管理</a>
                             <a href="#forum" onclick="switchTab(this, 'forum')"><i class="ti ti-message-circle"></i> 论坛设置</a>
                             <a href="#market" onclick="switchTab(this, 'market')"><i class="ti ti-shopping-bag"></i> 商城设置</a>
                             <a href="#security" onclick="switchTab(this, 'security')"><i class="ti ti-shield"></i> 安全设置</a>
@@ -95,6 +96,19 @@
                                             <input type="text" value="" placeholder="例如：京ICP备12345678号" id="siteICP">
                                         </div>
                                         <button class="btn-admin btn-admin-primary" onclick="saveSettings('general')"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存设置</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 首页管理 -->
+                            <div id="tab-homepage" class="settings-tab" style="display:none">
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-photo" style="margin-right:0.375rem"></i>首页轮播内容</h3>
+                                    <p class="desc">管理首页轮播图/视频，支持图片（JPG/PNG/GIF/WebP）和视频（MP4等）。点击可跳转链接。</p>
+                                    <div id="slideList" style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem"></div>
+                                    <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+                                        <button class="btn-admin btn-admin-outline" onclick="addSlide()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加内容</button>
+                                        <button class="btn-admin btn-admin-primary" onclick="saveSlides()"><i class="ti ti-device-floppy" style="margin-right:0.25rem"></i>保存</button>
                                     </div>
                                 </div>
                             </div>
@@ -852,6 +866,130 @@
 
         loadCopySettings();
 
+        // 首页轮播管理
+        function loadSlides() {
+            var saved = localStorage.getItem('admin_homepage_slides');
+            var slides = [];
+            try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+            var container = document.getElementById('slideList');
+            if (!slides.length) {
+                container.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--text-light);border:1px dashed var(--border-color);border-radius:var(--border-radius)"><i class="ti ti-photo" style="font-size:2rem;display:block;margin-bottom:0.5rem"></i>暂无轮播内容，点击下方添加</div>';
+                return;
+            }
+            container.innerHTML = slides.map(function(s, i) {
+                var preview = '';
+                if (s.media) {
+                    if (s.type === 'video') {
+                        preview = '<video src="' + s.media + '" muted style="width:100%;height:100%;object-fit:cover;border-radius:var(--border-radius)"></video>';
+                    } else {
+                        preview = '<img src="' + s.media + '" style="width:100%;height:100%;object-fit:cover;border-radius:var(--border-radius)" alt="">';
+                    }
+                } else {
+                    preview = '<i class="ti ti-photo" style="font-size:2rem;color:var(--text-light)"></i>';
+                }
+                return '<div style="padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">' +
+                    '<div style="display:flex;gap:1rem;align-items:flex-start">' +
+                    '<div style="flex-shrink:0;width:180px;height:100px;border-radius:var(--border-radius);overflow:hidden;background:var(--bg-tertiary);display:flex;align-items:center;justify-content:center">' + preview + '</div>' +
+                    '<div style="flex:1;display:flex;flex-direction:column;gap:0.5rem">' +
+                    '<div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">' +
+                    '<label style="font-size:var(--font-size-xs);color:var(--text-secondary);white-space:nowrap">类型</label>' +
+                    '<select id="slideType' + i + '" style="padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:var(--font-size-sm);background:var(--bg-primary);color:var(--text-primary)" onchange="handleSlideTypeChange(' + i + ', this)">' +
+                    '<option value="image"' + (s.type !== 'video' ? ' selected' : '') + '>图片</option>' +
+                    '<option value="video"' + (s.type === 'video' ? ' selected' : '') + '>视频</option>' +
+                    '</select>' +
+                    '<label class="btn-admin btn-admin-outline" style="margin:0;cursor:pointer;font-size:var(--font-size-sm);padding:0.375rem 0.75rem"><i class="ti ti-upload" style="margin-right:0.25rem"></i>选择文件<input type="file" accept="image/*,video/mp4,video/webm,video/ogg" style="display:none" onchange="previewSlide(' + i + ', this)"></label>' +
+                    '<span style="font-size:var(--font-size-xs);color:var(--text-light)">' + (s.type === 'video' ? '视频' : '图片') + '</span>' +
+                    '</div>' +
+                    '<input type="text" value="' + (s.link || '') + '" placeholder="点击跳转链接（留空不跳转）" id="slideLink' + i + '" style="padding:0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:var(--font-size-sm);background:var(--bg-primary);color:var(--text-primary)">' +
+                    '</div>' +
+                    '<button class="btn-admin btn-admin-danger" onclick="removeSlide(' + i + ')" style="flex-shrink:0"><i class="ti ti-trash"></i></button>' +
+                    '</div></div>';
+            }).join('');
+        }
+
+        function addSlide() {
+            var saved = localStorage.getItem('admin_homepage_slides');
+            var slides = [];
+            try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+            slides.push({ type: 'image', media: '', link: '' });
+            try { localStorage.setItem('admin_homepage_slides', JSON.stringify(slides)); } catch (e) {}
+            loadSlides();
+        }
+
+        function removeSlide(i) {
+            var saved = localStorage.getItem('admin_homepage_slides');
+            var slides = [];
+            try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+            slides.splice(i, 1);
+            try { localStorage.setItem('admin_homepage_slides', JSON.stringify(slides)); } catch (e) {}
+            loadSlides();
+        }
+
+        function handleSlideTypeChange(i, sel) {
+            var saved = localStorage.getItem('admin_homepage_slides');
+            var slides = [];
+            try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+            if (slides[i]) slides[i].type = sel.value;
+            try { localStorage.setItem('admin_homepage_slides', JSON.stringify(slides)); } catch (e) {}
+            loadSlides();
+        }
+
+        function previewSlide(i, input) {
+            if (!input.files || !input.files[0]) return;
+            var file = input.files[0];
+            var isVideo = file.type.startsWith('video/');
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var data = ev.target.result;
+                if (!isVideo) {
+                    var img = new Image();
+                    img.onload = function() {
+                        var maxW = 1600, maxH = 900;
+                        var w = img.width, h = img.height;
+                        if (w > maxW) { h = h * maxW / w; w = maxW; }
+                        if (h > maxH) { w = w * maxH / h; h = maxH; }
+                        var canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        var compressed = canvas.toDataURL('image/jpeg', 0.75);
+                        var saved = localStorage.getItem('admin_homepage_slides');
+                        var slides = [];
+                        try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+                        if (slides[i]) { slides[i].media = compressed; slides[i].type = 'image'; }
+                        try {
+                            localStorage.setItem('admin_homepage_slides', JSON.stringify(slides));
+                            loadSlides();
+                        } catch (err) { alert('图片太大，请使用更小的图片'); }
+                    };
+                    img.src = data;
+                } else {
+                    var saved = localStorage.getItem('admin_homepage_slides');
+                    var slides = [];
+                    try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+                    if (slides[i]) { slides[i].media = data; slides[i].type = 'video'; }
+                    try {
+                        localStorage.setItem('admin_homepage_slides', JSON.stringify(slides));
+                        loadSlides();
+                    } catch (err) { alert('视频太大，localStorage 空间不足。建议使用较短的视频或使用视频托管平台的链接。'); }
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveSlides() {
+            var saved = localStorage.getItem('admin_homepage_slides');
+            var slides = [];
+            try { slides = saved ? JSON.parse(saved) : []; } catch (e) { slides = []; }
+            slides.forEach(function(s, i) {
+                var linkEl = document.getElementById('slideLink' + i);
+                if (linkEl) s.link = linkEl.value;
+            });
+            try {
+                localStorage.setItem('admin_homepage_slides', JSON.stringify(slides));
+                alert('首页轮播已保存，刷新首页即可看到效果');
+            } catch (err) { alert('保存失败：存储空间不足'); }
+        }
+
         // 商城装修
         function loadBanners() {
             var saved = localStorage.getItem('admin_market_banners');
@@ -1009,6 +1147,7 @@
             return r + ',' + g + ',' + b;
         }
 
+        loadSlides();
         loadBanners();
         loadShopLinksEditor();
 
