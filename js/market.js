@@ -184,7 +184,7 @@ const market = {
         if (modal) modal.style.display = 'block';
     },
 
-    submitProduct() {
+    async submitProduct() {
         if (!authModule.isLoggedIn()) {
             alert('请先登录后再发布商品');
             authModule.showModal('login');
@@ -197,11 +197,17 @@ const market = {
         var price = parseFloat(document.getElementById('productPrice').value);
         var originalPrice = parseFloat(document.getElementById('originalPrice').value) || null;
         var condition = document.getElementById('productCondition').value;
+        var imageInput = document.getElementById('productImages');
 
         if (!category) { alert('请选择分类'); return; }
         if (!title) { alert('请输入商品名称'); return; }
         if (!description) { alert('请输入商品描述'); return; }
         if (isNaN(price) || price <= 0) { alert('请输入有效的价格'); return; }
+
+        var images = [];
+        if (imageInput && imageInput.files && imageInput.files.length > 0) {
+            images = await utils.processImageFiles(imageInput.files, 5);
+        }
 
         var user = authModule.getCurrentUser();
         if (!user) { alert('请先登录'); return; }
@@ -214,7 +220,7 @@ const market = {
             price: price,
             originalPrice: originalPrice,
             condition: condition,
-            images: [],
+            images: images,
             sellerId: user.id,
             viewsCount: 0,
             likesCount: 0,

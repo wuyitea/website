@@ -93,9 +93,10 @@ const settings = {
         });
     },
 
-    updateProfile() {
+    async updateProfile() {
         const username = document.getElementById('username').value.trim();
         const bio = document.getElementById('bio').value.trim();
+        const avatarInput = document.getElementById('avatar');
 
         if (!username) {
             utils.showNotification('请输入用户名', 'error');
@@ -111,6 +112,16 @@ const settings = {
             return;
         }
 
+        if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+            try {
+                const dataURL = await utils.readFileAsDataURL(avatarInput.files[0]);
+                users[userIndex].avatar = dataURL;
+            } catch (e) {
+                utils.showNotification(e.message, 'error');
+                return;
+            }
+        }
+
         users[userIndex].username = username;
         users[userIndex].bio = bio;
         localStorage.setItem('users', JSON.stringify(users));
@@ -118,6 +129,7 @@ const settings = {
         const currentUser = authModule.getCurrentUser();
         currentUser.username = username;
         currentUser.bio = bio;
+        if (users[userIndex].avatar) currentUser.avatar = users[userIndex].avatar;
         localStorage.setItem('current_user', JSON.stringify(currentUser));
         authModule.currentUser = currentUser;
 

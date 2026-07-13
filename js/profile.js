@@ -392,9 +392,10 @@ const profile = {
         }
     },
 
-    updateProfile() {
+    async updateProfile() {
         const username = document.getElementById('editUsername').value.trim();
         const bio = document.getElementById('editBio').value.trim();
+        const avatarInput = document.getElementById('editAvatar');
 
         if (!username) {
             utils.showNotification('请输入用户名', 'error');
@@ -409,6 +410,16 @@ const profile = {
             return;
         }
 
+        if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+            try {
+                const dataURL = await utils.readFileAsDataURL(avatarInput.files[0]);
+                users[userIndex].avatar = dataURL;
+            } catch (e) {
+                utils.showNotification(e.message, 'error');
+                return;
+            }
+        }
+
         users[userIndex].username = username;
         users[userIndex].bio = bio;
         localStorage.setItem('users', JSON.stringify(users));
@@ -417,6 +428,7 @@ const profile = {
         if (currentUser && currentUser.id === this.userId) {
             currentUser.username = username;
             currentUser.bio = bio;
+            if (users[userIndex].avatar) currentUser.avatar = users[userIndex].avatar;
             localStorage.setItem('current_user', JSON.stringify(currentUser));
             authModule.currentUser = currentUser;
         }

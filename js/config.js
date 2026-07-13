@@ -113,5 +113,36 @@ const utils = {
                 setTimeout(() => inThrottle = false, limit);
             }
         };
+    },
+
+    readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            if (!appConfig.allowedImageTypes.includes(file.type)) {
+                reject(new Error('不支持的图片格式'));
+                return;
+            }
+            if (file.size > appConfig.maxImageSize) {
+                reject(new Error('图片大小不能超过5MB'));
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error('读取图片失败'));
+            reader.readAsDataURL(file);
+        });
+    },
+
+    async processImageFiles(files, maxCount) {
+        const result = [];
+        const fileArray = Array.from(files).slice(0, maxCount);
+        for (const file of fileArray) {
+            try {
+                const dataURL = await this.readFileAsDataURL(file);
+                result.push(dataURL);
+            } catch (e) {
+                utils.showNotification(e.message, 'error');
+            }
+        }
+        return result;
     }
 };

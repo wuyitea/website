@@ -182,15 +182,18 @@
                 if (status === 'published') {
                     statusBadge = '<span class="badge badge-success">已发布</span>';
                     actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')">查看</button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="blockPost(' + index + ')">屏蔽</button>';
+                              '<button class="btn-admin btn-admin-danger" onclick="blockPost(' + index + ')">屏蔽</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')">删除</button>';
                 } else if (status === 'pending') {
                     statusBadge = '<span class="badge badge-warning">待审核</span>';
                     actions = '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')">通过</button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="rejectPost(' + index + ')">拒绝</button>';
+                              '<button class="btn-admin btn-admin-danger" onclick="rejectPost(' + index + ')">拒绝</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')">删除</button>';
                 } else if (status === 'blocked') {
                     statusBadge = '<span class="badge badge-danger">已屏蔽</span>';
                     actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')">查看</button> ' +
-                              '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')">恢复</button>';
+                              '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')">恢复</button> ' +
+                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')">删除</button>';
                 }
                 var date = post.createdAt ? new Date(post.createdAt).toLocaleString('zh-CN') : '-';
                 html += '<tr data-status="' + status + '">' +
@@ -278,6 +281,15 @@
             localStorage.setItem('posts', JSON.stringify(posts));
             loadPosts();
             alert('帖子已屏蔽');
+        }
+
+        function deletePost(index) {
+            if (!confirm('确定要删除该帖子吗？此操作不可恢复！')) return;
+            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
+            posts.splice(index, 1);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+            alert('帖子已删除');
         }
 
         loadPosts();
