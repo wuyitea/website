@@ -25,7 +25,7 @@
             <nav class="sidebar-nav">
                 <a href="admin.html" class="active"><i class="ti ti-dashboard"></i> 仪表盘</a>
                 <a href="admin-forum.html"><i class="ti ti-message-circle"></i> 论坛管理 <span class="nav-badge" id="navBadgePosts"></span></a>
-                <a href="admin-market.html"><i class="ti ti-shopping-bag"></i> 商城管理 <span class="nav-badge" id="navBadgeProducts"></span></a>
+
                 <a href="admin-users.html"><i class="ti ti-users"></i> 用户管理</a>
                 <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html"><i class="ti ti-settings"></i> 网站设置</a>
@@ -76,10 +76,6 @@
                             <div class="welcome-stat-label">总帖子</div>
                         </div>
                         <div class="welcome-stat">
-                            <div class="welcome-stat-value" id="welcomeProducts">0</div>
-                            <div class="welcome-stat-label">总商品</div>
-                        </div>
-                        <div class="welcome-stat">
                             <div class="welcome-stat-value" id="welcomeToday">0</div>
                             <div class="welcome-stat-label">今日新增</div>
                         </div>
@@ -109,16 +105,6 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background:rgba(245,158,11,0.1);color:var(--warning-color)">
-                            <i class="ti ti-shopping-bag"></i>
-                        </div>
-                        <div class="stat-info">
-                            <div class="stat-value" id="statProducts">0</div>
-                            <div class="stat-label">商品数量</div>
-                            <div class="stat-change up" id="statProductsChange"><i class="ti ti-trending-up"></i> +0</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
                         <div class="stat-icon" style="background:rgba(239,68,68,0.1);color:var(--danger-color)">
                             <i class="ti ti-clock"></i>
                         </div>
@@ -139,13 +125,7 @@
                             <div class="quick-action-desc">管理论坛内容</div>
                         </div>
                     </a>
-                    <a href="admin-market.html" class="quick-action">
-                        <div class="quick-action-icon" style="background:rgba(16,185,129,0.1);color:var(--success-color)"><i class="ti ti-package"></i></div>
-                        <div>
-                            <div class="quick-action-text">审核商品</div>
-                            <div class="quick-action-desc">管理商城商品</div>
-                        </div>
-                    </a>
+
                     <a href="admin-users.html" class="quick-action">
                         <div class="quick-action-icon" style="background:rgba(245,158,11,0.1);color:var(--warning-color)"><i class="ti ti-user-check"></i></div>
                         <div>
@@ -172,7 +152,7 @@
                         <div class="chart-container">
                             <div style="display:flex;gap:1.5rem;margin-bottom:1rem">
                                 <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--primary-color)"></div>帖子</div>
-                                <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--success-color)"></div>商品</div>
+
                                 <div class="chart-legend-item"><div class="chart-legend-dot" style="background:var(--warning-color)"></div>用户</div>
                             </div>
                             <div class="chart-bars" id="chartBars"></div>
@@ -226,25 +206,6 @@
                     </div>
                 </div>
 
-                <!-- 最新商品 -->
-                <div class="admin-card" style="margin-top:1rem">
-                    <div class="admin-card-header">
-                        <h2><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i>最新商品</h2>
-                        <a href="admin-market.html" class="btn-admin btn-admin-outline"><i class="ti ti-arrow-right"></i> 查看全部</a>
-                    </div>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>商品名称</th>
-                                <th>卖家</th>
-                                <th>价格</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentProducts"></tbody>
-                    </table>
-                </div>
             </div>
         </main>
     </div>
@@ -279,7 +240,6 @@
         // 加载数据
         var users = JSON.parse(localStorage.getItem('users') || '[]');
         var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-        var products = JSON.parse(localStorage.getItem('products') || '[]');
         var orders = JSON.parse(localStorage.getItem('orders') || '[]');
 
         // 统计数字动画
@@ -298,14 +258,11 @@
 
         animateNumber(document.getElementById('statUsers'), users.length);
         animateNumber(document.getElementById('statPosts'), posts.length);
-        animateNumber(document.getElementById('statProducts'), products.length);
         animateNumber(document.getElementById('statOrders'), orders.filter(function(o) { return o.status === 'pending'; }).length);
 
         // 欢迎区
         document.getElementById('welcomeUsers').textContent = users.length;
         document.getElementById('welcomePosts').textContent = posts.length;
-        document.getElementById('welcomeProducts').textContent = products.length;
-
         // 今日新增
         var today = new Date().toDateString();
         var todayNew = users.filter(function(u) { return new Date(u.createdAt).toDateString() === today; }).length;
@@ -315,18 +272,13 @@
         var weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         var newUsersWeek = users.filter(function(u) { return new Date(u.createdAt) > weekAgo; }).length;
         var newPostsWeek = posts.filter(function(p) { return new Date(p.createdAt) > weekAgo; }).length;
-        var newProductsWeek = products.filter(function(p) { return new Date(p.createdAt) > weekAgo; }).length;
         document.getElementById('statUsersChange').innerHTML = '<i class="ti ti-trending-up"></i> +' + newUsersWeek + ' 本周';
         document.getElementById('statPostsChange').innerHTML = '<i class="ti ti-trending-up"></i> +' + newPostsWeek + ' 本周';
-        document.getElementById('statProductsChange').innerHTML = '<i class="ti ti-trending-up"></i> +' + newProductsWeek + ' 本周';
 
         // 导航徽章
         var pendingPosts = posts.filter(function(p) { return p.status === 'pending'; }).length;
-        var pendingProducts = products.filter(function(p) { return p.status === 'pending'; }).length;
         if (pendingPosts > 0) document.getElementById('navBadgePosts').textContent = pendingPosts;
         else document.getElementById('navBadgePosts').style.display = 'none';
-        if (pendingProducts > 0) document.getElementById('navBadgeProducts').textContent = pendingProducts;
-        else document.getElementById('navBadgeProducts').style.display = 'none';
 
         // 数据图表
         var days = ['日', '一', '二', '三', '四', '五', '六'];
@@ -338,19 +290,18 @@
             var d = new Date(Date.now() - i * 86400000);
             var dayStr = d.toDateString();
             var pCount = posts.filter(function(p) { return new Date(p.createdAt).toDateString() === dayStr; }).length;
-            var prCount = products.filter(function(p) { return new Date(p.createdAt).toDateString() === dayStr; }).length;
             var uCount = users.filter(function(u) { return new Date(u.createdAt).toDateString() === dayStr; }).length;
-            chartData.push({ posts: pCount, products: prCount, users: uCount });
-            maxVal = Math.max(maxVal, pCount, prCount, uCount);
+            chartData.push({ posts: pCount, users: uCount });
+            maxVal = Math.max(maxVal, pCount, uCount);
         }
-        var colors = ['var(--primary-color)', 'var(--success-color)', 'var(--warning-color)'];
-        var keys = ['posts', 'products', 'users'];
+        var colors = ['var(--primary-color)', 'var(--warning-color)'];
+        var keys = ['posts', 'users'];
         chartData.forEach(function(d, i) {
             var group = document.createElement('div');
             group.style.cssText = 'flex:1;display:flex;gap:2px;align-items:flex-end;height:100%';
             keys.forEach(function(k) {
                 var bar = document.createElement('div');
-                bar.className = 'chart-bar ' + (k === 'posts' ? 'primary' : k === 'products' ? 'success' : 'warning');
+                bar.className = 'chart-bar ' + (k === 'posts' ? 'primary' : 'warning');
                 bar.style.height = (d[k] / maxVal * 100) + '%';
                 bar.title = d[k];
                 group.appendChild(bar);
@@ -370,9 +321,6 @@
         posts.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 3).forEach(function(p) {
             var author = users.find(function(u) { return u.id === p.authorId; }) || {};
             activities.push({ type: 'primary', text: '<strong>' + (author.username || '用户') + '</strong> 发布了帖子 <strong>' + (p.title || '').substring(0, 15) + '</strong>', time: p.createdAt });
-        });
-        products.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 2).forEach(function(p) {
-            activities.push({ type: 'warning', text: '新商品 <strong>' + (p.title || '').substring(0, 15) + '</strong> 已上架', time: p.createdAt });
         });
         activities.sort(function(a, b) { return new Date(b.time) - new Date(a.time); });
         activities = activities.slice(0, 6);
@@ -421,16 +369,6 @@
         if (sortedPosts.length === 0) recentPostsHtml = '<tr><td colspan="3" style="text-align:center;color:var(--text-light);padding:2rem"><i class="ti ti-message-circle" style="font-size:1.5rem;display:block;margin-bottom:0.5rem"></i>暂无帖子</td></tr>';
         document.getElementById('recentPosts').innerHTML = recentPostsHtml;
 
-        // 最新商品
-        var recentProductsHtml = '';
-        var sortedProducts = products.slice().sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); }).slice(0, 5);
-        sortedProducts.forEach(function(product) {
-            var seller = users.find(function(u) { return u.id === product.sellerId; }) || {};
-            var status = product.status === 'pending' ? '<span class="badge badge-warning"><i class="ti ti-clock" style="margin-right:0.25rem"></i>待审核</span>' : '<span class="badge badge-success"><i class="ti ti-circle-check" style="margin-right:0.25rem"></i>在售</span>';
-            recentProductsHtml += '<tr><td>' + (product.title || '-') + '</td><td>' + (seller.username || '匿名') + '</td><td>¥' + (product.price || 0).toFixed(2) + '</td><td>' + status + '</td><td><a href="product.html?id=' + product.id + '" class="btn-admin btn-admin-outline" target="_blank"><i class="ti ti-eye"></i></a></td></tr>';
-        });
-        if (sortedProducts.length === 0) recentProductsHtml = '<tr><td colspan="5" style="text-align:center;color:var(--text-light);padding:2rem"><i class="ti ti-shopping-bag" style="font-size:1.5rem;display:block;margin-bottom:0.5rem"></i>暂无商品</td></tr>';
-        document.getElementById('recentProducts').innerHTML = recentProductsHtml;
     </script>
 </body>
 </html>

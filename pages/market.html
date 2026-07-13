@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>try{var t=JSON.parse(localStorage.getItem('site_theme')||'{}');var r=document.documentElement;if(t.primaryColor){r.style.setProperty('--primary-color',t.primaryColor);var c=t.primaryColor;if(c[0]==='#'){var R=parseInt(c.slice(1,3),16),G=parseInt(c.slice(3,5),16),B=parseInt(c.slice(5,7),16);r.style.setProperty('--primary-dark','rgb('+(R>15?R-15:0)+','+(G>15?G-15:0)+','+(B>15?B-15:0)+')');r.style.setProperty('--primary-light','rgb('+(R<236?R+20:255)+','+(G<236?G+20:255)+','+(B<236?B+20:255)+')');}}if(t.secondaryColor)r.style.setProperty('--secondary-color',t.secondaryColor);if(t.successColor)r.style.setProperty('--success-color',t.successColor);if(t.warningColor)r.style.setProperty('--warning-color',t.warningColor);if(t.dangerColor)r.style.setProperty('--danger-color',t.dangerColor);if(t.infoColor)r.style.setProperty('--info-color',t.infoColor);if(t.borderRadius){r.style.setProperty('--border-radius',t.borderRadius);r.style.setProperty('--border-radius-lg',(parseFloat(t.borderRadius)*1.5)+'rem');}if(t.fontFamily)r.style.setProperty('--font-family',t.fontFamily);if(t.bgPrimary)r.style.setProperty('--bg-primary',t.bgPrimary);if(t.bgSecondary)r.style.setProperty('--bg-secondary',t.bgSecondary);if(t.textPrimary)r.style.setProperty('--text-primary',t.textPrimary);if(t.textSecondary)r.style.setProperty('--text-secondary',t.textSecondary);}catch(e){}</script>
     <script>var _sv="6";var _cv=localStorage.getItem("site_version");if(_cv&&_cv!==_sv){localStorage.setItem("site_version",_sv);location.replace(location.pathname+"?_t="+Date.now());}else{localStorage.setItem("site_version",_sv);}</script>
-    <meta name="description" content="社区市场 - 发现优质商品，买卖二手物品">
-    <title>市场 - 社区平台</title>
+    <meta name="description" content="商城 - 轮播横幅与店铺入口">
+    <title>商城 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/responsive.css">
@@ -19,17 +19,12 @@
         <div class="nav-brand">
             <a href="../index.html"><i class="ti ti-brand-community" style="margin-right:0.375rem"></i><span data-setting="siteName">社区平台</span></a>
         </div>
-        <div class="nav-search" id="navSearch">
-            <div class="input-icon">
-                <i class="ti ti-search"></i>
-                <input type="search" placeholder="搜索商品..." id="searchInput">
-            </div>
-        </div>
+
         <div class="nav-menu" id="navMenu">
             <ul class="nav-links">
                 <li><a href="../index.html"><i class="ti ti-home"></i> 首页</a></li>
                 <li><a href="forum.html"><i class="ti ti-message-circle"></i> 论坛</a></li>
-                <li><a href="market.html" class="active"><i class="ti ti-shopping-bag"></i> 市场</a></li>
+                <li><a href="market.html" class="active"><i class="ti ti-shopping-bag"></i> 商城</a></li>
                 <li><a href="messages.html"><i class="ti ti-mail"></i> 消息</a></li>
             </ul>
         </div>
@@ -64,72 +59,6 @@
 
         <!-- 店铺入口 -->
         <div id="shopLinks" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem"></div>
-
-        <div class="forum-layout">
-            <main>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i>全部商品</h2>
-                    <button class="btn btn-primary" id="sellBtn">
-                        <i class="ti ti-plus"></i> 发布商品
-                    </button>
-                </div>
-
-                <!-- 排序和筛选 -->
-                <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
-                    <select class="form-select" id="sortSelect" style="padding:0.5rem 1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
-                        <option value="latest"><i class="ti ti-clock"></i> 最新发布</option>
-                        <option value="price-low">价格从低到高</option>
-                        <option value="price-high">价格从高到低</option>
-                        <option value="popular">最受欢迎</option>
-                    </select>
-                </div>
-
-                <!-- 商品列表 -->
-                <div class="products-grid" id="productsList"></div>
-
-                <div id="pagination" style="margin-top:1.5rem;text-align:center"></div>
-            </main>
-
-            <aside class="forum-sidebar">
-                <div class="admin-card" style="margin-bottom:1rem">
-                    <div class="admin-card-header">
-                        <h2><i class="ti ti-category" style="margin-right:0.375rem"></i>商品分类</h2>
-                    </div>
-                    <div style="padding:1rem">
-                        <div id="categoryFilters" style="display:flex;flex-direction:column;gap:0.25rem"></div>
-                    </div>
-                </div>
-
-                <div class="admin-card" style="margin-bottom:1rem">
-                    <div class="admin-card-header">
-                        <h2><i class="ti ti-filter" style="margin-right:0.375rem"></i>价格筛选</h2>
-                    </div>
-                    <div style="padding:1rem">
-                        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem">
-                            <input type="number" placeholder="最低价" id="minPrice" style="flex:1;padding:0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
-                            <span style="color:var(--text-secondary)">-</span>
-                            <input type="number" placeholder="最高价" id="maxPrice" style="flex:1;padding:0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-primary);color:var(--text-primary)">
-                        </div>
-                        <button class="btn btn-primary btn-sm" id="filterPriceBtn" style="width:100%">
-                            <i class="ti ti-search"></i> 筛选
-                        </button>
-                    </div>
-                </div>
-
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h2><i class="ti ti-package" style="margin-right:0.375rem"></i>商品状态</h2>
-                    </div>
-                    <div style="padding:1rem">
-                        <div style="display:flex;flex-direction:column;gap:0.25rem">
-                            <button class="forum-filter-btn active" data-status="all">全部</button>
-                            <button class="forum-filter-btn" data-status="new"><i class="ti ti-sparkles"></i> 全新</button>
-                            <button class="forum-filter-btn" data-status="used"><i class="ti ti-recycle"></i> 二手</button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
     </div>
 
     <footer class="footer">
@@ -140,108 +69,7 @@
         </div>
     </footer>
 
-    <!-- 发布商品模态框 -->
-    <div class="modal" id="sellModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2><i class="ti ti-plus-circle" style="margin-right:0.375rem"></i>发布商品</h2>
-            <form id="sellForm">
-                <div class="form-group">
-                    <label for="productCategory"><i class="ti ti-category"></i> 分类</label>
-                    <select id="productCategory" required></select>
-                </div>
-                <div class="form-group">
-                    <label for="productTitle"><i class="ti ti-tag"></i> 商品名称</label>
-                    <input type="text" id="productTitle" placeholder="请输入商品名称" required>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription"><i class="ti ti-file-text"></i> 商品描述</label>
-                    <textarea id="productDescription" rows="5" placeholder="请详细描述商品信息..." required></textarea>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-                    <div class="form-group">
-                        <label for="productPrice"><i class="ti ti-currency-yuan"></i> 价格 (¥)</label>
-                        <input type="number" id="productPrice" step="0.01" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="originalPrice"><i class="ti ti-currency-yuan"></i> 原价 (¥)</label>
-                        <input type="number" id="originalPrice" step="0.01" min="0">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="productCondition"><i class="ti ti-package"></i> 商品状态</label>
-                    <select id="productCondition" required>
-                        <option value="new"><i class="ti ti-sparkles"></i> 全新</option>
-                        <option value="used"><i class="ti ti-recycle"></i> 二手</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="productImages"><i class="ti ti-photo"></i> 商品图片</label>
-                    <input type="file" id="productImages" multiple accept="image/*" required>
-                    <small style="color:var(--text-secondary)"><i class="ti ti-info-circle"></i> 最多上传5张图片，每张不超过5MB</small>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="ti ti-send"></i> 发布商品
-                </button>
-            </form>
-        </div>
-    </div>
 
-    <!-- 登录模态框 -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2><i class="ti ti-login" style="margin-right:0.375rem"></i>登录</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail"><i class="ti ti-mail"></i> 邮箱</label>
-                    <input type="email" id="loginEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword"><i class="ti ti-lock"></i> 密码</label>
-                    <input type="password" id="loginPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="ti ti-login"></i> 登录
-                </button>
-            </form>
-            <div class="modal-footer">
-                <p>还没有账号？<a href="#" id="showRegister">立即注册</a></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 注册模态框 -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2><i class="ti ti-user-plus" style="margin-right:0.375rem"></i>注册</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="registerUsername"><i class="ti ti-user"></i> 用户名</label>
-                    <input type="text" id="registerUsername" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerEmail"><i class="ti ti-mail"></i> 邮箱</label>
-                    <input type="email" id="registerEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword"><i class="ti ti-lock"></i> 密码</label>
-                    <input type="password" id="registerPassword" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="registerConfirmPassword"><i class="ti ti-lock-check"></i> 确认密码</label>
-                    <input type="password" id="registerConfirmPassword" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="ti ti-user-plus"></i> 注册
-                </button>
-            </form>
-            <div class="modal-footer">
-                <p>已有账号？<a href="#" id="showLogin">立即登录</a></p>
-            </div>
-        </div>
-    </div>
 
     <script>
     var bannerTimer = null;
@@ -294,8 +122,6 @@
     loadMarketBanners();
     loadShopLinks();
     </script>
-    <script src="../js/config.js?v=5"></script>
-    <script src="../js/auth.js?v=5"></script>
-    <script src="../js/market.js?v=5"></script>
+    <script src="../js/config.js?v=6"></script>
 </body>
 </html>
