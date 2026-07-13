@@ -327,21 +327,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>次按钮文字</label>
-                                                <input type="text" id="copyHeroBtn2" placeholder="例如：逛逛市场">
-                                            </div>
-                                        </div>
-                                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
-                                            <div class="form-group">
-                                                <label>统计标签1</label>
-                                                <input type="text" id="copyStat1" placeholder="例如：社区成员">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>统计标签2</label>
-                                                <input type="text" id="copyStat2" placeholder="例如：精彩帖子">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>统计标签3</label>
-                                                <input type="text" id="copyStat3" placeholder="例如：在售商品">
+                                                <input type="text" id="copyHeroBtn2" placeholder="例如：逛逛商城">
                                             </div>
                                         </div>
                                         <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
@@ -349,21 +335,29 @@
                                 </div>
 
                                 <div class="settings-group">
-                                    <h3><i class="ti ti-layout-list" style="margin-right:0.375rem"></i>首页 - 区块标题</h3>
-                                    <p class="desc">配置首页各区块的标题文字</p>
+                                    <h3><i class="ti ti-layout-navbar" style="margin-right:0.375rem"></i>导航栏</h3>
+                                    <p class="desc">配置所有页面顶部导航栏的文字</p>
                                     <div class="admin-form">
-                                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
                                             <div class="form-group">
-                                                <label>热门帖子区块</label>
-                                                <input type="text" id="copySectionHot" placeholder="例如：热门讨论">
+                                                <label>首页</label>
+                                                <input type="text" id="copyNavHome" placeholder="例如：首页">
                                             </div>
                                             <div class="form-group">
-                                                <label>推荐商品区块</label>
-                                                <input type="text" id="copySectionProduct" placeholder="例如：精选好物">
+                                                <label>论坛</label>
+                                                <input type="text" id="copyNavForum" placeholder="例如：论坛">
                                             </div>
                                             <div class="form-group">
-                                                <label>活跃用户区块</label>
-                                                <input type="text" id="copySectionUser" placeholder="例如：活跃成员">
+                                                <label>商城</label>
+                                                <input type="text" id="copyNavMarket" placeholder="例如：商城">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>消息</label>
+                                                <input type="text" id="copyNavMessages" placeholder="例如：消息">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>关于我们</label>
+                                                <input type="text" id="copyNavAbout" placeholder="例如：关于我们">
                                             </div>
                                         </div>
                                         <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
@@ -372,10 +366,10 @@
 
                                 <div class="settings-group">
                                     <h3><i class="ti ti-brand-footer" style="margin-right:0.375rem"></i>页脚区域</h3>
-                                    <p class="desc">配置网站页脚显示的文字</p>
+                                    <p class="desc">配置网站页脚显示的文字和链接</p>
                                     <div class="admin-form">
                                         <div class="form-group">
-                                            <label>关于我们的描述</label>
+                                            <label>关于我们描述</label>
                                             <textarea rows="2" id="copyFooterAbout" placeholder="例如：社区平台是一个集论坛、电商、社交于一体的综合性社区..."></textarea>
                                         </div>
                                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
@@ -391,6 +385,52 @@
                                         <div class="form-group">
                                             <label>版权信息</label>
                                             <input type="text" id="copyFooterCopyright" placeholder="例如：© 2026 社区平台. 保留所有权利.">
+                                        </div>
+                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                    </div>
+                                </div>
+
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-link" style="margin-right:0.375rem"></i>页脚链接文字</h3>
+                                    <p class="desc">配置页脚中各链接的显示文字</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                            <div class="form-group">
+                                                <label>快速链接标题</label>
+                                                <input type="text" id="copyFooterQuickLinks" placeholder="例如：快速链接">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>法律信息标题</label>
+                                                <input type="text" id="copyFooterLegal" placeholder="例如：法律信息">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>论坛链接</label>
+                                                <input type="text" id="copyFooterLinkForum" placeholder="例如：论坛">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>商城链接</label>
+                                                <input type="text" id="copyFooterLinkMarket" placeholder="例如：商城">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>关于我们链接</label>
+                                                <input type="text" id="copyFooterLinkAbout" placeholder="例如：关于我们">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>联系我们链接</label>
+                                                <input type="text" id="copyFooterLinkContact" placeholder="例如：联系我们">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>服务条款链接</label>
+                                                <input type="text" id="copyFooterLinkTerms" placeholder="例如：服务条款">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>隐私政策链接</label>
+                                                <input type="text" id="copyFooterLinkPrivacy" placeholder="例如：隐私政策">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Cookie政策链接</label>
+                                                <input type="text" id="copyFooterLinkCookies" placeholder="例如：Cookie政策">
+                                            </div>
                                         </div>
                                         <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
                                     </div>
@@ -803,19 +843,27 @@
         // 网站文案
         var copyDefaults = {
             heroTitle: '欢迎来到社区平台',
-            heroSubtitle: '在这里分享想法、交流经验、发现好物\n一个集论坛、电商、社交于一体的社区',
+            heroSubtitle: '在这里分享想法、交流经验、发现好物',
             heroBtn1: '进入论坛',
-            heroBtn2: '逛逛市场',
-            stat1: '社区成员',
-            stat2: '精彩帖子',
-            stat3: '在售商品',
-            sectionHot: '热门讨论',
-            sectionProduct: '精选好物',
-            sectionUser: '活跃成员',
+            heroBtn2: '逛逛商城',
+            navHome: '首页',
+            navForum: '论坛',
+            navMarket: '商城',
+            navMessages: '消息',
+            navAbout: '关于我们',
             footerAbout: '社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。',
             footerContact: '联系我们',
             footerEmail: 'contact@youtea.net',
-            footerCopyright: '© 2026 社区平台. 保留所有权利.'
+            footerCopyright: '© 2026 社区平台. 保留所有权利.',
+            footerQuickLinks: '快速链接',
+            footerLegal: '法律信息',
+            footerLinkForum: '论坛',
+            footerLinkMarket: '商城',
+            footerLinkAbout: '关于我们',
+            footerLinkContact: '联系我们',
+            footerLinkTerms: '服务条款',
+            footerLinkPrivacy: '隐私政策',
+            footerLinkCookies: 'Cookie政策'
         };
 
         function loadCopySettings() {
@@ -836,16 +884,24 @@
                 heroSubtitle: document.getElementById('copyHeroSubtitle').value,
                 heroBtn1: document.getElementById('copyHeroBtn1').value,
                 heroBtn2: document.getElementById('copyHeroBtn2').value,
-                stat1: document.getElementById('copyStat1').value,
-                stat2: document.getElementById('copyStat2').value,
-                stat3: document.getElementById('copyStat3').value,
-                sectionHot: document.getElementById('copySectionHot').value,
-                sectionProduct: document.getElementById('copySectionProduct').value,
-                sectionUser: document.getElementById('copySectionUser').value,
+                navHome: document.getElementById('copyNavHome').value,
+                navForum: document.getElementById('copyNavForum').value,
+                navMarket: document.getElementById('copyNavMarket').value,
+                navMessages: document.getElementById('copyNavMessages').value,
+                navAbout: document.getElementById('copyNavAbout').value,
                 footerAbout: document.getElementById('copyFooterAbout').value,
                 footerContact: document.getElementById('copyFooterContact').value,
                 footerEmail: document.getElementById('copyFooterEmail').value,
-                footerCopyright: document.getElementById('copyFooterCopyright').value
+                footerCopyright: document.getElementById('copyFooterCopyright').value,
+                footerQuickLinks: document.getElementById('copyFooterQuickLinks').value,
+                footerLegal: document.getElementById('copyFooterLegal').value,
+                footerLinkForum: document.getElementById('copyFooterLinkForum').value,
+                footerLinkMarket: document.getElementById('copyFooterLinkMarket').value,
+                footerLinkAbout: document.getElementById('copyFooterLinkAbout').value,
+                footerLinkContact: document.getElementById('copyFooterLinkContact').value,
+                footerLinkTerms: document.getElementById('copyFooterLinkTerms').value,
+                footerLinkPrivacy: document.getElementById('copyFooterLinkPrivacy').value,
+                footerLinkCookies: document.getElementById('copyFooterLinkCookies').value
             };
         }
 
