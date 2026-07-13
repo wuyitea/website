@@ -54,10 +54,21 @@
     </nav>
 
     <div style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem">
+        <!-- 轮播横幅 -->
+        <div class="market-banner" id="marketBanner" style="position:relative;border-radius:var(--border-radius-xl);overflow:hidden;margin-bottom:1.5rem;height:280px;background:linear-gradient(135deg,var(--primary-color),var(--primary-light));display:none">
+            <div class="banner-slides" id="bannerSlides" style="display:flex;width:100%;height:100%;transition:transform 0.5s ease"></div>
+            <button class="banner-arrow banner-prev" onclick="prevBanner()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.9);color:var(--text-primary);font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:2"><i class="ti ti-chevron-left"></i></button>
+            <button class="banner-arrow banner-next" onclick="nextBanner()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.9);color:var(--text-primary);font-size:1.25rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:2"><i class="ti ti-chevron-right"></i></button>
+            <div class="banner-dots" id="bannerDots" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2"></div>
+        </div>
+
+        <!-- 店铺入口 -->
+        <div id="shopLinks" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem"></div>
+
         <div class="forum-layout">
             <main>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i>市场</h2>
+                    <h2 style="font-size:1.25rem;font-weight:600"><i class="ti ti-shopping-bag" style="margin-right:0.375rem"></i>全部商品</h2>
                     <button class="btn btn-primary" id="sellBtn">
                         <i class="ti ti-plus"></i> 发布商品
                     </button>
@@ -232,6 +243,55 @@
         </div>
     </div>
 
+    <script>
+    var bannerTimer = null;
+    var bannerIndex = 0;
+
+    function loadMarketBanners() {
+        var saved = localStorage.getItem('admin_market_banners');
+        var banners = saved ? JSON.parse(saved) : [];
+        var container = document.getElementById('marketBanner');
+        var slidesEl = document.getElementById('bannerSlides');
+        var dotsEl = document.getElementById('bannerDots');
+        if (!banners.length) { container.style.display = 'none'; return; }
+        container.style.display = 'block';
+        slidesEl.innerHTML = banners.map(function(b) {
+            return '<div style="min-width:100%;height:100%"><a href="' + (b.link || '#') + '" target="' + (b.link ? '_blank' : '_self') + '" style="display:block;width:100%;height:100%"><img src="' + b.image + '" alt="" style="width:100%;height:100%;object-fit:cover"></a></div>';
+        }).join('');
+        dotsEl.innerHTML = banners.map(function(_, i) {
+            return '<div onclick="goBanner(' + i + ')" style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:background 0.3s' + (i === 0 ? ';background:white' : '') + '"></div>';
+        }).join('');
+        if (banners.length > 1) { clearInterval(bannerTimer); bannerTimer = setInterval(nextBanner, 4000); }
+    }
+
+    function updateBanner() {
+        var slidesEl = document.getElementById('bannerSlides');
+        var dotsEl = document.getElementById('bannerDots');
+        var total = slidesEl.children.length;
+        if (!total) return;
+        slidesEl.style.transform = 'translateX(-' + (bannerIndex * 100) + '%)';
+        Array.from(dotsEl.children).forEach(function(d, i) { d.style.background = i === bannerIndex ? 'white' : 'rgba(255,255,255,0.5)'; });
+    }
+
+    function nextBanner() { var t = document.getElementById('bannerSlides').children.length; if (!t) return; bannerIndex = (bannerIndex + 1) % t; updateBanner(); }
+    function prevBanner() { var t = document.getElementById('bannerSlides').children.length; if (!t) return; bannerIndex = (bannerIndex - 1 + t) % t; updateBanner(); }
+    function goBanner(i) { bannerIndex = i; updateBanner(); }
+
+    function loadShopLinks() {
+        var saved = localStorage.getItem('admin_shop_links');
+        var links = saved ? JSON.parse(saved) : [
+            { name: '淘宝小店', icon: 'ti ti-shopping-cart', color: '#ff5000', bgColor: 'rgba(255,80,0,0.08)', url: '#', desc: '逛逛淘宝好物' },
+            { name: '微信小店', icon: 'ti ti-brand-wechat', color: '#07c160', bgColor: 'rgba(7,193,96,0.08)', url: '#', desc: '微信小程序商城' }
+        ];
+        var container = document.getElementById('shopLinks');
+        container.innerHTML = links.map(function(link) {
+            return '<a href="' + (link.url || '#') + '" target="_blank" style="display:flex;align-items:center;gap:1rem;padding:1.25rem 1.5rem;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:var(--border-radius-xl);text-decoration:none;transition:all 0.2s;box-shadow:var(--shadow-sm)"><div style="width:56px;height:56px;border-radius:var(--border-radius-lg);background:' + (link.bgColor || 'var(--bg-secondary)') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="' + (link.icon || 'ti ti-link') + '" style="font-size:1.75rem;color:' + (link.color || 'var(--primary-color)') + '"></i></div><div><div style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:0.125rem">' + (link.name || '链接') + '</div><div style="font-size:var(--font-size-sm);color:var(--text-secondary)">' + (link.desc || '') + '</div></div><i class="ti ti-chevron-right" style="margin-left:auto;color:var(--text-light)"></i></a>';
+        }).join('');
+    }
+
+    loadMarketBanners();
+    loadShopLinks();
+    </script>
     <script src="../js/config.js?v=5"></script>
     <script src="../js/auth.js?v=5"></script>
     <script src="../js/market.js?v=5"></script>
