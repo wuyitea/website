@@ -292,8 +292,12 @@ utils.syncFromGitHub = function() {
     }).then(function(data) {
         Object.keys(_lsKeyMap).forEach(function(k) {
             if (data[k] !== undefined && data[k] !== null) {
-                var v = typeof data[k] === 'string' ? data[k] : JSON.stringify(data[k]);
-                localStorage.setItem(_lsKeyMap[k], v);
+                var raw = data[k];
+                var isEmpty = (typeof raw === 'object' && raw !== null && Object.keys(raw).length === 0) || (Array.isArray(raw) && raw.length === 0) || raw === '' || raw === '{}';
+                if (!isEmpty) {
+                    var v = typeof raw === 'string' ? raw : JSON.stringify(raw);
+                    localStorage.setItem(_lsKeyMap[k], v);
+                }
             }
         });
         utils.applyTheme();
