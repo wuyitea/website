@@ -179,47 +179,47 @@
     {
       "id": "home",
       "icon": "ti ti-home",
-      "label": "首页"
-    },
-    {
-      "id": "forum",
-      "icon": "ti ti-brand-zhihu",
-      "label": "论坛"
-    },
-    {
-      "id": "display1",
-      "icon": "ti ti-flame",
-      "label": "制作"
-    },
-    {
-      "id": "display2",
-      "icon": "ti ti-trophy",
-      "label": "荣誉"
-    },
-    {
-      "id": "display3",
-      "icon": "ti ti-photo",
-      "label": "山场"
-    },
-    {
-      "id": "display4",
-      "icon": "ti ti-leaf",
-      "label": "工厂"
-    },
-    {
-      "id": "display5",
-      "icon": "ti ti-building-community",
-      "label": "门店"
-    },
-    {
-      "id": "display6",
-      "icon": "ti ti-gift",
-      "label": "产品"
+      "label": "首页HOME"
     },
     {
       "id": "market",
       "icon": "ti ti-shopping-cart",
-      "label": "商城"
+      "label": "岩茶市集"
+    },
+    {
+      "id": "forum",
+      "icon": "ti ti-brand-zhihu",
+      "label": "岩茶知识"
+    },
+    {
+      "id": "display1",
+      "icon": "ti ti-users",
+      "label": "岩茶品种"
+    },
+    {
+      "id": "display2",
+      "icon": "ti ti-trophy",
+      "label": "岩茶山场"
+    },
+    {
+      "id": "display3",
+      "icon": "ti ti-chart-line",
+      "label": "岩茶工艺"
+    },
+    {
+      "id": "display4",
+      "icon": "ti ti-leaf",
+      "label": "生产环境"
+    },
+    {
+      "id": "display5",
+      "icon": "ti ti-building-community",
+      "label": "荣誉展示"
+    },
+    {
+      "id": "display6",
+      "icon": "ti ti-gift",
+      "label": "招商加盟"
     }
   ]
 }
