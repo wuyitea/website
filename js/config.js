@@ -316,7 +316,9 @@ utils.syncFromGitHub = function() {
         if (!r.ok) throw new Error('fetch failed');
         return r.json();
     }).then(function(data) {
+        var isAdmin = /\/pages\/admin/.test(location.pathname);
         Object.keys(_lsKeyMap).forEach(function(k) {
+            if (isAdmin && k === 'navConfig') return;
             if (data[k] !== undefined && data[k] !== null) {
                 var raw = data[k];
                 var isEmpty = (typeof raw === 'object' && raw !== null && Object.keys(raw).length === 0) || (Array.isArray(raw) && raw.length === 0) || raw === '' || raw === '{}';
@@ -328,7 +330,13 @@ utils.syncFromGitHub = function() {
         });
         utils.applyTheme();
         utils.applyGeneralSettings();
-utils.applyCopySettings();
+        utils.applyCopySettings();
+        utils.applyNavConfig();
+        window._siteConfigReady = true;
+    }).catch(function() {
+        window._siteConfigReady = true;
+    });
+};
 
 // ========== 导航栏配置 ==========
 utils.applyNavConfig = function() {
@@ -376,13 +384,6 @@ utils.applyNavConfig = function() {
 };
 
 utils.applyNavConfig();
-        utils.applyNavConfig();
-        window._siteConfigReady = true;
-    }).catch(function() {
-        window._siteConfigReady = true;
-    });
-};
-
 utils.syncFromGitHub();
 
 utils.saveConfigToGitHub = function(token) {
