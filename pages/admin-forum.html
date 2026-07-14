@@ -23,8 +23,7 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="admin.html"><i class="ti ti-dashboard"></i> 仪表盘</a>
-                <a href="admin-forum.html" class="active"><i class="ti ti-message-circle"></i> 论坛管理</a>
-
+                <a href="admin-forum.html" class="active"><i class="ti ti-photo"></i> 论坛管理</a>
                 <a href="admin-users.html"><i class="ti ti-users"></i> 用户管理</a>
                 <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html"><i class="ti ti-settings"></i> 网站设置</a>
@@ -49,13 +48,7 @@
                     <h1>论坛管理</h1>
                 </div>
                 <div class="admin-topbar-right">
-                    <button class="admin-topbar-btn" title="通知">
-                        <i class="ti ti-bell"></i>
-                        <span class="notif-dot"></span>
-                    </button>
-                    <button class="admin-topbar-btn" title="设置">
-                        <i class="ti ti-settings"></i>
-                    </button>
+                    <a href="forum.html" target="_blank" class="btn-admin btn-admin-outline"><i class="ti ti-external-link" style="margin-right:0.375rem"></i>查看前台</a>
                 </div>
             </div>
 
@@ -63,128 +56,99 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon" style="background:rgba(79,70,229,0.1);color:var(--primary-color)">
-                            <i class="ti ti-file-text"></i>
+                            <i class="ti ti-photo"></i>
                         </div>
                         <div class="stat-info">
-                            <div class="stat-value">86</div>
-                            <div class="stat-label">总帖子数</div>
+                            <div class="stat-value" id="statSlides">0</div>
+                            <div class="stat-label">轮播内容</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon" style="background:rgba(16,185,129,0.1);color:var(--success-color)">
-                            <i class="ti ti-circle-check"></i>
+                            <i class="ti ti-link"></i>
                         </div>
                         <div class="stat-info">
-                            <div class="stat-value">78</div>
-                            <div class="stat-label">已发布</div>
+                            <div class="stat-value" id="statLinks">0</div>
+                            <div class="stat-label">带链接</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon" style="background:rgba(245,158,11,0.1);color:var(--warning-color)">
-                            <i class="ti ti-clock"></i>
+                            <i class="ti ti-video"></i>
                         </div>
                         <div class="stat-info">
-                            <div class="stat-value">5</div>
-                            <div class="stat-label">待审核</div>
+                            <div class="stat-value" id="statVideos">0</div>
+                            <div class="stat-label">视频</div>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon" style="background:rgba(239,68,68,0.1);color:var(--danger-color)">
-                            <i class="ti ti-ban"></i>
+                        <div class="stat-icon" style="background:rgba(139,92,246,0.1);color:#8b5cf6">
+                            <i class="ti ti-ruler-vertical"></i>
                         </div>
                         <div class="stat-info">
-                            <div class="stat-value">3</div>
-                            <div class="stat-label">已屏蔽</div>
+                            <div class="stat-value" id="statHeight">500</div>
+                            <div class="stat-label">展示高度</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h2><i class="ti ti-message-circle" style="margin-right:0.375rem"></i>帖子列表</h2>
-                        <div class="card-actions">
-                            <div class="input-icon">
-                                <i class="ti ti-search"></i>
-                                <input type="text" class="admin-search" placeholder="搜索帖子..." id="postSearch">
+                <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start">
+                    <div>
+                        <div class="admin-card">
+                            <div class="admin-card-header">
+                                <h2><i class="ti ti-slideshow" style="margin-right:0.375rem"></i>轮播内容管理</h2>
+                                <button class="btn-admin btn-admin-primary" onclick="addSlide()"><i class="ti ti-plus" style="margin-right:0.25rem"></i>添加内容</button>
                             </div>
-                            <select class="admin-filter" id="postFilter">
-                                <option value="all">全部状态</option>
-                                <option value="published">已发布</option>
-                                <option value="pending">待审核</option>
-                                <option value="blocked">已屏蔽</option>
-                            </select>
+                            <div id="slideList" style="padding:1rem"></div>
+                        </div>
+
+                        <div class="admin-card" style="margin-top:1.5rem">
+                            <div class="admin-card-header">
+                                <h2><i class="ti ti-player-play" style="margin-right:0.375rem"></i>轮播设置</h2>
+                            </div>
+                            <div style="padding:1rem;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-end">
+                                <div class="form-group" style="margin:0;min-width:200px">
+                                    <label style="display:block;margin-bottom:0.375rem;font-weight:500;font-size:var(--font-size-sm)">展示高度（px）</label>
+                                    <input type="number" id="forumHeight" value="500" min="200" max="1200" step="50" style="width:100%">
+                                </div>
+                                <div class="form-group" style="margin:0;min-width:200px">
+                                    <label style="display:block;margin-bottom:0.375rem;font-weight:500;font-size:var(--font-size-sm)">轮播间隔（ms）</label>
+                                    <input type="number" id="forumInterval" value="5000" min="1000" max="30000" step="500" style="width:100%">
+                                </div>
+                                <label class="toggle" style="margin-bottom:0.375rem">
+                                    <input type="checkbox" checked id="forumAutoPlay">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span style="font-size:var(--font-size-sm);margin-bottom:0.375rem">自动轮播</span>
+                                <button class="btn-admin btn-admin-primary" onclick="saveAll()" style="margin-left:auto"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存全部</button>
+                            </div>
                         </div>
                     </div>
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>标题</th>
-                                <th>作者</th>
-                                <th>分类</th>
-                                <th>发布时间</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="forumTableBody">
-                            <!-- 动态加载 -->
-                        </tbody>
-                    </table>
-                    <div class="admin-pagination">
-                        <span class="pagination-info" id="paginationInfo">显示 0 / 共 0 条</span>
-                        <div class="pagination-btns">
-                            <button disabled>&laquo;</button>
-                            <button class="active">1</button>
-                            <button>2</button>
-                            <button>3</button>
-                            <button>...</button>
-                            <button>15</button>
-                            <button>&raquo;</button>
+
+                    <div class="admin-card" style="position:sticky;top:1.5rem">
+                        <div class="admin-card-header">
+                            <h2><i class="ti ti-eye" style="margin-right:0.375rem"></i>实时预览</h2>
+                        </div>
+                        <div style="padding:1rem">
+                            <div id="previewBox" style="width:100%;border-radius:var(--border-radius);overflow:hidden;background:#000;position:relative">
+                                <div id="previewEmpty" style="padding:3rem;text-align:center;color:var(--text-light)">
+                                    <i class="ti ti-photo" style="font-size:2.5rem;display:block;margin-bottom:0.75rem;opacity:0.4"></i>
+                                    <p style="font-size:var(--font-size-sm)">暂无内容</p>
+                                </div>
+                                <div id="previewContent" style="display:none;position:relative;width:100%;overflow:hidden">
+                                    <div id="previewTrack" style="display:flex;transition:transform 0.5s ease"></div>
+                                </div>
+                            </div>
+                            <p id="previewInfo" style="font-size:var(--font-size-xs);color:var(--text-light);margin-top:0.75rem;text-align:center"></p>
+                            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-color)">
+                                <h4 style="font-size:var(--font-size-sm);margin-bottom:0.5rem;color:var(--text-secondary)">前台链接</h4>
+                                <a href="forum.html" target="_blank" style="font-size:var(--font-size-sm);color:var(--primary-color);text-decoration:none;display:flex;align-items:center;gap:0.375rem"><i class="ti ti-external-link"></i>forum.html</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <div class="admin-modal-overlay" id="postModal">
-        <div class="admin-modal">
-            <div class="admin-modal-header">
-                <h3><i class="ti ti-file-text" style="margin-right:0.375rem"></i>帖子详情</h3>
-                <button class="admin-modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
-            </div>
-            <div class="admin-modal-body">
-                <div class="detail-grid">
-                    <div class="detail-item detail-full">
-                        <div class="label">标题</div>
-                        <div class="value" id="modalPostTitle">分享一个好用的开发工具</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="label">作者</div>
-                        <div class="value" id="modalPostAuthor">小明</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="label">分类</div>
-                        <div class="value" id="modalPostCategory">技术分享</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="label">发布时间</div>
-                        <div class="value" id="modalPostTime">2026-07-10 14:30</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="label">状态</div>
-                        <div class="value" id="modalPostStatus"><span class="badge badge-success">已发布</span></div>
-                    </div>
-                    <div class="detail-item detail-full">
-                        <div class="label">内容</div>
-                        <div class="value" id="modalPostContent">这是一篇关于开发工具的分享帖...</div>
-                    </div>
-                </div>
-            </div>
-            <div class="admin-modal-footer">
-                <button class="btn-admin btn-admin-outline" onclick="closeModal()"><i class="ti ti-x" style="margin-right:0.25rem"></i>关闭</button>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -213,147 +177,194 @@
             }
         });
 
-        function loadPosts() {
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            var users = JSON.parse(localStorage.getItem('users') || '[]');
-            var tbody = document.getElementById('forumTableBody');
+        function getSlides() {
+            var saved = localStorage.getItem('admin_forum_slides');
+            try { return saved ? JSON.parse(saved) : []; } catch(e) { return []; }
+        }
 
-            var total = posts.length;
-            var published = posts.filter(function(p) { return p.status === 'published'; }).length;
-            var pending = posts.filter(function(p) { return p.status === 'pending'; }).length;
-            var blocked = posts.filter(function(p) { return p.status === 'blocked'; }).length;
-            var cards = document.querySelectorAll('.stat-card .stat-value');
-            cards[0].textContent = total;
-            cards[1].textContent = published;
-            cards[2].textContent = pending;
-            cards[3].textContent = blocked;
+        function loadSlides() {
+            var slides = getSlides();
+            var container = document.getElementById('slideList');
+            var linked = slides.filter(function(s) { return s.link; }).length;
+            var videos = slides.filter(function(s) { return s.type === 'video'; }).length;
+            var h = parseInt(localStorage.getItem('admin_forum_height')) || 500;
+            var settings = {};
+            try { settings = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}'); } catch(e) {}
 
-            if (posts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="icon"><i class="ti ti-file-text" style="font-size:2rem"></i></div><p>暂无帖子</p></td></tr>';
+            document.getElementById('statSlides').textContent = slides.length;
+            document.getElementById('statLinks').textContent = linked;
+            document.getElementById('statVideos').textContent = videos;
+            document.getElementById('statHeight').textContent = h;
+            document.getElementById('forumHeight').value = h;
+            document.getElementById('forumAutoPlay').checked = settings.autoPlay !== false;
+            if (settings.interval) document.getElementById('forumInterval').value = settings.interval;
+
+            if (!slides.length) {
+                container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-light);border:1px dashed var(--border-color);border-radius:var(--border-radius)"><i class="ti ti-photo" style="font-size:2.5rem;display:block;margin-bottom:0.75rem"></i><p>暂无内容</p><p style="font-size:var(--font-size-xs);margin-top:0.5rem">点击"添加内容"开始配置展示页</p></div>';
+                updatePreview(slides);
                 return;
             }
 
-            var html = '';
-            posts.forEach(function(post, index) {
-                var user = users.find(function(u) { return u.id === post.authorId; });
-                var authorName = user ? (user.username || '未知') : (post.authorName || '未知');
-                var status = post.status || 'published';
-                var statusBadge = '';
-                var actions = '';
-                if (status === 'published') {
-                    statusBadge = '<span class="badge badge-success"><i class="ti ti-circle-check" style="margin-right:0.25rem"></i>已发布</span>';
-                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')"><i class="ti ti-eye"></i></button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="blockPost(' + index + ')"><i class="ti ti-ban"></i></button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')"><i class="ti ti-trash"></i></button>';
-                } else if (status === 'pending') {
-                    statusBadge = '<span class="badge badge-warning"><i class="ti ti-clock" style="margin-right:0.25rem"></i>待审核</span>';
-                    actions = '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')"><i class="ti ti-check"></i></button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="rejectPost(' + index + ')"><i class="ti ti-x"></i></button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')"><i class="ti ti-trash"></i></button>';
-                } else if (status === 'blocked') {
-                    statusBadge = '<span class="badge badge-danger"><i class="ti ti-ban" style="margin-right:0.25rem"></i>已屏蔽</span>';
-                    actions = '<button class="btn-admin btn-admin-outline" onclick="viewPost(' + index + ')"><i class="ti ti-eye"></i></button> ' +
-                              '<button class="btn-admin btn-admin-success" onclick="approvePost(' + index + ')"><i class="ti ti-check"></i></button> ' +
-                              '<button class="btn-admin btn-admin-danger" onclick="deletePost(' + index + ')"><i class="ti ti-trash"></i></button>';
-                }
-                var date = post.createdAt ? new Date(post.createdAt).toLocaleString('zh-CN') : '-';
-                html += '<tr data-status="' + status + '">' +
-                    '<td>' + (post.title || '-') + '</td>' +
-                    '<td>' + authorName + '</td>' +
-                    '<td>' + (post.category || '-') + '</td>' +
-                    '<td>' + date + '</td>' +
-                    '<td>' + statusBadge + '</td>' +
-                    '<td>' + actions + '</td>' +
-                    '</tr>';
-            });
-            tbody.innerHTML = html;
-            document.getElementById('paginationInfo').textContent = '显示 1-' + posts.length + ' / 共 ' + posts.length + ' 条';
-        }
-
-        document.getElementById('postFilter').addEventListener('change', function() {
-            var filter = this.value;
-            document.querySelectorAll('#forumTableBody tr').forEach(function(row) {
-                if (filter === 'all' || row.dataset.status === filter) {
-                    row.style.display = '';
+            container.innerHTML = slides.map(function(s, i) {
+                var preview = '';
+                if (s.media) {
+                    if (s.type === 'video') {
+                        preview = '<video src="' + s.media + '" muted style="width:100%;height:100%;object-fit:contain;border-radius:var(--border-radius)"></video>';
+                    } else {
+                        preview = '<img src="' + s.media + '" style="width:100%;height:100%;object-fit:contain;border-radius:var(--border-radius)" alt="">';
+                    }
                 } else {
-                    row.style.display = 'none';
+                    preview = '<i class="ti ti-photo" style="font-size:2rem;color:var(--text-light)"></i>';
                 }
+                return '<div style="padding:0.75rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">' +
+                    '<div style="display:flex;gap:0.75rem;align-items:flex-start">' +
+                    '<div style="flex-shrink:0;width:160px;height:90px;border-radius:var(--border-radius);overflow:hidden;background:var(--bg-tertiary);display:flex;align-items:center;justify-content:center">' + preview + '</div>' +
+                    '<div style="flex:1;display:flex;flex-direction:column;gap:0.5rem">' +
+                    '<div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">' +
+                    '<select id="fsType' + i + '" style="padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:var(--font-size-sm);background:var(--bg-primary);color:var(--text-primary)" onchange="changeType(' + i + ', this)">' +
+                    '<option value="image"' + (s.type !== 'video' ? ' selected' : '') + '>图片</option>' +
+                    '<option value="video"' + (s.type === 'video' ? ' selected' : '') + '>视频</option>' +
+                    '</select>' +
+                    '<label class="btn-admin btn-admin-outline" style="margin:0;cursor:pointer;font-size:var(--font-size-sm);padding:0.375rem 0.75rem"><i class="ti ti-upload" style="margin-right:0.25rem"></i>选择文件<input type="file" accept="image/*,video/mp4,video/webm,video/ogg" style="display:none" onchange="uploadFile(' + i + ', this)"></label>' +
+                    '</div>' +
+                    '<input type="text" value="' + (s.link || '') + '" placeholder="跳转链接（留空不跳转）" id="fsLink' + i + '" oninput="onLinkInput()" style="padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:var(--font-size-sm);background:var(--bg-primary);color:var(--text-primary)">' +
+                    '</div>' +
+                    '<div style="display:flex;gap:0.375rem;flex-shrink:0">' +
+                    (i > 0 ? '<button class="btn-admin btn-admin-outline" onclick="moveSlide(' + i + ',-1)" title="上移"><i class="ti ti-arrow-up"></i></button>' : '') +
+                    (i < slides.length - 1 ? '<button class="btn-admin btn-admin-outline" onclick="moveSlide(' + i + ',1)" title="下移"><i class="ti ti-arrow-down"></i></button>' : '') +
+                    '<button class="btn-admin btn-admin-danger" onclick="removeSlide(' + i + ')" title="删除"><i class="ti ti-trash"></i></button>' +
+                    '</div>' +
+                    '</div></div>';
+            }).join('');
+            updatePreview(slides);
+        }
+
+        function updatePreview(slides) {
+            slides = slides || getSlides();
+            slides = slides.filter(function(s) { return s.media; });
+            var h = parseInt(document.getElementById('forumHeight').value) || 500;
+            var box = document.getElementById('previewBox');
+            var empty = document.getElementById('previewEmpty');
+            var content = document.getElementById('previewContent');
+            var track = document.getElementById('previewTrack');
+            var info = document.getElementById('previewInfo');
+
+            if (!slides.length) {
+                empty.style.display = '';
+                content.style.display = 'none';
+                info.textContent = '';
+                box.style.height = 'auto';
+                return;
+            }
+            empty.style.display = 'none';
+            content.style.display = '';
+            var ph = Math.min(h * 0.45, 220);
+            content.style.height = ph + 'px';
+            track.innerHTML = slides.map(function(s) {
+                var inner = s.type === 'video' ? '<video src="' + s.media + '" muted style="width:100%;height:100%;object-fit:contain"></video>' : '<img src="' + s.media + '" style="width:100%;height:100%;object-fit:contain">';
+                return '<div style="flex-shrink:0;width:100%;height:' + ph + 'px;display:flex;align-items:center;justify-content:center">' + inner + '</div>';
+            }).join('');
+            info.textContent = slides.length + ' 个内容 · 高度 ' + h + 'px';
+        }
+
+        function addSlide() {
+            var slides = getSlides();
+            slides.push({ type: 'image', media: '', link: '' });
+            try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); } catch(e) { alert('存储空间不足'); return; }
+            loadSlides();
+        }
+
+        function removeSlide(i) {
+            var slides = getSlides();
+            slides.splice(i, 1);
+            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            loadSlides();
+        }
+
+        function moveSlide(i, dir) {
+            var slides = getSlides();
+            var j = i + dir;
+            if (j < 0 || j >= slides.length) return;
+            var tmp = slides[i]; slides[i] = slides[j]; slides[j] = tmp;
+            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            loadSlides();
+        }
+
+        function changeType(i, sel) {
+            var slides = getSlides();
+            if (slides[i]) slides[i].type = sel.value;
+            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            loadSlides();
+        }
+
+        function uploadFile(i, input) {
+            if (!input.files || !input.files[0]) return;
+            var file = input.files[0];
+            var isVideo = file.type.startsWith('video/');
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var data = ev.target.result;
+                if (!isVideo) {
+                    var img = new Image();
+                    img.onload = function() {
+                        var maxW = 1600, maxH = 900;
+                        var w = img.width, h = img.height;
+                        if (w > maxW) { h = h * maxW / w; w = maxW; }
+                        if (h > maxH) { w = w * maxH / h; h = maxH; }
+                        var canvas = document.createElement('canvas');
+                        canvas.width = w; canvas.height = h;
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                        var compressed = canvas.toDataURL('image/jpeg', 0.75);
+                        var slides = getSlides();
+                        if (slides[i]) { slides[i].media = compressed; slides[i].type = 'image'; }
+                        try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); loadSlides(); }
+                        catch(e) { alert('图片太大'); }
+                    };
+                    img.src = data;
+                } else {
+                    var slides = getSlides();
+                    if (slides[i]) { slides[i].media = data; slides[i].type = 'video'; }
+                    try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); loadSlides(); }
+                    catch(e) { alert('视频太大，存储空间不足'); }
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function onLinkInput() {
+            var slides = getSlides();
+            slides.forEach(function(s, i) {
+                var el = document.getElementById('fsLink' + i);
+                if (el) s.link = el.value;
             });
+            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            var linked = slides.filter(function(s) { return s.link; }).length;
+            document.getElementById('statLinks').textContent = linked;
+        }
+
+        function saveAll() {
+            var slides = getSlides();
+            slides.forEach(function(s, i) {
+                var el = document.getElementById('fsLink' + i);
+                if (el) s.link = el.value;
+            });
+            var h = document.getElementById('forumHeight').value;
+            var interval = document.getElementById('forumInterval').value;
+            var autoPlay = document.getElementById('forumAutoPlay').checked;
+            try {
+                localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+                localStorage.setItem('admin_forum_height', h);
+                localStorage.setItem('admin_settings_forum', JSON.stringify({ autoPlay: autoPlay, interval: parseInt(interval) || 5000, showNav: true, showFooter: true }));
+                alert('保存成功');
+            } catch(e) { alert('保存失败：存储空间不足'); }
+        }
+
+        document.getElementById('forumHeight').addEventListener('input', function() {
+            document.getElementById('statHeight').textContent = this.value;
+            updatePreview();
         });
 
-        document.getElementById('postSearch').addEventListener('input', function() {
-            var keyword = this.value.toLowerCase();
-            document.querySelectorAll('#forumTableBody tr').forEach(function(row) {
-                var text = row.textContent.toLowerCase();
-                row.style.display = text.includes(keyword) ? '' : 'none';
-            });
-        });
-
-        function viewPost(index) {
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            var users = JSON.parse(localStorage.getItem('users') || '[]');
-            var post = posts[index];
-            if (!post) return;
-            var user = users.find(function(u) { return u.id === post.authorId; });
-            var authorName = user ? (user.username || '未知') : (post.authorName || '未知');
-            var status = post.status || 'published';
-            var statusBadge = status === 'published' ? '<span class="badge badge-success"><i class="ti ti-circle-check" style="margin-right:0.25rem"></i>已发布</span>' :
-                status === 'pending' ? '<span class="badge badge-warning"><i class="ti ti-clock" style="margin-right:0.25rem"></i>待审核</span>' :
-                '<span class="badge badge-danger"><i class="ti ti-ban" style="margin-right:0.25rem"></i>已屏蔽</span>';
-            document.getElementById('postModal').querySelector('.detail-grid').innerHTML =
-                '<div class="detail-item detail-full"><div class="label">标题</div><div class="value">' + (post.title || '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">作者</div><div class="value">' + authorName + '</div></div>' +
-                '<div class="detail-item"><div class="label">分类</div><div class="value">' + (post.category || '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">发布时间</div><div class="value">' + (post.createdAt ? new Date(post.createdAt).toLocaleString('zh-CN') : '-') + '</div></div>' +
-                '<div class="detail-item"><div class="label">状态</div><div class="value">' + statusBadge + '</div></div>' +
-                '<div class="detail-item detail-full"><div class="label">内容</div><div class="value">' + (post.content || '暂无内容') + '</div></div>';
-            document.getElementById('postModal').classList.add('show');
-        }
-
-        function closeModal() {
-            document.getElementById('postModal').classList.remove('show');
-        }
-
-        function approvePost(index) {
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            var post = posts[index];
-            if (!post) return;
-            post.status = 'published';
-            localStorage.setItem('posts', JSON.stringify(posts));
-            loadPosts();
-            alert('帖子已通过审核');
-        }
-
-        function rejectPost(index) {
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            var post = posts[index];
-            if (!post) return;
-            post.status = 'blocked';
-            localStorage.setItem('posts', JSON.stringify(posts));
-            loadPosts();
-            alert('帖子已拒绝');
-        }
-
-        function blockPost(index) {
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            var post = posts[index];
-            if (!post) return;
-            post.status = 'blocked';
-            localStorage.setItem('posts', JSON.stringify(posts));
-            loadPosts();
-            alert('帖子已屏蔽');
-        }
-
-        function deletePost(index) {
-            if (!confirm('确定要删除该帖子吗？此操作不可恢复！')) return;
-            var posts = JSON.parse(localStorage.getItem('posts') || '[]');
-            posts.splice(index, 1);
-            localStorage.setItem('posts', JSON.stringify(posts));
-            loadPosts();
-            alert('帖子已删除');
-        }
-
-        loadPosts();
+        loadSlides();
     </script>
 </body>
 </html>

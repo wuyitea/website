@@ -283,6 +283,8 @@ var _lsKeyMap = {
     banners: 'admin_market_banners',
     shopLinks: 'admin_shop_links',
     forum: 'admin_settings_forum',
+    forumSlides: 'admin_forum_slides',
+    forumHeight: 'admin_forum_height',
     market: 'admin_settings_market',
     security: 'admin_settings_security',
     notifications: 'admin_settings_notifications'
