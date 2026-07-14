@@ -24,6 +24,8 @@
             <nav class="sidebar-nav">
                 <a href="admin.html"><i class="ti ti-dashboard"></i> 仪表盘</a>
                 <a href="admin-forum.html"><i class="ti ti-message-circle"></i> 论坛管理</a>
+                <a href="admin-display1.html"><i class="ti ti-slideshow"></i> 展示页1</a>
+                <a href="admin-display2.html"><i class="ti ti-device-desktop"></i> 展示页2</a>
                 <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html" class="active"><i class="ti ti-settings"></i> 网站设置</a>
                 <a href="../index.html" target="_blank"><i class="ti ti-external-link"></i> 查看前台</a>
@@ -315,6 +317,14 @@
                                             <div class="form-group">
                                                 <label>商城</label>
                                                 <input type="text" id="copyNavMarket" placeholder="例如：商城">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>展示页1</label>
+                                                <input type="text" id="copyNavDisplay1" placeholder="例如：展示页1">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>展示页2</label>
+                                                <input type="text" id="copyNavDisplay2" placeholder="例如：展示页2">
                                             </div>
                                             <div class="form-group">
                                                 <label>关于我们</label>
@@ -858,6 +868,8 @@
             navHome: '首页',
             navForum: '论坛',
             navMarket: '商城',
+            navDisplay1: '展示页1',
+            navDisplay2: '展示页2',
             navAbout: '关于我们',
             footerAbout: '社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。',
             footerContact: '联系我们',
@@ -902,6 +914,8 @@
                 navHome: document.getElementById('copyNavHome').value,
                 navForum: document.getElementById('copyNavForum').value,
                 navMarket: document.getElementById('copyNavMarket').value,
+                navDisplay1: document.getElementById('copyNavDisplay1').value,
+                navDisplay2: document.getElementById('copyNavDisplay2').value,
                 navAbout: document.getElementById('copyNavAbout').value,
                 footerAbout: document.getElementById('copyFooterAbout').value,
                 footerContact: document.getElementById('copyFooterContact').value,

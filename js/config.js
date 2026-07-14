@@ -285,6 +285,12 @@ var _lsKeyMap = {
     forum: 'admin_settings_forum',
     forumSlides: 'admin_forum_slides',
     forumHeight: 'admin_forum_height',
+    display1: 'admin_settings_display1',
+    display1Slides: 'admin_display1_slides',
+    display1Height: 'admin_display1_height',
+    display2: 'admin_settings_display2',
+    display2Slides: 'admin_display2_slides',
+    display2Height: 'admin_display2_height',
     market: 'admin_settings_market',
     security: 'admin_settings_security',
     notifications: 'admin_settings_notifications'

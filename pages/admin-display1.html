@@ -6,7 +6,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>论坛管理 - 社区平台</title>
+    <title>展示页1管理 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/style.css?v=11">
     <link rel="stylesheet" href="../css/responsive.css?v=11">
@@ -23,8 +23,8 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="admin.html"><i class="ti ti-dashboard"></i> 仪表盘</a>
-                <a href="admin-forum.html" class="active"><i class="ti ti-photo"></i> 论坛管理</a>
-                <a href="admin-display1.html"><i class="ti ti-slideshow"></i> 展示页1</a>
+                <a href="admin-forum.html"><i class="ti ti-photo"></i> 论坛管理</a>
+                <a href="admin-display1.html" class="active"><i class="ti ti-slideshow"></i> 展示页1</a>
                 <a href="admin-display2.html"><i class="ti ti-device-desktop"></i> 展示页2</a>
                 <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html"><i class="ti ti-settings"></i> 网站设置</a>
@@ -46,7 +46,7 @@
                     <button class="admin-topbar-btn" id="sidebarToggle" style="display:none">
                         <i class="ti ti-menu-2" style="font-size:1.25rem"></i>
                     </button>
-                    <h1>论坛管理</h1>
+                    <h1>展示页1管理</h1>
                 </div>
                 <div class="admin-topbar-right">
                     <a href="forum.html" target="_blank" class="btn-admin btn-admin-outline"><i class="ti ti-external-link" style="margin-right:0.375rem"></i>查看前台</a>
@@ -179,7 +179,7 @@
         });
 
         function getSlides() {
-            var saved = localStorage.getItem('admin_forum_slides');
+            var saved = localStorage.getItem('admin_display1_slides');
             try { return saved ? JSON.parse(saved) : []; } catch(e) { return []; }
         }
 
@@ -188,9 +188,9 @@
             var container = document.getElementById('slideList');
             var linked = slides.filter(function(s) { return s.link; }).length;
             var videos = slides.filter(function(s) { return s.type === 'video'; }).length;
-            var h = parseInt(localStorage.getItem('admin_forum_height')) || 500;
+            var h = parseInt(localStorage.getItem('admin_display1_height')) || 500;
             var settings = {};
-            try { settings = JSON.parse(localStorage.getItem('admin_settings_forum') || '{}'); } catch(e) {}
+            try { settings = JSON.parse(localStorage.getItem('admin_settings_display1') || '{}'); } catch(e) {}
 
             document.getElementById('statSlides').textContent = slides.length;
             document.getElementById('statLinks').textContent = linked;
@@ -271,14 +271,14 @@
         function addSlide() {
             var slides = getSlides();
             slides.push({ type: 'image', media: '', link: '' });
-            try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); } catch(e) { alert('存储空间不足'); return; }
+            try { localStorage.setItem('admin_display1_slides', JSON.stringify(slides)); } catch(e) { alert('存储空间不足'); return; }
             loadSlides();
         }
 
         function removeSlide(i) {
             var slides = getSlides();
             slides.splice(i, 1);
-            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            localStorage.setItem('admin_display1_slides', JSON.stringify(slides));
             loadSlides();
         }
 
@@ -287,14 +287,14 @@
             var j = i + dir;
             if (j < 0 || j >= slides.length) return;
             var tmp = slides[i]; slides[i] = slides[j]; slides[j] = tmp;
-            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            localStorage.setItem('admin_display1_slides', JSON.stringify(slides));
             loadSlides();
         }
 
         function changeType(i, sel) {
             var slides = getSlides();
             if (slides[i]) slides[i].type = sel.value;
-            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            localStorage.setItem('admin_display1_slides', JSON.stringify(slides));
             loadSlides();
         }
 
@@ -318,14 +318,14 @@
                         var compressed = canvas.toDataURL('image/jpeg', 0.75);
                         var slides = getSlides();
                         if (slides[i]) { slides[i].media = compressed; slides[i].type = 'image'; }
-                        try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); loadSlides(); }
+                        try { localStorage.setItem('admin_display1_slides', JSON.stringify(slides)); loadSlides(); }
                         catch(e) { alert('图片太大'); }
                     };
                     img.src = data;
                 } else {
                     var slides = getSlides();
                     if (slides[i]) { slides[i].media = data; slides[i].type = 'video'; }
-                    try { localStorage.setItem('admin_forum_slides', JSON.stringify(slides)); loadSlides(); }
+                    try { localStorage.setItem('admin_display1_slides', JSON.stringify(slides)); loadSlides(); }
                     catch(e) { alert('视频太大，存储空间不足'); }
                 }
             };
@@ -338,13 +338,13 @@
                 var el = document.getElementById('fsLink' + i);
                 if (el) s.link = el.value;
             });
-            localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
+            localStorage.setItem('admin_display1_slides', JSON.stringify(slides));
             var linked = slides.filter(function(s) { return s.link; }).length;
             document.getElementById('statLinks').textContent = linked;
         }
 
         function saveAll() {
-            var slides = getSlides();
+                var slides = getSlides();
             slides.forEach(function(s, i) {
                 var el = document.getElementById('fsLink' + i);
                 if (el) s.link = el.value;
@@ -353,9 +353,9 @@
             var interval = document.getElementById('forumInterval').value;
             var autoPlay = document.getElementById('forumAutoPlay').checked;
             try {
-                localStorage.setItem('admin_forum_slides', JSON.stringify(slides));
-                localStorage.setItem('admin_forum_height', h);
-                localStorage.setItem('admin_settings_forum', JSON.stringify({ autoPlay: autoPlay, interval: parseInt(interval) || 5000, showNav: true, showFooter: true }));
+                localStorage.setItem('admin_display1_slides', JSON.stringify(slides));
+                localStorage.setItem('admin_display1_height', h);
+                localStorage.setItem('admin_settings_display1', JSON.stringify({ autoPlay: autoPlay, interval: parseInt(interval) || 5000, showNav: true, showFooter: true }));
                 alert('保存成功');
             } catch(e) { alert('保存失败：存储空间不足'); }
         }
