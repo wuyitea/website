@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '13';
+const SITE_VERSION = '14';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
@@ -292,6 +292,18 @@ var _lsKeyMap = {
     display2: 'admin_settings_display2',
     display2Slides: 'admin_display2_slides',
     display2Height: 'admin_display2_height',
+    display3: 'admin_settings_display3',
+    display3Slides: 'admin_display3_slides',
+    display3Height: 'admin_display3_height',
+    display4: 'admin_settings_display4',
+    display4Slides: 'admin_display4_slides',
+    display4Height: 'admin_display4_height',
+    display5: 'admin_settings_display5',
+    display5Slides: 'admin_display5_slides',
+    display5Height: 'admin_display5_height',
+    display6: 'admin_settings_display6',
+    display6Slides: 'admin_display6_slides',
+    display6Height: 'admin_display6_height',
     market: 'admin_settings_market',
     security: 'admin_settings_security',
     notifications: 'admin_settings_notifications',
@@ -332,6 +344,10 @@ utils.applyNavConfig = function() {
             market: isIndex ? 'pages/market.html' : 'market.html',
             display1: isIndex ? 'pages/display1.html' : 'display1.html',
             display2: isIndex ? 'pages/display2.html' : 'display2.html',
+            display3: isIndex ? 'pages/display3.html' : 'display3.html',
+            display4: isIndex ? 'pages/display4.html' : 'display4.html',
+            display5: isIndex ? 'pages/display5.html' : 'display5.html',
+            display6: isIndex ? 'pages/display6.html' : 'display6.html',
             about: isIndex ? 'pages/about.html' : 'about.html'
         };
         document.querySelectorAll('.nav-links').forEach(function(ul) {

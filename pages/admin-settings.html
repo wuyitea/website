@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="../css/style.css?v=13">
-    <link rel="stylesheet" href="../css/responsive.css?v=13">
+    <link rel="stylesheet" href="../css/style.css?v=14">
+    <link rel="stylesheet" href="../css/responsive.css?v=14">
 </head>
 <body>
     <div class="admin-layout">
@@ -26,6 +26,10 @@
                 <a href="admin-forum.html"><i class="ti ti-message-circle"></i> 论坛管理</a>
                 <a href="admin-display1.html"><i class="ti ti-slideshow"></i> 展示页1</a>
                 <a href="admin-display2.html"><i class="ti ti-device-desktop"></i> 展示页2</a>
+                <a href="admin-display3.html"><i class="ti ti-camera"></i> 展示页3</a>
+                <a href="admin-display4.html"><i class="ti ti-video"></i> 展示页4</a>
+                <a href="admin-display5.html"><i class="ti ti-image"></i> 展示页5</a>
+                <a href="admin-display6.html"><i class="ti ti-layout-grid"></i> 展示页6</a>
                 <div class="sidebar-nav-label">系统</div>
                 <a href="admin-settings.html" class="active"><i class="ti ti-settings"></i> 网站设置</a>
                 <a href="../index.html" target="_blank"><i class="ti ti-external-link"></i> 查看前台</a>
@@ -390,7 +394,7 @@
 
                                 <div class="settings-group">
                                     <h3><i class="ti ti-slideshow" style="margin-right:0.375rem"></i>展示页文案</h3>
-                                    <p class="desc">配置展示页1和展示页2显示的文字</p>
+                                    <p class="desc">配置各展示页显示的文字</p>
                                     <div class="admin-form">
                                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
                                             <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
@@ -413,6 +417,50 @@
                                                 <div class="form-group" style="margin:0">
                                                     <label>空状态提示文字</label>
                                                     <input type="text" id="copyDisplay2Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-camera" style="margin-right:0.25rem"></i>展示页3</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay3Title" placeholder="例如：精彩瞬间">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay3Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-video" style="margin-right:0.25rem"></i>展示页4</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay4Title" placeholder="例如：视频集锦">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay4Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-image" style="margin-right:0.25rem"></i>展示页5</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay5Title" placeholder="例如：活动集锦">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay5Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-layout-grid" style="margin-right:0.25rem"></i>展示页6</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay6Title" placeholder="例如：更多展示">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay6Empty" placeholder="例如：暂无展示内容">
                                                 </div>
                                             </div>
                                         </div>
@@ -623,7 +671,7 @@
         </main>
     </div>
 
-    <script src="../js/config.js?v=13"></script>
+    <script src="../js/config.js?v=14"></script>
     <script>
         if (localStorage.getItem('admin_logged_in') !== 'true') {
             window.location.href = 'admin-login.html';
@@ -898,7 +946,15 @@
             display1Title: '展示页1',
             display1Empty: '暂无展示内容',
             display2Title: '展示页2',
-            display2Empty: '暂无展示内容'
+            display2Empty: '暂无展示内容',
+            display3Title: '展示页3',
+            display3Empty: '暂无展示内容',
+            display4Title: '展示页4',
+            display4Empty: '暂无展示内容',
+            display5Title: '展示页5',
+            display5Empty: '暂无展示内容',
+            display6Title: '展示页6',
+            display6Empty: '暂无展示内容'
         };
 
         var defaultNavConfig = [
@@ -906,7 +962,11 @@
             { id: 'forum', icon: 'ti ti-message-circle', label: '论坛' },
             { id: 'market', icon: 'ti ti-shopping-bag', label: '商城' },
             { id: 'display1', icon: 'ti ti-slideshow', label: '展示页1' },
-            { id: 'display2', icon: 'ti ti-device-desktop', label: '展示页2' }
+            { id: 'display2', icon: 'ti ti-device-desktop', label: '展示页2' },
+            { id: 'display3', icon: 'ti ti-camera', label: '展示页3' },
+            { id: 'display4', icon: 'ti ti-video', label: '展示页4' },
+            { id: 'display5', icon: 'ti ti-image', label: '展示页5' },
+            { id: 'display6', icon: 'ti ti-layout-grid', label: '展示页6' }
         ];
 
         function getNavConfig() {
@@ -1045,7 +1105,15 @@
                 display1Title: document.getElementById('copyDisplay1Title').value,
                 display1Empty: document.getElementById('copyDisplay1Empty').value,
                 display2Title: document.getElementById('copyDisplay2Title').value,
-                display2Empty: document.getElementById('copyDisplay2Empty').value
+                display2Empty: document.getElementById('copyDisplay2Empty').value,
+                display3Title: document.getElementById('copyDisplay3Title').value,
+                display3Empty: document.getElementById('copyDisplay3Empty').value,
+                display4Title: document.getElementById('copyDisplay4Title').value,
+                display4Empty: document.getElementById('copyDisplay4Empty').value,
+                display5Title: document.getElementById('copyDisplay5Title').value,
+                display5Empty: document.getElementById('copyDisplay5Empty').value,
+                display6Title: document.getElementById('copyDisplay6Title').value,
+                display6Empty: document.getElementById('copyDisplay6Empty').value
             };
             return data;
         }
@@ -1561,7 +1629,11 @@
                 'admin_settings_general', 'admin_settings_copy', 'admin_settings_forum',
                 'admin_settings_market', 'admin_settings_security', 'admin_settings_notifications',
                 'admin_homepage_slides', 'admin_market_banners', 'admin_shop_links',
-                'site_theme', 'admin_password', 'admin_nav_config'
+                'site_theme', 'admin_password', 'admin_nav_config',
+                'admin_display3_slides', 'admin_display3_height', 'admin_settings_display3',
+                'admin_display4_slides', 'admin_display4_height', 'admin_settings_display4',
+                'admin_display5_slides', 'admin_display5_height', 'admin_settings_display5',
+                'admin_display6_slides', 'admin_display6_height', 'admin_settings_display6'
             ];
             keys.forEach(function(key) {
                 var val = localStorage.getItem(key);
