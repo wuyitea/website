@@ -985,8 +985,9 @@
                     '<span class="nav-drag-handle" style="cursor:grab;color:var(--text-secondary);font-size:1.125rem" title="拖拽排序"><i class="ti ti-grip-vertical"></i></span>' +
                     '<button class="btn-icon" onclick="navMoveUp(' + i + ')" title="上移" style="border:none;background:none;color:var(--text-secondary);cursor:pointer;font-size:1rem;padding:2px"><i class="ti ti-chevron-up"></i></button>' +
                     '<button class="btn-icon" onclick="navMoveDown(' + i + ')" title="下移" style="border:none;background:none;color:var(--text-secondary);cursor:pointer;font-size:1rem;padding:2px"><i class="ti ti-chevron-down"></i></button>' +
-                    '<span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;background:rgba(79,70,229,0.08);flex-shrink:0" class="nav-icon-preview"><i class="' + item.icon + '" style="font-size:1.125rem;color:var(--primary-color)"></i></span>' +
+                    '<span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;background:rgba(79,70,229,0.08);flex-shrink:0;cursor:pointer" class="nav-icon-preview" onclick="openIconPicker(this.closest(\'.nav-sort-item\').querySelector(\'[data-field=icon]\'))" title="点击选择图标"><i class="' + item.icon + '" style="font-size:1.125rem;color:var(--primary-color)"></i></span>' +
                     '<input type="text" value="' + item.icon + '" data-field="icon" data-nav-index="' + i + '" placeholder="ti ti-xxx" style="width:140px;padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:0.8rem;font-family:monospace" oninput="updateNavIconPreview(this,' + i + ')">' +
+                    '<button onclick="openIconPicker(this.previousElementSibling)" title="选择图标" style="border:1px solid var(--border-color);background:var(--bg-primary);border-radius:var(--border-radius);padding:0.375rem 0.5rem;cursor:pointer;font-size:0.8rem;color:var(--text-secondary);display:inline-flex;align-items:center;gap:0.25rem;flex-shrink:0"><i class="ti ti-palette"></i></button>' +
                     '<span style="flex:1;display:flex;align-items:center;gap:0.375rem">' +
                     '<i class="ti ti-arrow-right" style="color:var(--text-secondary);font-size:0.8rem;flex-shrink:0"></i>' +
                     '<input type="text" value="' + (item.label || '') + '" data-field="label" data-nav-index="' + i + '" placeholder="显示文字" style="flex:1;padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:0.875rem" oninput="updateNavLabel(this,' + i + ')">' +
@@ -1678,6 +1679,105 @@
                 }
             };
             reader.readAsText(input.files[0]);
+        }
+
+        // ========== 图标选择器 ==========
+        var _iconPickerList = [
+            'ti ti-home','ti ti-message-circle','ti ti-shopping-bag','ti ti-user','ti ti-users','ti ti-heart','ti ti-star','ti ti-search',
+            'ti ti-settings','ti ti-bell','ti ti-mail','ti ti-phone','ti ti-clock','ti ti-calendar','ti ti-map-pin','ti ti-location',
+            'ti ti-camera','ti ti-video','ti ti-image','ti ti-music','ti ti-headphones','ti ti-microphone','ti ti-player-play','ti ti-player-stop',
+            'ti ti-device-desktop','ti ti-device-laptop','ti ti-device-phone','ti ti-device-tablet','ti ti-device-watch','ti ti-printer','ti ti-keyboard','ti ti-mouse',
+            'ti ti-cloud','ti ti-cloud-upload','ti ti-cloud-download','ti ti-download','ti ti-upload','ti ti-file','ti ti-file-text','ti ti-folder',
+            'ti ti-folder-open','ti ti-database','ti ti-clipboard','ti ti-bookmark','ti ti-link','ti ti-external-link','ti ti-share','ti ti-copy',
+            'ti ti-edit','ti ti-trash','ti ti-plus','ti ti-minus','ti ti-x','ti ti-check','ti ti-alert-circle','ti ti-info-circle',
+            'ti ti-help-circle','ti ti-arrow-left','ti ti-arrow-right','ti ti-arrow-up','ti ti-arrow-down','ti ti-chevron-left','ti ti-chevron-right','ti ti-chevron-up',
+            'ti ti-chevron-down','ti ti-refresh','ti ti-rotate','ti ti-reload','ti ti-restore','ti ti-sort-ascending','ti ti-sort-descending','ti ti-grip-vertical',
+            'ti ti-layout','ti ti-layout-grid','ti ti-layout-list','ti ti-layout-columns','ti ti-layout-navbar','ti ti-layout-sidebar','ti ti-layout-dashboard','ti ti-layout-master',
+            'ti ti-slideshow','ti ti-photo','ti ti-clipboard-list','ti ti-clipboard-check','ti ti-chart-bar','ti ti-chart-line','ti ti-chart-pie','ti ti-chart-area',
+            'ti ti-shopping-cart','ti ti-shopping-cart-plus','ti ti-tag','ti ti-tags','ti tiReceipt','ti ti-world','ti ti-globe','ti ti-language',
+            'ti ti-lock','ti ti-lock-open','ti ti-shield','ti ti-shield-check','ti ti-user-circle','ti ti-user-plus','ti ti-user-minus','ti ti-users-group',
+            'ti ti-login','ti ti-logout','ti ti-key','ti ti-certificate','ti ti-award','ti ti-trophy','ti ti-gift','ti ti-package',
+            'ti ti-brand-github','ti ti-brand-google','ti ti-brand-wechat','ti ti-brand-qq','ti ti-brand-zhihu','ti ti-brand-bilibili','ti ti-brand-youtube','ti ti-brand-twitter',
+            'ti ti-dots','ti ti-dots-vertical','ti ti-menu-2','ti ti-menu','ti ti-diamond','ti ti-flame','ti ti-bolt','ti ti-sun',
+            'ti ti-moon','ti ti-star-filled','ti ti-heart-filled','ti ti-bookmark-filled','ti ti-rating-star','ti ti-mood-happy','ti ti-mood-smile','ti ti-mood-wink',
+            'ti ti-address-book','ti ti-sticker','ti ti-puzzle','ti ti-building','ti ti-building-store','ti ti-building-house','ti ti-building-community','ti ti-school',
+            'ti ti-armchair','ti ti-bed','ti ti-bath','ti ti-brush','ti ti-scissors','ti ti-paint','ti ti-mug','ti ti-bottle',
+            'ti ti-cookie','ti ti-cup','ti ti-train','ti ti-plane','ti ti-ship','ti ti-car','ti ti-bike','ti ti-walk',
+            'ti ti-run','ti ti-swimming','ti ti-football','ti ti-basketball','ti ti-tennis','ti ti-golf','ti ti-snowflake','ti ti-fire',
+            'ti ti-plant','ti ti-leaf','ti ti-seeding','ti ti-tree','ti ti-bug','ti ti-fish','ti ti-butterfly','ti ti-feather'
+        ];
+
+        var _iconPickerEl = null;
+        var _iconPickerTarget = null;
+
+        function openIconPicker(inputEl) {
+            _iconPickerTarget = inputEl;
+            if (!_iconPickerEl) {
+                _iconPickerEl = document.createElement('div');
+                _iconPickerEl.id = 'iconPickerModal';
+                _iconPickerEl.style.cssText = 'display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:10000;align-items:center;justify-content:center';
+                _iconPickerEl.innerHTML =
+                    '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4)" onclick="closeIconPicker()"></div>' +
+                    '<div style="position:relative;background:var(--bg-primary);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);width:560px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column;overflow:hidden">' +
+                        '<div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid var(--border-color)">' +
+                            '<h3 style="margin:0;font-size:1rem"><i class="ti ti-palette" style="margin-right:0.375rem"></i>选择图标</h3>' +
+                            '<button onclick="closeIconPicker()" style="border:none;background:none;cursor:pointer;font-size:1.25rem;color:var(--text-secondary);padding:4px"><i class="ti ti-x"></i></button>' +
+                        '</div>' +
+                        '<div style="padding:0.75rem 1.25rem;border-bottom:1px solid var(--border-color)">' +
+                            '<input type="text" id="iconPickerSearch" placeholder="搜索图标名称（如 home、user、heart...）" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:0.875rem;box-sizing:border-box" oninput="filterIconPicker()">' +
+                        '</div>' +
+                        '<div id="iconPickerGrid" style="padding:0.75rem 1.25rem;overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:4px;align-content:start"></div>' +
+                        '<div style="padding:0.625rem 1.25rem;border-top:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center">' +
+                            '<span id="iconPickerSelected" style="font-size:0.8rem;color:var(--text-secondary)"></span>' +
+                            '<button class="btn-admin btn-admin-primary" onclick="closeIconPicker()" style="padding:0.375rem 1rem">确定</button>' +
+                        '</div>' +
+                    '</div>';
+                document.body.appendChild(_iconPickerEl);
+            }
+            _iconPickerEl.style.display = 'flex';
+            document.getElementById('iconPickerSearch').value = '';
+            document.getElementById('iconPickerSearch').focus();
+            renderIconPickerGrid(_iconPickerList);
+        }
+
+        function renderIconPickerGrid(list) {
+            var grid = document.getElementById('iconPickerGrid');
+            var current = _iconPickerTarget ? _iconPickerTarget.value : '';
+            grid.innerHTML = list.map(function(cls) {
+                var selected = cls === current;
+                return '<div onclick="selectIconFromPicker(\'' + cls + '\')" title="' + cls + '" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 2px;border-radius:8px;cursor:pointer;transition:all 0.15s;border:2px solid ' + (selected ? 'var(--primary-color)' : 'transparent') + ';background:' + (selected ? 'rgba(79,70,229,0.08)' : 'transparent') + '">' +
+                    '<i class="' + cls + '" style="font-size:1.25rem;color:' + (selected ? 'var(--primary-color)' : 'var(--text-primary)') + '"></i>' +
+                    '<span style="font-size:0.6rem;color:var(--text-secondary);margin-top:2px;text-align:center;word-break:break-all;line-height:1.2;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + cls.replace('ti ti-', '') + '</span>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function filterIconPicker() {
+            var q = document.getElementById('iconPickerSearch').value.toLowerCase().trim();
+            if (!q) { renderIconPickerGrid(_iconPickerList); return; }
+            var filtered = _iconPickerList.filter(function(cls) {
+                return cls.toLowerCase().indexOf(q) !== -1;
+            });
+            renderIconPickerGrid(filtered);
+            if (!filtered.length) {
+                document.getElementById('iconPickerGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);font-size:0.875rem"><i class="ti ti-search" style="font-size:1.5rem;display:block;margin-bottom:0.5rem"></i>未找到匹配的图标</div>';
+            }
+        }
+
+        function selectIconFromPicker(cls) {
+            if (_iconPickerTarget) {
+                _iconPickerTarget.value = cls;
+                _iconPickerTarget.dispatchEvent(new Event('input'));
+            }
+            var current = document.getElementById('iconPickerSelected');
+            if (current) current.textContent = '已选择: ' + cls;
+            renderIconPickerGrid(document.getElementById('iconPickerSearch').value.trim()
+                ? _iconPickerList.filter(function(c) { return c.toLowerCase().indexOf(document.getElementById('iconPickerSearch').value.trim().toLowerCase()) !== -1; })
+                : _iconPickerList);
+        }
+
+        function closeIconPicker() {
+            if (_iconPickerEl) _iconPickerEl.style.display = 'none';
         }
     </script>
 </body>
