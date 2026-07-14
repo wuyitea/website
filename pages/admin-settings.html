@@ -1119,10 +1119,12 @@
         }
 
         function saveCopySettings() {
-            localStorage.setItem('admin_settings_copy', JSON.stringify(collectCopySettings()));
-            localStorage.setItem('admin_nav_config', JSON.stringify(getNavConfig()));
+            try {
+                localStorage.setItem('admin_settings_copy', JSON.stringify(collectCopySettings()));
+                localStorage.setItem('admin_nav_config', JSON.stringify(getNavConfig()));
+            } catch(e) { alert('保存失败：' + e.message); return; }
             alert('文案已保存，刷新前台页面即可看到效果');
-            pushToGitHub();
+            try { pushToGitHub(); } catch(e) { console.warn('GitHub sync failed:', e); }
         }
 
         function resetCopySettings() {

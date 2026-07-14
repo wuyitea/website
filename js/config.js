@@ -399,7 +399,10 @@ utils.saveConfigToGitHub = function(token) {
     return fetch(GITHUB_API, {
         method: 'GET',
         headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
-    }).then(function(r) { return r.json(); }).then(function(file) {
+    }).then(function(r) {
+        if (!r.ok) throw new Error('GitHub read failed: ' + r.status);
+        return r.json();
+    }).then(function(file) {
         var sha = file.sha || '';
         var body = { message: 'update site config', content: content, branch: 'main' };
         if (sha) body.sha = sha;
