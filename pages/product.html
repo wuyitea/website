@@ -30,23 +30,7 @@
                 <li><a href="../index.html"><i class="ti ti-home"></i> <span data-copy="navHome">首页</span></a></li>
                 <li><a href="forum.html"><i class="ti ti-message-circle"></i> <span data-copy="navForum">论坛</span></a></li>
                 <li><a href="market.html" class="active"><i class="ti ti-shopping-bag"></i> <span data-copy="navMarket">市场</span></a></li>
-                <li><a href="messages.html"><i class="ti ti-mail"></i> <span data-copy="navMessages">消息</span></a></li>
             </ul>
-        </div>
-        <div class="nav-user">
-            <div class="user-actions" id="userActions">
-                <button class="btn btn-ghost" id="loginBtn">登录</button>
-                <button class="btn btn-primary" id="registerBtn">注册</button>
-            </div>
-            <div class="user-profile" id="userProfile" style="display:none;">
-                <img src="../images/default-avatar.png" alt="头像" id="userAvatar">
-                <div class="user-dropdown">
-                    <a href="profile.html"><i class="ti ti-user"></i> 个人资料</a>
-                    <a href="settings.html"><i class="ti ti-settings"></i> 设置</a>
-                    <a href="admin.html" class="admin-link" style="display:none"><i class="ti ti-dashboard"></i> 管理后台</a>
-                    <a href="#" id="logoutBtn"><i class="ti ti-logout"></i> 退出登录</a>
-                </div>
-            </div>
         </div>
         <div class="nav-toggle" id="navToggle">
             <span></span><span></span><span></span>
@@ -106,7 +90,7 @@
                                 <div style="font-weight:600;color:var(--text-primary)" id="sellerName">加载中...</div>
                                 <div style="font-size:0.875rem;color:var(--text-secondary)" id="sellerStats">-</div>
                             </div>
-                            <a href="#" class="btn btn-outline btn-sm" id="sellerLink"><i class="ti ti-user"></i> 主页</a>
+                            <span id="sellerLink" style="font-size:var(--font-size-sm);color:var(--text-secondary)"><i class="ti ti-user"></i> 卖家</span>
                         </div>
 
                         <div style="display:flex;gap:0.75rem">
@@ -132,7 +116,7 @@
     </footer>
 
     <script src="../js/config.js?v=11"></script>
-    <script src="../js/auth.js?v=11"></script>
+
     <script src="../js/product.js?v=11"></script>
 </body>
 </html>

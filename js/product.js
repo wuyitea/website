@@ -100,7 +100,6 @@ const product = {
             document.getElementById('sellerAvatar').src = (sav && sav.indexOf('data:') === 0) ? sav : '../' + sav.replace(/^\.\.\//, '');
             document.getElementById('sellerName').textContent = this.sellerData.username;
             document.getElementById('sellerStats').textContent = `${this.sellerData.postsCount || 0}帖 · ${this.sellerData.productsCount || 0}商品`;
-            document.getElementById('sellerLink').href = `profile.html?id=${this.productData.sellerId}`;
         }
 
         document.title = `${this.productData.title} - 社区平台`;

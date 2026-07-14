@@ -123,7 +123,6 @@ const post = {
         }
         if (authorName) authorName.textContent = this.authorData?.username || '匿名用户';
         if (authorBio) authorBio.textContent = this.authorData?.bio || '这个人很懒，什么都没写';
-        if (authorLink) authorLink.href = `profile.html?id=${this.postData.authorId}`;
     },
 
     checkLikeStatus() {

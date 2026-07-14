@@ -133,7 +133,7 @@ const checkout = {
 
         utils.showNotification('下单成功', 'success');
         setTimeout(() => {
-            window.location.href = 'profile.html';
+            window.location.href = 'market.html';
         }, 1500);
     }
 };
