@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '11';
+const SITE_VERSION = '12';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
@@ -350,9 +350,21 @@ utils.saveConfigToGitHub = function(token) {
 };
 
 (function() {
-    var path = location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a').forEach(function(a) {
-        var href = a.getAttribute('href').split('/').pop();
-        if (href === path) a.classList.add('active');
-    });
+    function setActiveNav() {
+        var path = location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(function(a) {
+            a.classList.remove('active');
+            var href = a.getAttribute('href');
+            if (href) {
+                var h = href.split('/').pop().split('?')[0];
+                if (h === path) a.classList.add('active');
+            }
+        });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setActiveNav);
+    } else {
+        setActiveNav();
+    }
+    setTimeout(setActiveNav, 500);
 })();
