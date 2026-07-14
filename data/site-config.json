@@ -189,32 +189,32 @@
     {
       "id": "display1",
       "icon": "ti ti-layout-grid",
-      "label": "展示页1"
+      "label": "制作"
     },
     {
       "id": "display2",
       "icon": "ti ti-layout-grid",
-      "label": "展示页2"
+      "label": "荣誉"
     },
     {
       "id": "display3",
       "icon": "ti ti-layout-grid",
-      "label": "展示页3"
+      "label": "山场"
     },
     {
       "id": "display4",
       "icon": "ti ti-layout-grid",
-      "label": "展示页4"
+      "label": "工厂"
     },
     {
       "id": "display5",
       "icon": "ti ti-layout-grid",
-      "label": "展示页5"
+      "label": "门店"
     },
     {
       "id": "display6",
       "icon": "ti ti-layout-grid",
-      "label": "展示页6"
+      "label": "传承"
     },
     {
       "id": "market",
