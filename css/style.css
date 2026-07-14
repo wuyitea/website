@@ -131,6 +131,7 @@
 
 .nav-menu {
     display: flex;
+    margin-left: auto;
 }
 
 .nav-links {
