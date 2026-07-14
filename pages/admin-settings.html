@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网站设置 - 社区平台</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/iconfont/tabler-icons.min.css">
-    <link rel="stylesheet" href="../css/style.css?v=12">
-    <link rel="stylesheet" href="../css/responsive.css?v=12">
+    <link rel="stylesheet" href="../css/style.css?v=13">
+    <link rel="stylesheet" href="../css/responsive.css?v=13">
 </head>
 <body>
     <div class="admin-layout">
@@ -303,35 +303,13 @@
 
                                 <div class="settings-group">
                                     <h3><i class="ti ti-layout-navbar" style="margin-right:0.375rem"></i>导航栏</h3>
-                                    <p class="desc">配置所有页面顶部导航栏的文字</p>
+                                    <p class="desc">配置导航栏按钮的图标、文字和顺序（拖拽或点击箭头调整顺序）</p>
                                     <div class="admin-form">
-                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-                                            <div class="form-group">
-                                                <label>首页</label>
-                                                <input type="text" id="copyNavHome" placeholder="例如：首页">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>论坛</label>
-                                                <input type="text" id="copyNavForum" placeholder="例如：论坛">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>商城</label>
-                                                <input type="text" id="copyNavMarket" placeholder="例如：商城">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>展示页1</label>
-                                                <input type="text" id="copyNavDisplay1" placeholder="例如：展示页1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>展示页2</label>
-                                                <input type="text" id="copyNavDisplay2" placeholder="例如：展示页2">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>关于我们</label>
-                                                <input type="text" id="copyNavAbout" placeholder="例如：关于我们">
-                                            </div>
+                                        <div id="navSortable" style="display:flex;flex-direction:column;gap:0.5rem"></div>
+                                        <div style="margin-top:1rem;display:flex;gap:0.5rem">
+                                            <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                            <button class="btn-admin" onclick="resetNavConfig()"><i class="ti ti-restore" style="margin-right:0.375rem"></i>恢复默认</button>
                                         </div>
-                                        <button class="btn-admin btn-admin-primary" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
                                     </div>
                                 </div>
 
@@ -645,7 +623,7 @@
         </main>
     </div>
 
-    <script src="../js/config.js?v=12"></script>
+    <script src="../js/config.js?v=13"></script>
     <script>
         if (localStorage.getItem('admin_logged_in') !== 'true') {
             window.location.href = 'admin-login.html';
@@ -897,12 +875,6 @@
             heroSubtitle: '在这里分享想法、交流经验、发现好物',
             heroBtn1: '进入论坛',
             heroBtn2: '逛逛商城',
-            navHome: '首页',
-            navForum: '论坛',
-            navMarket: '商城',
-            navDisplay1: '展示页1',
-            navDisplay2: '展示页2',
-            navAbout: '关于我们',
             footerAbout: '社区平台是一个集论坛、电商、社交于一体的综合性社区，为用户提供分享、交流、购物的一站式体验。',
             footerContact: '联系我们',
             footerEmail: 'contact@youtea.net',
@@ -929,6 +901,109 @@
             display2Empty: '暂无展示内容'
         };
 
+        var defaultNavConfig = [
+            { id: 'home', icon: 'ti ti-home', label: '首页' },
+            { id: 'forum', icon: 'ti ti-message-circle', label: '论坛' },
+            { id: 'market', icon: 'ti ti-shopping-bag', label: '商城' },
+            { id: 'display1', icon: 'ti ti-slideshow', label: '展示页1' },
+            { id: 'display2', icon: 'ti ti-device-desktop', label: '展示页2' }
+        ];
+
+        function getNavConfig() {
+            try {
+                var saved = localStorage.getItem('admin_nav_config');
+                if (saved) return JSON.parse(saved);
+            } catch (e) {}
+            return JSON.parse(JSON.stringify(defaultNavConfig));
+        }
+
+        function renderNavSortable() {
+            var list = document.getElementById('navSortable');
+            var config = getNavConfig();
+            list.innerHTML = config.map(function(item, i) {
+                return '<div class="nav-sort-item" data-index="' + i + '" style="display:flex;align-items:center;gap:0.5rem;padding:0.625rem 0.75rem;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--border-radius);cursor:default">' +
+                    '<span class="nav-drag-handle" style="cursor:grab;color:var(--text-secondary);font-size:1.125rem" title="拖拽排序"><i class="ti ti-grip-vertical"></i></span>' +
+                    '<button class="btn-icon" onclick="navMoveUp(' + i + ')" title="上移" style="border:none;background:none;color:var(--text-secondary);cursor:pointer;font-size:1rem;padding:2px"><i class="ti ti-chevron-up"></i></button>' +
+                    '<button class="btn-icon" onclick="navMoveDown(' + i + ')" title="下移" style="border:none;background:none;color:var(--text-secondary);cursor:pointer;font-size:1rem;padding:2px"><i class="ti ti-chevron-down"></i></button>' +
+                    '<span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;background:rgba(79,70,229,0.08);flex-shrink:0" class="nav-icon-preview"><i class="' + item.icon + '" style="font-size:1.125rem;color:var(--primary-color)"></i></span>' +
+                    '<input type="text" value="' + item.icon + '" data-field="icon" data-nav-index="' + i + '" placeholder="ti ti-xxx" style="width:140px;padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:0.8rem;font-family:monospace" oninput="updateNavIconPreview(this,' + i + ')">' +
+                    '<span style="flex:1;display:flex;align-items:center;gap:0.375rem">' +
+                    '<i class="ti ti-arrow-right" style="color:var(--text-secondary);font-size:0.8rem;flex-shrink:0"></i>' +
+                    '<input type="text" value="' + (item.label || '') + '" data-field="label" data-nav-index="' + i + '" placeholder="显示文字" style="flex:1;padding:0.375rem 0.5rem;border:1px solid var(--border-color);border-radius:var(--border-radius);font-size:0.875rem" oninput="updateNavLabel(this,' + i + ')">' +
+                    '</span>' +
+                    '<span style="font-size:0.75rem;color:var(--text-secondary);background:var(--bg-primary);padding:2px 6px;border-radius:4px;border:1px solid var(--border-color);min-width:52px;text-align:center;cursor:default">' + item.id + '</span>' +
+                    '</div>';
+            }).join('');
+            initNavDrag();
+        }
+
+        function updateNavIconPreview(input, idx) {
+            var config = getNavConfig();
+            config[idx].icon = input.value;
+            var preview = input.closest('.nav-sort-item').querySelector('.nav-icon-preview i');
+            if (preview) preview.className = input.value || 'ti ti-circle';
+            saveNavConfigSilent(config);
+        }
+
+        function updateNavLabel(input, idx) {
+            var config = getNavConfig();
+            config[idx].label = input.value;
+            saveNavConfigSilent(config);
+        }
+
+        function saveNavConfigSilent(config) {
+            localStorage.setItem('admin_nav_config', JSON.stringify(config));
+        }
+
+        function navMoveUp(idx) {
+            if (idx <= 0) return;
+            var config = getNavConfig();
+            var tmp = config[idx]; config[idx] = config[idx-1]; config[idx-1] = tmp;
+            saveNavConfigSilent(config);
+            renderNavSortable();
+        }
+
+        function navMoveDown(idx) {
+            var config = getNavConfig();
+            if (idx >= config.length - 1) return;
+            var tmp = config[idx]; config[idx] = config[idx+1]; config[idx+1] = tmp;
+            saveNavConfigSilent(config);
+            renderNavSortable();
+        }
+
+        function initNavDrag() {
+            var list = document.getElementById('navSortable');
+            var dragIdx = null;
+            list.querySelectorAll('.nav-sort-item').forEach(function(item) {
+                var handle = item.querySelector('.nav-drag-handle');
+                handle.addEventListener('mousedown', function(e) {
+                    dragIdx = parseInt(item.dataset.index);
+                    item.style.opacity = '0.5';
+                    e.preventDefault();
+                });
+                item.addEventListener('mouseup', function() {
+                    if (dragIdx === null || dragIdx === parseInt(item.dataset.index)) { dragIdx = null; return; }
+                    var config = getNavConfig();
+                    var moved = config.splice(dragIdx, 1)[0];
+                    config.splice(parseInt(item.dataset.index), 0, moved);
+                    saveNavConfigSilent(config);
+                    dragIdx = null;
+                    renderNavSortable();
+                });
+            });
+            document.addEventListener('mouseup', function() {
+                list.querySelectorAll('.nav-sort-item').forEach(function(item) { item.style.opacity = ''; });
+                dragIdx = null;
+            });
+        }
+
+        function resetNavConfig() {
+            if (!confirm('确定要恢复默认导航栏配置吗？')) return;
+            localStorage.removeItem('admin_nav_config');
+            renderNavSortable();
+            alert('已恢复默认');
+        }
+
         function loadCopySettings() {
             var saved = localStorage.getItem('admin_settings_copy');
             if (!saved) return;
@@ -942,17 +1017,11 @@
         }
 
         function collectCopySettings() {
-            return {
+            var data = {
                 heroTitle: document.getElementById('copyHeroTitle').value,
                 heroSubtitle: document.getElementById('copyHeroSubtitle').value,
                 heroBtn1: document.getElementById('copyHeroBtn1').value,
                 heroBtn2: document.getElementById('copyHeroBtn2').value,
-                navHome: document.getElementById('copyNavHome').value,
-                navForum: document.getElementById('copyNavForum').value,
-                navMarket: document.getElementById('copyNavMarket').value,
-                navDisplay1: document.getElementById('copyNavDisplay1').value,
-                navDisplay2: document.getElementById('copyNavDisplay2').value,
-                navAbout: document.getElementById('copyNavAbout').value,
                 footerAbout: document.getElementById('copyFooterAbout').value,
                 footerContact: document.getElementById('copyFooterContact').value,
                 footerEmail: document.getElementById('copyFooterEmail').value,
@@ -978,10 +1047,12 @@
                 display2Title: document.getElementById('copyDisplay2Title').value,
                 display2Empty: document.getElementById('copyDisplay2Empty').value
             };
+            return data;
         }
 
         function saveCopySettings() {
             localStorage.setItem('admin_settings_copy', JSON.stringify(collectCopySettings()));
+            localStorage.setItem('admin_nav_config', JSON.stringify(getNavConfig()));
             alert('文案已保存，刷新前台页面即可看到效果');
             pushToGitHub();
         }
@@ -989,14 +1060,17 @@
         function resetCopySettings() {
             if (!confirm('确定要恢复默认文案吗？')) return;
             localStorage.removeItem('admin_settings_copy');
+            localStorage.removeItem('admin_nav_config');
             Object.keys(copyDefaults).forEach(function(key) {
                 var el = document.getElementById('copy' + key.charAt(0).toUpperCase() + key.slice(1));
                 if (el) el.value = copyDefaults[key];
             });
+            renderNavSortable();
             alert('已恢复默认文案');
         }
 
         loadCopySettings();
+        renderNavSortable();
 
         // 首页轮播管理
         function loadSlides() {
@@ -1487,7 +1561,7 @@
                 'admin_settings_general', 'admin_settings_copy', 'admin_settings_forum',
                 'admin_settings_market', 'admin_settings_security', 'admin_settings_notifications',
                 'admin_homepage_slides', 'admin_market_banners', 'admin_shop_links',
-                'site_theme', 'admin_password'
+                'site_theme', 'admin_password', 'admin_nav_config'
             ];
             keys.forEach(function(key) {
                 var val = localStorage.getItem(key);

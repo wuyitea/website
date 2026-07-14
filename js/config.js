@@ -1,5 +1,5 @@
 // 应用配置
-const SITE_VERSION = '12';
+const SITE_VERSION = '13';
 const appConfig = {
     siteName: '社区平台',
     siteUrl: 'https://youtea.net',
@@ -229,10 +229,11 @@ utils.applyGeneralSettings();
 utils.applyCopySettings = function() {
     var saved = localStorage.getItem('admin_settings_copy');
     if (!saved) return;
+    var skipNavKeys = {'navHome':1,'navForum':1,'navMarket':1,'navDisplay1':1,'navDisplay2':1,'navAbout':1};
     try {
         var s = JSON.parse(saved);
         Object.keys(s).forEach(function(key) {
-            if (!s[key]) return;
+            if (!s[key] || skipNavKeys[key]) return;
             var els = document.querySelectorAll('[data-copy="' + key + '"]');
             els.forEach(function(el) {
                 if (key === 'heroSubtitle') {
@@ -293,7 +294,8 @@ var _lsKeyMap = {
     display2Height: 'admin_display2_height',
     market: 'admin_settings_market',
     security: 'admin_settings_security',
-    notifications: 'admin_settings_notifications'
+    notifications: 'admin_settings_notifications',
+    navConfig: 'admin_nav_config'
 };
 
 utils.syncFromGitHub = function() {
@@ -314,7 +316,51 @@ utils.syncFromGitHub = function() {
         });
         utils.applyTheme();
         utils.applyGeneralSettings();
-        utils.applyCopySettings();
+utils.applyCopySettings();
+
+// ========== 导航栏配置 ==========
+utils.applyNavConfig = function() {
+    var saved = localStorage.getItem('admin_nav_config');
+    if (!saved) return;
+    try {
+        var config = JSON.parse(saved);
+        if (!Array.isArray(config) || !config.length) return;
+        var isIndex = /\/index\.html$/.test(location.pathname) || location.pathname.endsWith('/') || location.pathname.split('/').pop() === '';
+        var navHrefs = {
+            home: isIndex ? 'index.html' : '../index.html',
+            forum: isIndex ? 'pages/forum.html' : 'forum.html',
+            market: isIndex ? 'pages/market.html' : 'market.html',
+            display1: isIndex ? 'pages/display1.html' : 'display1.html',
+            display2: isIndex ? 'pages/display2.html' : 'display2.html',
+            about: isIndex ? 'pages/about.html' : 'about.html'
+        };
+        document.querySelectorAll('.nav-links').forEach(function(ul) {
+            var existing = {};
+            ul.querySelectorAll('li[data-nav]').forEach(function(li) {
+                existing[li.getAttribute('data-nav')] = li;
+            });
+            var newOrder = [];
+            config.forEach(function(item) {
+                if (existing[item.id]) {
+                    var li = existing[item.id];
+                    var a = li.querySelector('a');
+                    if (a) {
+                        if (navHrefs[item.id]) a.href = navHrefs[item.id];
+                        var icon = a.querySelector('i');
+                        if (icon) icon.className = item.icon;
+                        var span = a.querySelector('span');
+                        if (span && item.label) span.textContent = item.label;
+                    }
+                    newOrder.push(li);
+                }
+            });
+            newOrder.forEach(function(li) { ul.appendChild(li); });
+        });
+    } catch (e) {}
+};
+
+utils.applyNavConfig();
+        utils.applyNavConfig();
         window._siteConfigReady = true;
     }).catch(function() {
         window._siteConfigReady = true;
