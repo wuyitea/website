@@ -193,27 +193,27 @@
     },
     {
       "id": "display1",
-      "icon": "ti ti-users",
+      "icon": "ti ti-leaf",
       "label": "岩茶品种"
     },
     {
       "id": "display2",
-      "icon": "ti ti-trophy",
+      "icon": "ti ti-chart-line",
       "label": "岩茶山场"
     },
     {
       "id": "display3",
-      "icon": "ti ti-chart-line",
+      "icon": "ti ti-heart",
       "label": "岩茶工艺"
     },
     {
       "id": "display4",
-      "icon": "ti ti-leaf",
+      "icon": "ti ti-users",
       "label": "生产环境"
     },
     {
       "id": "display5",
-      "icon": "ti ti-building-community",
+      "icon": "ti ti-trophy",
       "label": "荣誉展示"
     },
     {
