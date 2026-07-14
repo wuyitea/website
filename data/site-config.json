@@ -183,42 +183,42 @@
     },
     {
       "id": "forum",
-      "icon": "ti ti-message-circle",
+      "icon": "ti ti-brand-zhihu",
       "label": "论坛"
     },
     {
       "id": "display1",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-flame",
       "label": "制作"
     },
     {
       "id": "display2",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-trophy",
       "label": "荣誉"
     },
     {
       "id": "display3",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-photo",
       "label": "山场"
     },
     {
       "id": "display4",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-leaf",
       "label": "工厂"
     },
     {
       "id": "display5",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-building-community",
       "label": "门店"
     },
     {
       "id": "display6",
-      "icon": "ti ti-layout-grid",
+      "icon": "ti ti-gift",
       "label": "产品"
     },
     {
       "id": "market",
-      "icon": "ti ti-shopping-bag",
+      "icon": "ti ti-shopping-cart",
       "label": "商城"
     }
   ]
