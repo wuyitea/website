@@ -348,3 +348,11 @@ utils.saveConfigToGitHub = function(token) {
         });
     }).then(function(r) { return r.json(); });
 };
+
+(function() {
+    var path = location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.nav-links a').forEach(function(a) {
+        var href = a.getAttribute('href').split('/').pop();
+        if (href === path) a.classList.add('active');
+    });
+})();
