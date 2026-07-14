@@ -410,6 +410,38 @@
                                     </div>
                                 </div>
 
+                                <div class="settings-group">
+                                    <h3><i class="ti ti-slideshow" style="margin-right:0.375rem"></i>展示页文案</h3>
+                                    <p class="desc">配置展示页1和展示页2显示的文字</p>
+                                    <div class="admin-form">
+                                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-slideshow" style="margin-right:0.25rem"></i>展示页1</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay1Title" placeholder="例如：精彩瞬间">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay1Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                            <div style="display:flex;flex-direction:column;gap:0.75rem;padding:1rem;border:1px solid var(--border-color);border-radius:var(--border-radius);background:var(--bg-secondary)">
+                                                <h4 style="font-size:var(--font-size-sm);margin:0;color:var(--text-primary)"><i class="ti ti-device-desktop" style="margin-right:0.25rem"></i>展示页2</h4>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>页面标题</label>
+                                                    <input type="text" id="copyDisplay2Title" placeholder="例如：活动集锦">
+                                                </div>
+                                                <div class="form-group" style="margin:0">
+                                                    <label>空状态提示文字</label>
+                                                    <input type="text" id="copyDisplay2Empty" placeholder="例如：暂无展示内容">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn-admin btn-admin-primary" style="margin-top:1rem" onclick="saveCopySettings()"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存文案</button>
+                                    </div>
+                                </div>
+
                                 <div style="display:flex;gap:0.75rem">
                                     <button class="btn-admin btn-admin-outline" onclick="resetCopySettings()"><i class="ti ti-refresh" style="margin-right:0.375rem"></i>恢复默认文案</button>
                                 </div>
@@ -890,7 +922,11 @@
             footerUrlContact: 'pages/contact.html',
             footerUrlTerms: 'pages/terms.html',
             footerUrlPrivacy: 'pages/privacy.html',
-            footerUrlCookies: 'pages/cookies.html'
+            footerUrlCookies: 'pages/cookies.html',
+            display1Title: '展示页1',
+            display1Empty: '暂无展示内容',
+            display2Title: '展示页2',
+            display2Empty: '暂无展示内容'
         };
 
         function loadCopySettings() {
@@ -936,7 +972,11 @@
                 footerUrlContact: document.getElementById('copyFooterUrlContact').value,
                 footerUrlTerms: document.getElementById('copyFooterUrlTerms').value,
                 footerUrlPrivacy: document.getElementById('copyFooterUrlPrivacy').value,
-                footerUrlCookies: document.getElementById('copyFooterUrlCookies').value
+                footerUrlCookies: document.getElementById('copyFooterUrlCookies').value,
+                display1Title: document.getElementById('copyDisplay1Title').value,
+                display1Empty: document.getElementById('copyDisplay1Empty').value,
+                display2Title: document.getElementById('copyDisplay2Title').value,
+                display2Empty: document.getElementById('copyDisplay2Empty').value
             };
         }
 

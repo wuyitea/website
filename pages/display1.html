@@ -96,6 +96,21 @@
     <script src="../js/config.js?v=11"></script>
     <script>
     var galleryIndex = 0, galleryTimer = null;
+    function loadCopySettings() {
+        var saved = localStorage.getItem('admin_settings_copy');
+        if (!saved) return;
+        try {
+            var s = JSON.parse(saved);
+            if (s.display1Title) document.title = s.display1Title + ' - ' + (document.querySelector('span[data-setting="siteName"]')?.textContent || '社区平台');
+            if (s.display1Empty) {
+                var el = document.getElementById('forumFallback');
+                if (el) {
+                    var p = el.querySelector('p');
+                    if (p) p.textContent = s.display1Empty;
+                }
+            }
+        } catch(e) {}
+    }
     function loadForumSettings() {
         var s = {};
         try { s = JSON.parse(localStorage.getItem('admin_settings_display1') || '{}'); } catch(e) {}
@@ -153,6 +168,7 @@
     function galleryNext() { var t = document.getElementById('galleryTrack').children.length; if (!t) return; galleryIndex = (galleryIndex + 1) % t; updateGallery(); }
     function galleryPrev() { var t = document.getElementById('galleryTrack').children.length; if (!t) return; galleryIndex = (galleryIndex - 1 + t) % t; updateGallery(); }
     function goGallery(i) { galleryIndex = i; updateGallery(); }
+    loadCopySettings();
     loadForumGallery();
     </script>
 </body>
