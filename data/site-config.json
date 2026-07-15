@@ -59,7 +59,7 @@
   },
   "shopLinks": [
     {
-      "name": "武彝工夫 淘宝小店",
+      "name": "武彝工夫     淘宝小店",
       "icon": "ti ti-shopping-cart",
       "color": "#ff9300",
       "bgColor": "rgba(0,0,0,0.08)",
@@ -67,7 +67,7 @@
       "desc": "点击进入"
     },
     {
-      "name": "武夷岩茶 微信小店",
+      "name": "武夷岩茶     微信小店",
       "icon": "ti ti-shopping-cart",
       "color": "#ff9300",
       "bgColor": "rgba(0,0,0,0.08)",
