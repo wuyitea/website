@@ -35,12 +35,17 @@
 
     <script src="../js/config.js?v=14"></script>
     <script>
+        var _ADMIN_USER = 'wuyiyoutea5134';
+        var _ADMIN_PASS = 'adminhyh080226';
         document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var user = document.getElementById('adminUser').value;
             var pass = document.getElementById('adminPass').value;
-            var savedPass = localStorage.getItem('admin_password') || 'admin123';
-            if (user === 'admin' && pass === savedPass) {
+            var savedPass = localStorage.getItem('admin_password');
+            var savedUser = localStorage.getItem('admin_username');
+            var okUser = savedUser ? (user === savedUser) : (user === _ADMIN_USER);
+            var okPass = savedPass ? (pass === savedPass) : (pass === _ADMIN_PASS);
+            if (okUser && okPass) {
                 localStorage.setItem('admin_logged_in', 'true');
                 window.location.href = 'admin.html';
             } else {

@@ -209,21 +209,29 @@
                                 <button class="btn-admin btn-admin-primary" onclick="saveSettings('security')"><i class="ti ti-device-floppy" style="margin-right:0.375rem"></i>保存设置</button>
                                 <div class="settings-group" style="margin-top:1rem">
                                     <h3><i class="ti ti-key" style="margin-right:0.375rem"></i>管理员账号</h3>
-                                    <p class="desc">修改管理员登录密码</p>
+                                    <p class="desc">修改管理员登录用户名和密码</p>
                                     <div class="admin-form">
                                         <div class="form-group">
-                                            <label>当前密码</label>
-                                            <input type="password" placeholder="请输入当前密码">
+                                            <label>当前用户名</label>
+                                            <input type="text" id="changeUsername" placeholder="请输入当前用户名">
                                         </div>
                                         <div class="form-group">
-                                            <label>新密码</label>
-                                            <input type="password" placeholder="请输入新密码（至少6位）" minlength="6">
+                                            <label>当前密码</label>
+                                            <input type="password" id="changeCurrentPass" placeholder="请输入当前密码">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>新用户名（留空则不修改）</label>
+                                            <input type="text" id="changeNewUsername" placeholder="请输入新用户名">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>新密码（留空则不修改）</label>
+                                            <input type="password" id="changeNewPass" placeholder="请输入新密码（至少6位）" minlength="6">
                                         </div>
                                         <div class="form-group">
                                             <label>确认新密码</label>
-                                            <input type="password" placeholder="请再次输入新密码">
+                                            <input type="password" id="changeConfirmPass" placeholder="请再次输入新密码">
                                         </div>
-                                        <button class="btn-admin btn-admin-primary" onclick="changePassword()"><i class="ti ti-lock" style="margin-right:0.375rem"></i>修改密码</button>
+                                        <button class="btn-admin btn-admin-primary" onclick="changePassword()"><i class="ti ti-lock" style="margin-right:0.375rem"></i>修改账号信息</button>
                                     </div>
                                 </div>
                             </div>
@@ -721,26 +729,43 @@
         }
 
         function changePassword() {
-            var inputs = document.querySelectorAll('#tab-security input[type="password"]');
-            var currentPass = inputs[0].value;
-            var newPass = inputs[1].value;
-            var confirmPass = inputs[2].value;
-            var savedPass = localStorage.getItem('admin_password') || 'admin123';
-            if (currentPass !== savedPass) {
-                alert('当前密码错误');
+            var _DEFAULT_USER = 'wuyiyoutea5134';
+            var _DEFAULT_PASS = 'adminhyh080226';
+            var currentUser = document.getElementById('changeUsername').value;
+            var currentPass = document.getElementById('changeCurrentPass').value;
+            var newUsername = document.getElementById('changeNewUsername').value.trim();
+            var newPass = document.getElementById('changeNewPass').value;
+            var confirmPass = document.getElementById('changeConfirmPass').value;
+            var savedUser = localStorage.getItem('admin_username') || _DEFAULT_USER;
+            var savedPass = localStorage.getItem('admin_password') || _DEFAULT_PASS;
+            if (currentUser !== savedUser || currentPass !== savedPass) {
+                alert('当前用户名或密码错误');
                 return;
             }
-            if (newPass.length < 6) {
+            if (newUsername && newUsername.length < 3) {
+                alert('新用户名至少需要3个字符');
+                return;
+            }
+            if (newPass && newPass.length < 6) {
                 alert('新密码至少需要6位');
                 return;
             }
-            if (newPass !== confirmPass) {
+            if (newPass && newPass !== confirmPass) {
                 alert('两次输入的密码不一致');
                 return;
             }
-            localStorage.setItem('admin_password', newPass);
-            alert('密码修改成功，下次登录请使用新密码');
-            inputs.forEach(function(input) { input.value = ''; });
+            if (!newUsername && !newPass) {
+                alert('请输入新的用户名或密码');
+                return;
+            }
+            if (newUsername) localStorage.setItem('admin_username', newUsername);
+            if (newPass) localStorage.setItem('admin_password', newPass);
+            alert('账号信息修改成功，下次登录请使用新的用户名和密码');
+            document.getElementById('changeUsername').value = '';
+            document.getElementById('changeCurrentPass').value = '';
+            document.getElementById('changeNewUsername').value = '';
+            document.getElementById('changeNewPass').value = '';
+            document.getElementById('changeConfirmPass').value = '';
         }
 
         // Load saved settings
