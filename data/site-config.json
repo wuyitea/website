@@ -61,16 +61,16 @@
     {
       "name": "武彝工夫",
       "icon": "ti ti-shopping-cart",
-      "color": "#4f46e5",
-      "bgColor": "rgba(0,0,0,0.08)",
+      "color": "#ff9300",
+      "bgColor": "rgba(148,33,146,0.08)",
       "url": "https://shop328723740.taobao.com/?spm=a21xtw.29978516.0.0",
       "desc": "点击进入淘宝小店"
     },
     {
       "name": "武夷岩茶",
       "icon": "ti ti-shopping-cart",
-      "color": "#4f46e5",
-      "bgColor": "rgba(0,0,0,0.08)",
+      "color": "#ff9300",
+      "bgColor": "rgba(148,33,146,0.08)",
       "url": "https://channels.weixin.qq.com/shop/b/bMb2oaaxLdA0wgp",
       "desc": "点击进入微信小店"
     }
@@ -89,7 +89,13 @@
     "showNav": true,
     "showFooter": true
   },
-  "display1Slides": [],
+  "display1Slides": [
+    {
+      "type": "image",
+      "media": "",
+      "link": ""
+    }
+  ],
   "display1Height": 500,
   "display2": {
     "autoPlay": true,
