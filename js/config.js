@@ -387,16 +387,27 @@ utils.applyNavConfig();
 utils.syncFromGitHub();
 
 utils.saveConfigToGitHub = function(token) {
+    var imageKeys = { slides: 1, banners: 1, shopLinks: 1, forumSlides: 1,
+        display1Slides: 1, display2Slides: 1, display3Slides: 1,
+        display4Slides: 1, display5Slides: 1, display6Slides: 1 };
     var payload = {};
+    var skipped = [];
     Object.keys(_lsKeyMap).forEach(function(k) {
         var raw = localStorage.getItem(_lsKeyMap[k]);
         if (raw) {
+            if (imageKeys[k] && raw.length > 100000) {
+                skipped.push(k);
+                return;
+            }
             try { payload[k] = JSON.parse(raw); } catch(e) { payload[k] = raw; }
         } else {
             payload[k] = typeof {} === 'object' ? {} : '';
         }
     });
     var content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    if (content.length > 900000) {
+        return Promise.reject(new Error('配置数据仍然过大，请联系开发者'));
+    }
     return fetch(GITHUB_API, {
         method: 'GET',
         headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
@@ -412,7 +423,10 @@ utils.saveConfigToGitHub = function(token) {
             headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
             body: JSON.stringify(body)
         });
-    }).then(function(r) { return r.json(); });
+    }).then(function(r) {
+        if (!r.ok) return r.json().then(function(e) { throw new Error('GitHub push failed: ' + r.status + ' - ' + (e.message || '')); });
+        return r.json();
+    });
 };
 
 (function() {
